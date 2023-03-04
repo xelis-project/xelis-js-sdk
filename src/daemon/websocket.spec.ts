@@ -30,7 +30,7 @@ describe('WS', () => {
   })
 
   const timeout = 40000
-  test('Subscribe [NewBlock]', () => {
+  test('Listen [NewBlock]', () => {
     return new Promise(async (resolve, reject) => {
       const daemonWS = new DaemonWS(DEV_NODE_WS)
       const [err] = await to(daemonWS.connect())
@@ -42,15 +42,15 @@ describe('WS', () => {
         resolve(null)
       }
 
-      const unsubscribe = await daemonWS.onNewBlock(async (newBlock, msgEvent) => {
+      const closeListen = await daemonWS.onNewBlock(async (newBlock, msgEvent) => {
         console.log(newBlock)
-        if (unsubscribe) await unsubscribe()
+        if (closeListen) await closeListen()
         doneTest()
       }).catch(err => doneTest(err))
     })
   }, timeout)
 
-  test.skip('Multi subscribe', () => {
+  test('Multi Listen', () => {
     return new Promise(async (resolve, reject) => {
       const daemonWS = new DaemonWS(DEV_NODE_WS)
       const [err] = await to(daemonWS.connect())
@@ -62,7 +62,7 @@ describe('WS', () => {
         if (err) return reject(err)
         count--
         if (count === 0) {
-          const [err] = await to(daemonWS.unsubscribe(RPCEvent.NewBlock))
+          const [err] = await to(daemonWS.closeAllListens(RPCEvent.NewBlock))
           if (err) return reject(err)
 
           daemonWS.socket.close()

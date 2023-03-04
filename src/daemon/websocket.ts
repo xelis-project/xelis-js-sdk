@@ -15,7 +15,7 @@ class WS {
   endpoint: string
   socket!: WebSocket
   timeout: number
-  events: Record<string, number>
+  private events: Record<string, ((msgEvent: MessageEvent) => void)[]>
 
   constructor(endpoint: string) {
     this.endpoint = endpoint
@@ -43,14 +43,22 @@ class WS {
     return this.connect()
   }
 
-  async unsubscribe(event: RPCEvent) {
-    const [err, _] = await to(this.call<boolean>(`unsubscribe`, { notify: event }))
-    if (err) return Promise.reject(err)
-    Reflect.deleteProperty(this.events, event)
+  async closeAllListens(event: RPCEvent) {
+    if (this.events[event]) {
+      const [err, _] = await to(this.call<boolean>(`unsubscribe`, { notify: event }))
+      if (err) return Promise.reject(err)
+
+      this.events[event].forEach(onMsg => {
+        this.socket.removeEventListener(`message`, onMsg)
+      })
+
+      Reflect.deleteProperty(this.events, event)
+    }
+
     return Promise.resolve()
   }
 
-  async subscribe<T>(event: RPCEvent, onMsg: (result: T, msgEvent: MessageEvent) => void) {
+  async listenEvent<T>(event: RPCEvent, onMsg: (result: T, msgEvent: MessageEvent) => void) {
     const onMessage = (msgEvent: MessageEvent) => {
       if (typeof msgEvent.data === `string`) {
         const data = JSON.parse(msgEvent.data)
@@ -63,30 +71,30 @@ class WS {
     this.socket.addEventListener(`message`, onMessage)
 
     if (this.events[event]) {
-      this.events[event]++
+      this.events[event].push(onMessage)
     } else {
-      this.events[event] = 1
       const [err, _] = await to(this.call<boolean>(`subscribe`, { notify: event }))
       if (err) return Promise.reject(err)
+
+      this.events[event] = [onMessage]
     }
 
-    const unsubscribe = async () => {
-      if (this.events[event] === 1) {
-        const [err, _] = await to(this.unsubscribe(event))
+    const closeListen = async () => {
+      if (this.events[event] && this.events[event].length === 1) {
+        const [err, _] = await to(this.call<boolean>(`unsubscribe`, { notify: event }))
         if (err) return Promise.reject(err)
-      } else {
-        this.events[event]--
-        this.socket.removeEventListener(`message`, onMessage)
+        Reflect.deleteProperty(this.events, event)
       }
 
+      this.socket.removeEventListener(`message`, onMessage)
       return Promise.resolve()
     }
 
-    return Promise.resolve(unsubscribe)
+    return Promise.resolve(closeListen)
   }
 
   onNewBlock(onMsg: (data: NewBlockResult, msgEvent: MessageEvent) => void) {
-    return this.subscribe(RPCEvent.NewBlock, onMsg)
+    return this.listenEvent(RPCEvent.NewBlock, onMsg)
   }
 
   call<T>(method: string, params?: any): Promise<T> {
@@ -111,7 +119,7 @@ class WS {
         reject(`timeout`)
       }, this.timeout)
 
-      this.socket.addEventListener(`message`, onMessage)
+      this.socket.addEventListener(`message`, onMessage) // we don't use once option because of timeout feature
     })
   }
 
