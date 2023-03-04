@@ -11,11 +11,16 @@ function createRequestMethod(method: string, params?: any): { data: string, id: 
   return { data, id }
 }
 
+interface EventData {
+  id?: number
+  listeners: ((msgEvent: MessageEvent) => void)[]
+}
+
 class WS {
   endpoint: string
   socket!: WebSocket
   timeout: number
-  private events: Record<string, ((msgEvent: MessageEvent) => void)[]>
+  private events: Record<string, EventData>
 
   constructor(endpoint: string) {
     this.endpoint = endpoint
@@ -43,16 +48,19 @@ class WS {
     return this.connect()
   }
 
+  private clearEvent(event: RPCEvent) {
+    this.events[event].listeners.forEach(listener => {
+      this.socket.removeEventListener(`message`, listener)
+    })
+
+    Reflect.deleteProperty(this.events, event)
+  }
+
   async closeAllListens(event: RPCEvent) {
     if (this.events[event]) {
       const [err, _] = await to(this.call<boolean>(`unsubscribe`, { notify: event }))
       if (err) return Promise.reject(err)
-
-      this.events[event].forEach(onMsg => {
-        this.socket.removeEventListener(`message`, onMsg)
-      })
-
-      Reflect.deleteProperty(this.events, event)
+      this.clearEvent(event)
     }
 
     return Promise.resolve()
@@ -60,27 +68,35 @@ class WS {
 
   async listenEvent<T>(event: RPCEvent, onMsg: (result: T, msgEvent: MessageEvent) => void) {
     const onMessage = (msgEvent: MessageEvent) => {
-      if (typeof msgEvent.data === `string`) {
-        const data = JSON.parse(msgEvent.data)
-        if (typeof data.result === `object` && data.result.event === event) {
-          onMsg(data.result, msgEvent)
+      if (this.events[event]) {
+        const { id } = this.events[event]
+        if (typeof msgEvent.data === `string`) {
+          const data = JSON.parse(msgEvent.data) as RPCResponse<any>
+          if (typeof data.result === `object` && data.id === id) {
+            onMsg(data.result, msgEvent)
+          }
         }
       }
     }
 
-    this.socket.addEventListener(`message`, onMessage)
-
     if (this.events[event]) {
-      this.events[event].push(onMessage)
+      this.events[event].listeners.push(onMessage)
     } else {
-      const [err, _] = await to(this.call<boolean>(`subscribe`, { notify: event }))
-      if (err) return Promise.reject(err)
+      this.events[event] = { listeners: [onMessage] } // important if multiple listenEvent are called without await atleast we store before getting id
+      const [err, res] = await to(this.call<boolean>(`subscribe`, { notify: event }))
+      if (err) {
+        this.clearEvent(event)
+        return Promise.reject(err)
+      }
 
-      this.events[event] = [onMessage]
+      this.events[event].id = res.id
     }
 
+    this.socket.addEventListener(`message`, onMessage)
+
     const closeListen = async () => {
-      if (this.events[event] && this.events[event].length === 1) {
+      if (this.events[event] && this.events[event].listeners.length === 1) {
+        // this is the last listen callback so we unsubscribe from daemon ws
         const [err, _] = await to(this.call<boolean>(`unsubscribe`, { notify: event }))
         if (err) return Promise.reject(err)
         Reflect.deleteProperty(this.events, event)
@@ -97,7 +113,7 @@ class WS {
     return this.listenEvent(RPCEvent.NewBlock, onMsg)
   }
 
-  call<T>(method: string, params?: any): Promise<T> {
+  call<T>(method: string, params?: any): Promise<RPCResponse<T>> {
     return new Promise((resolve, reject) => {
       const { data, id } = createRequestMethod(method, params)
       this.socket.send(data)
@@ -109,7 +125,8 @@ class WS {
           if (data.id === id) {
             clearTimeout(timeoutId)
             this.socket.removeEventListener(`message`, onMessage)
-            resolve(data.result)
+
+            resolve(data)
           }
         }
       }

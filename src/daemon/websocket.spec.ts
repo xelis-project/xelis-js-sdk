@@ -9,11 +9,11 @@ describe('WS', () => {
     const daemonWS = new DaemonWS(DEV_NODE_WS)
     const [err] = await to(daemonWS.connect())
     expect(err).toBeNull()
-    const [err2, info] = await to(daemonWS.getInfo())
+    const [err2, res] = await to(daemonWS.getInfo())
     expect(err2).toBeNull()
 
-    console.log(info)
-    expect(info)
+    console.log(res)
+    expect(res)
 
     daemonWS.socket.close()
   })

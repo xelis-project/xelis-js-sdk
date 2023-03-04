@@ -9,7 +9,6 @@ describe('RPC', () => {
 
     const [err, res] = await to(daemonRPC.getInfo())
     expect(err).toBeNull()
-    
     console.log(res)
     expect(res)
   })
