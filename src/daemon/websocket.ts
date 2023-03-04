@@ -1,8 +1,7 @@
 import { WebSocket, MessageEvent } from 'ws'
-
-import { RPCRequest, NewBlockResult, RPCResponse, GetInfoResult } from './types'
-
 import to from 'await-to-js'
+
+import { RPCRequest, NewBlockResult, RPCResponse, GetInfoResult, RPCEvent, RPCMethod } from './types'
 
 function createRequestMethod(method: string, params?: any): { data: string, id: number } {
   const id = Date.now() + Math.round((Math.random() * 9999))
@@ -16,12 +15,12 @@ class WS {
   endpoint: string
   socket!: WebSocket
   timeout: number
-  subscriptions: Record<string, number>
+  events: Record<string, number>
 
   constructor(endpoint: string) {
     this.endpoint = endpoint
     this.timeout = 3000
-    this.subscriptions = {}
+    this.events = {}
   }
 
   connect() {
@@ -44,46 +43,50 @@ class WS {
     return this.connect()
   }
 
-  async subscribe<T>(event: string, onMsg: (result: T, msgEvent: MessageEvent) => void): Promise<() => void> {
-    return new Promise(async (resolve, reject) => {
-      const onMessage = (msgEvent: MessageEvent) => {
-        if (typeof msgEvent.data === `string`) {
-          const data = JSON.parse(msgEvent.data)
-          if (typeof data.result === `object` && data.result.event === event) {
-            onMsg(data.result, msgEvent)
-          }
+  async unsubscribe(event: RPCEvent) {
+    const [err, _] = await to(this.call<boolean>(`unsubscribe`, { notify: event }))
+    if (err) return Promise.reject(err)
+    Reflect.deleteProperty(this.events, event)
+    return Promise.resolve()
+  }
+
+  async subscribe<T>(event: RPCEvent, onMsg: (result: T, msgEvent: MessageEvent) => void) {
+    const onMessage = (msgEvent: MessageEvent) => {
+      if (typeof msgEvent.data === `string`) {
+        const data = JSON.parse(msgEvent.data)
+        if (typeof data.result === `object` && data.result.event === event) {
+          onMsg(data.result, msgEvent)
         }
       }
+    }
 
-      this.socket.addEventListener(`message`, onMessage)
+    this.socket.addEventListener(`message`, onMessage)
 
-      if (this.subscriptions[event]) {
-        this.subscriptions[event]++
+    if (this.events[event]) {
+      this.events[event]++
+    } else {
+      this.events[event] = 1
+      const [err, _] = await to(this.call<boolean>(`subscribe`, { notify: event }))
+      if (err) return Promise.reject(err)
+    }
+
+    const unsubscribe = async () => {
+      if (this.events[event] === 1) {
+        const [err, _] = await to(this.unsubscribe(event))
+        if (err) return Promise.reject(err)
       } else {
-        this.subscriptions[event] = 1
-        const [err, _] = await to(this.call<boolean>(`subscribe`, { notify: event }))
-        if (err) return reject(err)
+        this.events[event]--
+        this.socket.removeEventListener(`message`, onMessage)
       }
 
-      const unsubscribe = async () => {
-        return new Promise(async (resolve, reject) => {
-          if (this.subscriptions[event] === 1) {
-            const [err, _] = await to(this.call<boolean>(`unsubscribe`, { notify: event }))
-            if (err) return reject(err)
-          }
+      return Promise.resolve()
+    }
 
-          this.subscriptions[event]--
-          this.socket.removeEventListener(`message`, onMessage)
-          resolve(null)
-        })
-      }
-
-      return resolve(unsubscribe)
-    })
+    return Promise.resolve(unsubscribe)
   }
 
   onNewBlock(onMsg: (data: NewBlockResult, msgEvent: MessageEvent) => void) {
-    return this.subscribe(`NewBlock`, onMsg)
+    return this.subscribe(RPCEvent.NewBlock, onMsg)
   }
 
   call<T>(method: string, params?: any): Promise<T> {
@@ -113,7 +116,7 @@ class WS {
   }
 
   getInfo() {
-    return this.call<GetInfoResult>(`get_info`)
+    return this.call<GetInfoResult>(RPCMethod.GetInfo)
   }
 }
 

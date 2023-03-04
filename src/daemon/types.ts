@@ -48,3 +48,33 @@ export interface NewBlockResult {
   total_size_in_bytes: number
   txs_hashes: string[]
 }
+
+export enum RPCMethod {
+  GetInfo = 'get_info',
+  GetHeight = 'get_height',
+  GetTopoHeight = 'get_topoheight',
+  GetStableHeight = 'get_stableheight',
+  GetBlockTemplate = 'get_block_template',
+  GetBlockAtTopoHeight = 'get_block_at_topoheight',
+  GetBlocksAtHeight = 'get_blocks_at_height',
+  GetBlockByHash = 'get_block_by_hash',
+  GetTopBlock = 'get_top_block',
+  GetNonce = 'get_nonce',
+  GetLastBalance = 'get_last_balance',
+  GetBalanceAtTopoHeight = 'get_balance_at_topoheight',
+  GetAssets = 'get_assets',
+  CountTransactions = 'count_transactions',
+  GetTips = 'get_tips',
+  P2PStatus = 'p2p_status',
+  GetDAGOrder = 'get_dag_order',
+  GetMempool = 'get_mempool',
+  GetTransaction = 'get_transaction',
+  GetTransactions = 'get_transactions'
+}
+
+export enum RPCEvent {
+  NewBlock = `NewBlock`,
+  TransactionAddedInMempool = `TransactionAddedInMempool`,
+  TransactionExecuted = `TransactionExecuted`,
+  BlockOrdered = `BlockOrdered`,
+}

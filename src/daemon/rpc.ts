@@ -1,4 +1,4 @@
-import { GetInfoResult } from './types'
+import { GetInfoResult, RPCMethod } from './types'
 
 class RPC {
   endpoint: string
@@ -6,7 +6,7 @@ class RPC {
     this.endpoint = endpoint
   }
 
-  async fetch<T>(method: string, params?: any): Promise<T> {
+  async fetch<T>(method: RPCMethod, params?: any): Promise<T> {
     try {
       const body = JSON.stringify({ id: 1, jsonrpc: '2.0', method: method, params })
       const res = await fetch(this.endpoint, { method: `POST`, body })
@@ -22,8 +22,8 @@ class RPC {
     }
   }
 
-  async getInfo() {
-    return this.fetch<GetInfoResult>(`get_info`)
+  getInfo() {
+    return this.fetch<GetInfoResult>(RPCMethod.GetInfo)
   }
 }
 
