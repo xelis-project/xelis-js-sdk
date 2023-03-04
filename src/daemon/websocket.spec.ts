@@ -78,4 +78,14 @@ describe('WS', () => {
       }
     })
   }, timeout)
+
+  test.only('Check invalid event', async () => {
+    const daemonWS = new DaemonWS(DEV_NODE_WS)
+    const [err] = await to(daemonWS.connect())
+    expect(err).toBeNull()
+
+    //@ts-ignore
+    const [err2, _] = await to(daemonWS.listenEvent(`asdasd`, async (result, msgEvent) => { }))
+    expect(err2).toBeDefined()
+  })
 })

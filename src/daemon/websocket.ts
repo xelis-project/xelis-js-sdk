@@ -58,8 +58,9 @@ class WS {
 
   async closeAllListens(event: RPCEvent) {
     if (this.events[event]) {
-      const [err, _] = await to(this.call<boolean>(`unsubscribe`, { notify: event }))
+      const [err, res] = await to(this.call<boolean>(`unsubscribe`, { notify: event }))
       if (err) return Promise.reject(err)
+      if (res.error) return Promise.reject(res.error.message)
       this.clearEvent(event)
     }
 
@@ -87,6 +88,11 @@ class WS {
       if (err) {
         this.clearEvent(event)
         return Promise.reject(err)
+      }
+
+      if (res.error) {
+        this.clearEvent(event)
+        return Promise.reject(res.error.message)
       }
 
       this.events[event].id = res.id
@@ -125,7 +131,6 @@ class WS {
           if (data.id === id) {
             clearTimeout(timeoutId)
             this.socket.removeEventListener(`message`, onMessage)
-
             resolve(data)
           }
         }
