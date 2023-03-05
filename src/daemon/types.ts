@@ -29,24 +29,77 @@ export interface GetInfoResult {
   topoheight: number
 }
 
-export interface NewBlockResult {
+export interface Block {
   block_type: string
   cumulative_difficulty: number
+  supply: number
   difficulty: number
-  event: string
+  reward: number
   extra_nonce: string
   hash: string
   height: number
+  miner_tx: {
+    owner: string
+    signature: null
+    variant: string
+  }
   miner: string
   nonce: number
-  reward: number
-  supply: number
-  timestamp: number
   tips: string[]
   topoheight: number
   total_fees: number
   total_size_in_bytes: number
   txs_hashes: string[]
+}
+
+export interface BalanceParams {
+  address: string
+  asset: string
+}
+
+export interface Balance {
+  balance: number
+  previous_topoheight: number
+}
+
+export interface GetLastBalanceResult {
+  topoheight: number,
+  balance: Balance
+}
+
+export interface P2PStatusResult {
+  best_height: number
+  max_peers: number
+  our_height: number
+  peer_count: number
+  peer_id: number
+  tag?: string
+}
+
+export interface TopoHeightStartEndParams {
+  start_topoheight?: number
+  end_topoheight?: number
+}
+
+export interface RPCEventResult {
+  event: string
+}
+
+export interface Transaction {
+  hash: string
+  blocks: string[],
+  data: {
+    Transfer: {
+      amount: number
+      asset: string
+      extra_data: any
+      to: string
+    }[]
+  }
+  fee: number
+  nonce: number
+  owner: string
+  signature: string
 }
 
 export enum RPCMethod {
@@ -69,7 +122,8 @@ export enum RPCMethod {
   GetDAGOrder = 'get_dag_order',
   GetMempool = 'get_mempool',
   GetTransaction = 'get_transaction',
-  GetTransactions = 'get_transactions'
+  GetTransactions = 'get_transactions',
+  GetBlocks = 'get_blocks'
 }
 
 export enum RPCEvent {

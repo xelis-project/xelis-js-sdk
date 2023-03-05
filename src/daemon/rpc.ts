@@ -1,4 +1,7 @@
-import { GetInfoResult, RPCMethod, RPCResponse } from './types'
+import {
+  Balance, Block, TopoHeightStartEndParams, GetInfoResult,
+  GetLastBalanceResult, P2PStatusResult, RPCMethod, RPCResponse, Transaction, BalanceParams
+} from './types'
 
 class RPC {
   endpoint: string
@@ -24,6 +27,86 @@ class RPC {
 
   getInfo() {
     return this.fetch<GetInfoResult>(RPCMethod.GetInfo)
+  }
+
+  getHeight() {
+    return this.fetch<number>(RPCMethod.GetHeight)
+  }
+
+  getTopoHeight() {
+    return this.fetch<number>(RPCMethod.GetTopoHeight)
+  }
+
+  getStableHeight() {
+    return this.fetch<number>(RPCMethod.GetStableHeight)
+  }
+
+  getBlockTemplate(address: string) {
+    return this.fetch<string>(RPCMethod.GetBlockTemplate, { address })
+  }
+
+  getBlockAtTopoHeight(topoHeight: number) {
+    return this.fetch<Block>(RPCMethod.GetBlockAtTopoHeight, { topoheight: topoHeight })
+  }
+
+  getBlocksAtHeight(height: number) {
+    return this.fetch<Block[]>(RPCMethod.GetBlocksAtHeight, { height })
+  }
+
+  getBlockByHash(hash: string) {
+    return this.fetch<Block>(RPCMethod.GetBlockByHash, { hash })
+  }
+
+  getTopBlock() {
+    return this.fetch<Block>(RPCMethod.GetTopBlock)
+  }
+
+  getNonce(address: string) {
+    return this.fetch<number>(RPCMethod.GetNonce, { address })
+  }
+
+  getLastBalance(params: BalanceParams) {
+    return this.fetch<GetLastBalanceResult>(RPCMethod.GetLastBalance, params)
+  }
+
+  getBalanceAtTopoHeight(params: BalanceParams) {
+    return this.fetch<Balance>(RPCMethod.GetBalanceAtTopoHeight, params)
+  }
+
+  getAssets() {
+    return this.fetch<string[]>(RPCMethod.GetAssets)
+  }
+
+  countTransactions() {
+    return this.fetch<number>(RPCMethod.CountTransactions)
+  }
+
+  getTips() {
+    return this.fetch<string[]>(RPCMethod.GetTips)
+  }
+
+  p2pStatus() {
+    return this.fetch<P2PStatusResult>(RPCMethod.P2PStatus)
+  }
+
+  getDAGOrder(params: TopoHeightStartEndParams) {
+    return this.fetch<string[]>(RPCMethod.GetDAGOrder, params)
+  }
+
+  getMemPool() {
+    return this.fetch<Transaction[]>(RPCMethod.GetMempool)
+  }
+
+  getTransaction(hash: string) {
+    return this.fetch<Transaction>(RPCMethod.GetTransaction, { hash })
+  }
+
+  getTransactions(txHashes: string[]) {
+    return this.fetch<Transaction[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
+  }
+
+  getBlocks(params: TopoHeightStartEndParams) {
+    return this.fetch<Block[]>(RPCMethod.GetBlocks, params)
   }
 }
 

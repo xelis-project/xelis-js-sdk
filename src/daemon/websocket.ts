@@ -1,7 +1,11 @@
 import { WebSocket, MessageEvent } from 'ws'
 import to from 'await-to-js'
 
-import { RPCRequest, NewBlockResult, RPCResponse, GetInfoResult, RPCEvent, RPCMethod } from './types'
+import {
+  RPCRequest, Block, RPCResponse, GetInfoResult, RPCEvent, RPCMethod,
+  RPCEventResult, Transaction, TopoHeightStartEndParams, P2PStatusResult, Balance,
+  BalanceParams, GetLastBalanceResult
+} from './types'
 
 function createRequestMethod(method: string, params?: any): { data: string, id: number } {
   const id = Date.now() + Math.round((Math.random() * 9999))
@@ -83,7 +87,8 @@ class WS {
     if (this.events[event]) {
       this.events[event].listeners.push(onMessage)
     } else {
-      this.events[event] = { listeners: [onMessage] } // important if multiple listenEvent are called without await atleast we store before getting id
+      // important if multiple listenEvent are called without await atleast we store listener before getting id
+      this.events[event] = { listeners: [onMessage] }
       const [err, res] = await to(this.call<boolean>(`subscribe`, { notify: event }))
       if (err) {
         this.clearEvent(event)
@@ -115,8 +120,20 @@ class WS {
     return Promise.resolve(closeListen)
   }
 
-  onNewBlock(onMsg: (data: NewBlockResult, msgEvent: MessageEvent) => void) {
+  onNewBlock(onMsg: (data: Block & RPCEventResult, msgEvent: MessageEvent) => void) {
     return this.listenEvent(RPCEvent.NewBlock, onMsg)
+  }
+
+  onTransactionAddedInMempool(onMsg: (data: Transaction & RPCEventResult, msgEvent: MessageEvent) => void) {
+    return this.listenEvent(RPCEvent.TransactionAddedInMempool, onMsg)
+  }
+
+  onTransactionExecuted(onMsg: (data: Transaction & RPCEventResult, msgEvent: MessageEvent) => void) {
+    return this.listenEvent(RPCEvent.TransactionExecuted, onMsg)
+  }
+
+  onBlockOrdered(onMsg: (data: any & RPCEventResult, msgEvent: MessageEvent) => void) {
+    return this.listenEvent(RPCEvent.BlockOrdered, onMsg)
   }
 
   call<T>(method: string, params?: any): Promise<RPCResponse<T>> {
@@ -147,6 +164,86 @@ class WS {
 
   getInfo() {
     return this.call<GetInfoResult>(RPCMethod.GetInfo)
+  }
+
+  getHeight() {
+    return this.call<number>(RPCMethod.GetHeight)
+  }
+
+  getTopoHeight() {
+    return this.call<number>(RPCMethod.GetTopoHeight)
+  }
+
+  getStableHeight() {
+    return this.call<number>(RPCMethod.GetStableHeight)
+  }
+
+  getBlockTemplate(address: string) {
+    return this.call<string>(RPCMethod.GetBlockTemplate, { address })
+  }
+
+  getBlockAtTopoHeight(topoHeight: number) {
+    return this.call<Block>(RPCMethod.GetBlockAtTopoHeight, { topoheight: topoHeight })
+  }
+
+  getBlocksAtHeight(height: number) {
+    return this.call<Block[]>(RPCMethod.GetBlocksAtHeight, { height })
+  }
+
+  getBlockByHash(hash: string) {
+    return this.call<Block>(RPCMethod.GetBlockByHash, { hash })
+  }
+
+  getTopBlock() {
+    return this.call<Block>(RPCMethod.GetTopBlock)
+  }
+
+  getNonce(address: string) {
+    return this.call<number>(RPCMethod.GetNonce, { address })
+  }
+
+  getLastBalance(params: BalanceParams) {
+    return this.call<GetLastBalanceResult>(RPCMethod.GetLastBalance, params)
+  }
+
+  getBalanceAtTopoHeight(params: BalanceParams) {
+    return this.call<Balance>(RPCMethod.GetBalanceAtTopoHeight, params)
+  }
+
+  getAssets() {
+    return this.call<string[]>(RPCMethod.GetAssets)
+  }
+
+  countTransactions() {
+    return this.call<number>(RPCMethod.CountTransactions)
+  }
+
+  getTips() {
+    return this.call<string[]>(RPCMethod.GetTips)
+  }
+
+  p2pStatus() {
+    return this.call<P2PStatusResult>(RPCMethod.P2PStatus)
+  }
+
+  getDAGOrder(params: TopoHeightStartEndParams) {
+    return this.call<string[]>(RPCMethod.GetDAGOrder, params)
+  }
+
+  getMemPool() {
+    return this.call<Transaction[]>(RPCMethod.GetMempool)
+  }
+
+  getTransaction(hash: string) {
+    return this.call<Transaction>(RPCMethod.GetTransaction, { hash })
+  }
+
+  getTransactions(txHashes: string[]) {
+    return this.call<Transaction[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
+  }
+
+  getBlocks(params: TopoHeightStartEndParams) {
+    return this.call<Block[]>(RPCMethod.GetBlocks, params)
   }
 }
 
