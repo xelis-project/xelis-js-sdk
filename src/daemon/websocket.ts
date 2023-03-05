@@ -8,7 +8,7 @@ import {
 } from './types'
 
 function createRequestMethod(method: string, params?: any): { data: string, id: number } {
-  const id = Date.now() + Math.round((Math.random() * 9999))
+  const id = Date.now()
   const request = { id: id, jsonrpc: `2.0`, method } as RPCRequest
   if (params) request.params = params
   const data = JSON.stringify(request)
