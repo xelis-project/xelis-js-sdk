@@ -139,7 +139,6 @@ class WS {
   call<T>(method: string, params?: any): Promise<RPCResponse<T>> {
     return new Promise((resolve, reject) => {
       const { data, id } = createRequestMethod(method, params)
-      this.socket.send(data)
 
       let timeoutId: any = null
       const onMessage = (msgEvent: MessageEvent) => {
@@ -153,12 +152,15 @@ class WS {
         }
       }
 
+      // make sure you listen before sending data
+      this.socket.addEventListener(`message`, onMessage) // we don't use { once: true } option because of timeout feature
+
       timeoutId = setTimeout(() => {
         this.socket.removeEventListener(`message`, onMessage)
         reject(`timeout`)
       }, this.timeout)
 
-      this.socket.addEventListener(`message`, onMessage) // we don't use once option because of timeout feature
+      this.socket.send(data)
     })
   }
 
