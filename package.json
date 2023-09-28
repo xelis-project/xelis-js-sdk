@@ -7,11 +7,13 @@
     "url": "git+https://github.com/xelis-project/xelis-js-sdk"
   },
   "homepage": "https://github.com/xelis-project/xelis-js-sdk#readme",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "jest",
     "build": "npx tsc --declaration && cp package.json ./dist && cp README.md ./dist",
-    "prepublish": "npm run build",
-    "publish": "npm publish dist"
+    "prepublish": "npm run build"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",
