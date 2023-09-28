@@ -6,7 +6,7 @@ Xelis software development kit for JS.
 
 Install library with NPM.
 
-`npm i xelis-js-sdk`
+`npm i @xelis/sdk`
 
 ## Usage
 
@@ -15,8 +15,8 @@ Import library and start working :).
 Use http/rpc connection.
 
 ```js
-import { DEV_NODE_RPC } from 'xelis-js-sdk/config/nodes'
-import DaemonRPC from 'xelis-js-sdk/daemon/rpc'
+import { DEV_NODE_RPC } from '@xelis/sdk/config/nodes'
+import DaemonRPC from '@xelis/sdk/daemon/rpc'
 
 const main = async () => {
   const daemonRPC = new DaemonRPC(DEV_NODE_RPC)
@@ -30,8 +30,8 @@ main()
 Use websocket connection.
 
 ```js
-import { DEV_NODE_RPC } from 'xelis-js-sdk/config/nodes'
-import DaemonWS from 'xelis-js-sdk/daemon/websocket'
+import { DEV_NODE_RPC } from '@xelis/sdk/config/nodes'
+import DaemonWS from '@xelis/sdk/daemon/websocket'
 
 const main = async () => {
   const daemonWS = new DaemonWS()
