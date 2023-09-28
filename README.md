@@ -2,11 +2,13 @@
 
 Xelis software development kit for JS.
 
-## Usage
+## Install
 
-Install library with NPM
+Install library with NPM.
 
 `npm i xelis-js-sdk`
+
+## Usage
 
 Import library and start working :).
 
@@ -15,7 +17,6 @@ Use http/rpc connection.
 ```js
 import { DEV_NODE_RPC } from 'xelis-js-sdk/config/nodes'
 import DaemonRPC from 'xelis-js-sdk/daemon/rpc'
-// const DaemonRPC = require(`xelis-js-sdk/daemon/rpc`).default
 
 const main = async () => {
   const daemonRPC = new DaemonRPC(DEV_NODE_RPC)
