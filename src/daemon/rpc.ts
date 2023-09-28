@@ -1,5 +1,5 @@
 import {
-  Balance, Block, TopoHeightStartEndParams, GetInfoResult,
+  Balance, Block, TopoHeightRangeParams, GetInfoResult, HeightRangeParams,
   GetLastBalanceResult, P2PStatusResult, RPCMethod, RPCResponse, Transaction, BalanceParams
 } from './types'
 
@@ -89,7 +89,7 @@ class RPC {
     return this.fetch<P2PStatusResult>(RPCMethod.P2PStatus)
   }
 
-  getDAGOrder(params: TopoHeightStartEndParams) {
+  getDAGOrder(params: TopoHeightRangeParams) {
     return this.fetch<string[]>(RPCMethod.GetDAGOrder, params)
   }
 
@@ -105,8 +105,16 @@ class RPC {
     return this.fetch<Transaction[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
   }
 
-  getBlocks(params: TopoHeightStartEndParams) {
+  getBlocks(params: TopoHeightRangeParams) {
     return this.fetch<Block[]>(RPCMethod.GetBlocks, params)
+  }
+
+  getBlocksRangeByTopoheight(params: TopoHeightRangeParams) {
+    return this.fetch<Block[]>(RPCMethod.GetBlocksRangeByTopoheight, params)
+  }
+
+  getBlocksRangeByHeight(params: HeightRangeParams) {
+    return this.fetch<Block[]>(RPCMethod.GetBlocksRangeByHeight, params)
   }
 }
 

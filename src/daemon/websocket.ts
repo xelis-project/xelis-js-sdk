@@ -1,14 +1,15 @@
-import { WebSocket, MessageEvent } from 'ws'
+import { MessageEvent } from 'ws'
+import WebSocket from 'isomorphic-ws'
 import to from 'await-to-js'
 
 import {
   RPCRequest, Block, RPCResponse, GetInfoResult, RPCEvent, RPCMethod,
-  RPCEventResult, Transaction, TopoHeightStartEndParams, P2PStatusResult, Balance,
-  BalanceParams, GetLastBalanceResult
+  RPCEventResult, Transaction, TopoHeightRangeParams, P2PStatusResult, Balance,
+  BalanceParams, GetLastBalanceResult, HeightRangeParams, BlockOrdered
 } from './types'
 
 function createRequestMethod(method: string, params?: any): { data: string, id: number } {
-  const id = Date.now()
+  const id = Math.floor(Date.now() * Math.random())
   const request = { id: id, jsonrpc: `2.0`, method } as RPCRequest
   if (params) request.params = params
   const data = JSON.stringify(request)
@@ -22,39 +23,65 @@ interface EventData {
 
 class WS {
   endpoint: string
-  socket!: WebSocket
+  socket?: WebSocket
   timeout: number
+  connected: boolean
   private events: Record<string, EventData>
 
-  constructor(endpoint: string) {
-    this.endpoint = endpoint
+  constructor() {
+    this.endpoint = ""
     this.timeout = 3000
+    this.connected = false
     this.events = {}
   }
 
-  connect() {
-    return new Promise((resolve, reject) => {
-      this.socket = new WebSocket(this.endpoint)
-
-      this.socket.addEventListener(`open`, resolve)
-      this.socket.addEventListener(`close`, reject)
-      this.socket.addEventListener(`error`, reject)
-    })
-  }
-
-  reconnect(newEndpoint?: string) {
-    if (newEndpoint) this.endpoint = newEndpoint
-
-    if (this.socket.readyState !== WebSocket.CLOSED) {
+  connect(endpoint: string) {
+    if (this.socket && this.socket.readyState !== WebSocket.CLOSED) {
       this.socket.close()
     }
 
-    return this.connect()
+    return new Promise((resolve, reject) => {
+      this.socket = new WebSocket(endpoint)
+      this.endpoint = endpoint
+
+      this.socket.addEventListener(`open`, (event) => {
+        this.connected = true
+        resolve(event)
+      })
+
+      this.socket.addEventListener(`close`, () => {
+        this.connected = false
+        reject()
+      })
+
+      this.socket.addEventListener(`error`, (err) => {
+        this.connected = false
+        reject(err)
+      })
+    })
+  }
+
+  close(code?: number | undefined, data?: string | Buffer | undefined): void {
+    this.socket && this.socket.close(code, data)
+  }
+
+  onClose(cb: (event: WebSocket.CloseEvent) => void) {
+    if (!this.socket) return
+    this.socket.addEventListener(`close`, (event) => {
+      cb(event)
+    })
+  }
+
+  onError(cb: (err: WebSocket.ErrorEvent) => void) {
+    if (!this.socket) return
+    this.socket.addEventListener(`error`, (err) => {
+      cb(err)
+    })
   }
 
   private clearEvent(event: RPCEvent) {
     this.events[event].listeners.forEach(listener => {
-      this.socket.removeEventListener(`message`, listener)
+      this.socket && this.socket.removeEventListener(`message`, listener)
     })
 
     Reflect.deleteProperty(this.events, event)
@@ -62,23 +89,30 @@ class WS {
 
   async closeAllListens(event: RPCEvent) {
     if (this.events[event]) {
-      const [err, res] = await to(this.call<boolean>(`unsubscribe`, { notify: event }))
+      const [err, _] = await to(this.call<boolean>(`unsubscribe`, { notify: event }))
       if (err) return Promise.reject(err)
-      if (res.error) return Promise.reject(res.error.message)
       this.clearEvent(event)
     }
 
     return Promise.resolve()
   }
 
-  async listenEvent<T>(event: RPCEvent, onMsg: (result: T, msgEvent: MessageEvent) => void) {
+  async listenEvent<T>(event: RPCEvent, onData: (msgEvent: MessageEvent, data?: T, err?: Error) => void) {
     const onMessage = (msgEvent: MessageEvent) => {
       if (this.events[event]) {
         const { id } = this.events[event]
         if (typeof msgEvent.data === `string`) {
-          const data = JSON.parse(msgEvent.data) as RPCResponse<any>
-          if (typeof data.result === `object` && data.id === id) {
-            onMsg(data.result, msgEvent)
+          try {
+            const data = JSON.parse(msgEvent.data) as RPCResponse<any>
+            if (data.id === id) {
+              if (data.error) {
+                onData(msgEvent, undefined, new Error(data.error.message))
+              } else {
+                onData(msgEvent, data.result, undefined)
+              }
+            }
+          } catch {
+            // can't parse json -- do nothing
           }
         }
       }
@@ -95,15 +129,10 @@ class WS {
         return Promise.reject(err)
       }
 
-      if (res.error) {
-        this.clearEvent(event)
-        return Promise.reject(res.error.message)
-      }
-
       this.events[event].id = res.id
     }
 
-    this.socket.addEventListener(`message`, onMessage)
+    this.socket && this.socket.addEventListener(`message`, onMessage)
 
     const closeListen = async () => {
       if (this.events[event] && this.events[event].listeners.length === 1) {
@@ -113,27 +142,27 @@ class WS {
         Reflect.deleteProperty(this.events, event)
       }
 
-      this.socket.removeEventListener(`message`, onMessage)
+      this.socket && this.socket.removeEventListener(`message`, onMessage)
       return Promise.resolve()
     }
 
     return Promise.resolve(closeListen)
   }
 
-  onNewBlock(onMsg: (data: Block & RPCEventResult, msgEvent: MessageEvent) => void) {
-    return this.listenEvent(RPCEvent.NewBlock, onMsg)
+  onNewBlock(onData: (msgEvent: MessageEvent, data?: Block & RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.NewBlock, onData)
   }
 
-  onTransactionAddedInMempool(onMsg: (data: Transaction & RPCEventResult, msgEvent: MessageEvent) => void) {
-    return this.listenEvent(RPCEvent.TransactionAddedInMempool, onMsg)
+  onTransactionAddedInMempool(onData: (msgEvent: MessageEvent, data?: Transaction & RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.TransactionAddedInMempool, onData)
   }
 
-  onTransactionExecuted(onMsg: (data: Transaction & RPCEventResult, msgEvent: MessageEvent) => void) {
-    return this.listenEvent(RPCEvent.TransactionExecuted, onMsg)
+  onTransactionExecuted(onData: (msgEvent: MessageEvent, data?: Transaction & RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.TransactionExecuted, onData)
   }
 
-  onBlockOrdered(onMsg: (data: any & RPCEventResult, msgEvent: MessageEvent) => void) {
-    return this.listenEvent(RPCEvent.BlockOrdered, onMsg)
+  onBlockOrdered(onData: (msgEvent: MessageEvent, data?: BlockOrdered & RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.BlockOrdered, onData)
   }
 
   call<T>(method: string, params?: any): Promise<RPCResponse<T>> {
@@ -146,106 +175,123 @@ class WS {
           const data = JSON.parse(msgEvent.data) as RPCResponse<T>
           if (data.id === id) {
             clearTimeout(timeoutId)
-            this.socket.removeEventListener(`message`, onMessage)
-            resolve(data)
+            this.socket && this.socket.removeEventListener(`message`, onMessage)
+            if (data.error) return reject(new Error(data.error.message))
+            else resolve(data)
           }
         }
       }
 
       // make sure you listen before sending data
-      this.socket.addEventListener(`message`, onMessage) // we don't use { once: true } option because of timeout feature
+      this.socket && this.socket.addEventListener(`message`, onMessage) // we don't use { once: true } option because of timeout feature
 
       timeoutId = setTimeout(() => {
-        this.socket.removeEventListener(`message`, onMessage)
-        reject(`timeout`)
+        this.socket && this.socket.removeEventListener(`message`, onMessage)
+        reject(new Error(`timeout`))
       }, this.timeout)
 
-      this.socket.send(data)
+      this.socket && this.socket.send(data)
+    })
+  }
+
+  dataCall<T>(method: string, params?: any): Promise<T> {
+    return new Promise(async (resolve, reject) => {
+      const [err, res] = await to(this.call<T>(method, params))
+      if (err) return reject(err)
+      return resolve(res.result)
     })
   }
 
   getInfo() {
-    return this.call<GetInfoResult>(RPCMethod.GetInfo)
+    return this.dataCall<GetInfoResult>(RPCMethod.GetInfo)
   }
 
   getHeight() {
-    return this.call<number>(RPCMethod.GetHeight)
+    return this.dataCall<number>(RPCMethod.GetHeight)
   }
 
   getTopoHeight() {
-    return this.call<number>(RPCMethod.GetTopoHeight)
+    return this.dataCall<number>(RPCMethod.GetTopoHeight)
   }
 
   getStableHeight() {
-    return this.call<number>(RPCMethod.GetStableHeight)
+    return this.dataCall<number>(RPCMethod.GetStableHeight)
   }
 
   getBlockTemplate(address: string) {
-    return this.call<string>(RPCMethod.GetBlockTemplate, { address })
+    return this.dataCall<string>(RPCMethod.GetBlockTemplate, { address })
   }
 
   getBlockAtTopoHeight(topoHeight: number) {
-    return this.call<Block>(RPCMethod.GetBlockAtTopoHeight, { topoheight: topoHeight })
+    return this.dataCall<Block>(RPCMethod.GetBlockAtTopoHeight, { topoheight: topoHeight })
   }
 
   getBlocksAtHeight(height: number) {
-    return this.call<Block[]>(RPCMethod.GetBlocksAtHeight, { height })
+    return this.dataCall<Block[]>(RPCMethod.GetBlocksAtHeight, { height })
   }
 
   getBlockByHash(hash: string) {
-    return this.call<Block>(RPCMethod.GetBlockByHash, { hash })
+    return this.dataCall<Block>(RPCMethod.GetBlockByHash, { hash })
   }
 
   getTopBlock() {
-    return this.call<Block>(RPCMethod.GetTopBlock)
+    return this.dataCall<Block>(RPCMethod.GetTopBlock)
   }
 
   getNonce(address: string) {
-    return this.call<number>(RPCMethod.GetNonce, { address })
+    return this.dataCall<number>(RPCMethod.GetNonce, { address })
   }
 
   getLastBalance(params: BalanceParams) {
-    return this.call<GetLastBalanceResult>(RPCMethod.GetLastBalance, params)
+    return this.dataCall<GetLastBalanceResult>(RPCMethod.GetLastBalance, params)
   }
 
   getBalanceAtTopoHeight(params: BalanceParams) {
-    return this.call<Balance>(RPCMethod.GetBalanceAtTopoHeight, params)
+    return this.dataCall<Balance>(RPCMethod.GetBalanceAtTopoHeight, params)
   }
 
   getAssets() {
-    return this.call<string[]>(RPCMethod.GetAssets)
+    return this.dataCall<string[]>(RPCMethod.GetAssets)
   }
 
   countTransactions() {
-    return this.call<number>(RPCMethod.CountTransactions)
+    return this.dataCall<number>(RPCMethod.CountTransactions)
   }
 
   getTips() {
-    return this.call<string[]>(RPCMethod.GetTips)
+    return this.dataCall<string[]>(RPCMethod.GetTips)
   }
 
   p2pStatus() {
-    return this.call<P2PStatusResult>(RPCMethod.P2PStatus)
+    return this.dataCall<P2PStatusResult>(RPCMethod.P2PStatus)
   }
 
-  getDAGOrder(params: TopoHeightStartEndParams) {
-    return this.call<string[]>(RPCMethod.GetDAGOrder, params)
+  getDAGOrder(params: TopoHeightRangeParams) {
+    return this.dataCall<string[]>(RPCMethod.GetDAGOrder, params)
   }
 
   getMemPool() {
-    return this.call<Transaction[]>(RPCMethod.GetMempool)
+    return this.dataCall<Transaction[]>(RPCMethod.GetMempool)
   }
 
   getTransaction(hash: string) {
-    return this.call<Transaction>(RPCMethod.GetTransaction, { hash })
+    return this.dataCall<Transaction>(RPCMethod.GetTransaction, { hash })
   }
 
   getTransactions(txHashes: string[]) {
-    return this.call<Transaction[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
+    return this.dataCall<Transaction[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
   }
 
-  getBlocks(params: TopoHeightStartEndParams) {
-    return this.call<Block[]>(RPCMethod.GetBlocks, params)
+  getBlocks(params: TopoHeightRangeParams) {
+    return this.dataCall<Block[]>(RPCMethod.GetBlocks, params)
+  }
+
+  getBlocksRangeByTopoheight(params: TopoHeightRangeParams) {
+    return this.dataCall<Block[]>(RPCMethod.GetBlocksRangeByTopoheight, params)
+  }
+
+  getBlocksRangeByHeight(params: HeightRangeParams) {
+    return this.dataCall<Block[]>(RPCMethod.GetBlocksRangeByHeight, params)
   }
 }
 

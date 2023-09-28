@@ -76,13 +76,24 @@ export interface P2PStatusResult {
   tag?: string
 }
 
-export interface TopoHeightStartEndParams {
+export interface TopoHeightRangeParams {
   start_topoheight?: number
   end_topoheight?: number
 }
 
+export interface HeightRangeParams {
+  start_height?: number
+  end_height?: number
+}
+
 export interface RPCEventResult {
   event: string
+}
+
+export interface BlockOrdered {
+  topoheight: number
+  block_hash: string
+  block_type: string
 }
 
 export interface Transaction {
@@ -123,7 +134,9 @@ export enum RPCMethod {
   GetMempool = 'get_mempool',
   GetTransaction = 'get_transaction',
   GetTransactions = 'get_transactions',
-  GetBlocks = 'get_blocks'
+  GetBlocks = 'get_blocks',
+  GetBlocksRangeByTopoheight = 'get_blocks_range_by_topoheight',
+  GetBlocksRangeByHeight = 'get_blocks_range_by_height'
 }
 
 export enum RPCEvent {
