@@ -68,12 +68,12 @@ export interface GetLastBalanceResult {
 }
 
 export interface P2PStatusResult {
-  best_height: number
-  max_peers: number
-  our_height: number
   peer_count: number
-  peer_id: number
   tag?: string
+  peer_id: number
+  our_topoheight: number,
+  best_topoheight: number,
+  max_peers: number
 }
 
 export interface TopoHeightRangeParams {
