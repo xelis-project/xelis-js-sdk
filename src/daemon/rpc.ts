@@ -25,6 +25,10 @@ class RPC {
     }
   }
 
+  getVersion() {
+    return this.fetch<string>(RPCMethod.GetVersion)
+  }
+
   getInfo() {
     return this.fetch<GetInfoResult>(RPCMethod.GetInfo)
   }

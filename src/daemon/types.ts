@@ -114,6 +114,7 @@ export interface Transaction {
 }
 
 export enum RPCMethod {
+  GetVersion = 'get_version',
   GetInfo = 'get_info',
   GetHeight = 'get_height',
   GetTopoHeight = 'get_topoheight',
