@@ -85,6 +85,10 @@ class RPC {
     return this.fetch<number>(RPCMethod.CountTransactions)
   }
 
+  countAssets() {
+    return this.fetch<number>(RPCMethod.CountAssets)
+  }
+
   getTips() {
     return this.fetch<string[]>(RPCMethod.GetTips)
   }

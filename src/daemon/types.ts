@@ -128,6 +128,7 @@ export enum RPCMethod {
   GetLastBalance = 'get_last_balance',
   GetBalanceAtTopoHeight = 'get_balance_at_topoheight',
   GetAssets = 'get_assets',
+  CountAssets = 'count_assets',
   CountTransactions = 'count_transactions',
   GetTips = 'get_tips',
   P2PStatus = 'p2p_status',
