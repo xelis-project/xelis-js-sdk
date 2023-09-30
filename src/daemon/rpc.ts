@@ -109,10 +109,6 @@ class RPC {
     return this.fetch<Transaction[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
   }
 
-  getBlocks(params: TopoHeightRangeParams) {
-    return this.fetch<Block[]>(RPCMethod.GetBlocks, params)
-  }
-
   getBlocksRangeByTopoheight(params: TopoHeightRangeParams) {
     return this.fetch<Block[]>(RPCMethod.GetBlocksRangeByTopoheight, params)
   }

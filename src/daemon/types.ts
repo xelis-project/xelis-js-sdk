@@ -135,7 +135,6 @@ export enum RPCMethod {
   GetMempool = 'get_mempool',
   GetTransaction = 'get_transaction',
   GetTransactions = 'get_transactions',
-  GetBlocks = 'get_blocks',
   GetBlocksRangeByTopoheight = 'get_blocks_range_by_topoheight',
   GetBlocksRangeByHeight = 'get_blocks_range_by_height'
 }
