@@ -5,7 +5,8 @@ import to from 'await-to-js'
 import {
   RPCRequest, Block, RPCResponse, GetInfoResult, RPCEvent, RPCMethod,
   RPCEventResult, Transaction, TopoHeightRangeParams, P2PStatusResult, Balance,
-  BalanceParams, GetLastBalanceResult, HeightRangeParams, BlockOrdered
+  GetBalanceAtTopoHeightParams, GetLastBalanceResult, HeightRangeParams, BlockOrdered,
+  GetLastBalanceParams, GetAccountsParams
 } from './types'
 
 function createRequestMethod(method: string, params?: any): { data: string, id: number } {
@@ -242,11 +243,11 @@ class WS {
     return this.dataCall<number>(RPCMethod.GetNonce, { address })
   }
 
-  getLastBalance(params: BalanceParams) {
+  getLastBalance(params: GetLastBalanceParams) {
     return this.dataCall<GetLastBalanceResult>(RPCMethod.GetLastBalance, params)
   }
 
-  getBalanceAtTopoHeight(params: BalanceParams) {
+  getBalanceAtTopoHeight(params: GetBalanceAtTopoHeightParams) {
     return this.dataCall<Balance>(RPCMethod.GetBalanceAtTopoHeight, params)
   }
 
@@ -282,16 +283,16 @@ class WS {
     return this.dataCall<Transaction[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
   }
 
-  getBlocks(params: TopoHeightRangeParams) {
-    return this.dataCall<Block[]>(RPCMethod.GetBlocks, params)
-  }
-
   getBlocksRangeByTopoheight(params: TopoHeightRangeParams) {
     return this.dataCall<Block[]>(RPCMethod.GetBlocksRangeByTopoheight, params)
   }
 
   getBlocksRangeByHeight(params: HeightRangeParams) {
     return this.dataCall<Block[]>(RPCMethod.GetBlocksRangeByHeight, params)
+  }
+
+  getAccounts(params: GetAccountsParams) {
+    return this.dataCall<string[]>(RPCMethod.GetAccounts, params)
   }
 }
 

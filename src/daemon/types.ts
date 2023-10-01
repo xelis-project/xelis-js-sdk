@@ -52,9 +52,15 @@ export interface Block {
   txs_hashes: string[]
 }
 
-export interface BalanceParams {
+export interface GetLastBalanceParams {
   address: string
   asset: string
+}
+
+export interface GetBalanceAtTopoHeightParams {
+  address: string
+  asset: string
+  topoheight: number
 }
 
 export interface Balance {
@@ -113,6 +119,13 @@ export interface Transaction {
   signature: string
 }
 
+export interface GetAccountsParams {
+  skip?: number
+  maximum?: number
+  minimum_topoheight?: number
+  maximum_topoheight?: number
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetInfo = 'get_info',
@@ -137,7 +150,8 @@ export enum RPCMethod {
   GetTransaction = 'get_transaction',
   GetTransactions = 'get_transactions',
   GetBlocksRangeByTopoheight = 'get_blocks_range_by_topoheight',
-  GetBlocksRangeByHeight = 'get_blocks_range_by_height'
+  GetBlocksRangeByHeight = 'get_blocks_range_by_height',
+  GetAccounts = 'get_accounts'
 }
 
 export enum RPCEvent {

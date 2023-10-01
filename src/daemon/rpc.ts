@@ -1,6 +1,7 @@
 import {
   Balance, Block, TopoHeightRangeParams, GetInfoResult, HeightRangeParams,
-  GetLastBalanceResult, P2PStatusResult, RPCMethod, RPCResponse, Transaction, BalanceParams
+  GetLastBalanceResult, P2PStatusResult, RPCMethod, RPCResponse, Transaction, GetLastBalanceParams,
+  GetBalanceAtTopoHeightParams, GetAccountsParams
 } from './types'
 
 class RPC {
@@ -69,11 +70,11 @@ class RPC {
     return this.fetch<number>(RPCMethod.GetNonce, { address })
   }
 
-  getLastBalance(params: BalanceParams) {
+  getLastBalance(params: GetLastBalanceParams) {
     return this.fetch<GetLastBalanceResult>(RPCMethod.GetLastBalance, params)
   }
 
-  getBalanceAtTopoHeight(params: BalanceParams) {
+  getBalanceAtTopoHeight(params: GetBalanceAtTopoHeightParams) {
     return this.fetch<Balance>(RPCMethod.GetBalanceAtTopoHeight, params)
   }
 
@@ -119,6 +120,10 @@ class RPC {
 
   getBlocksRangeByHeight(params: HeightRangeParams) {
     return this.fetch<Block[]>(RPCMethod.GetBlocksRangeByHeight, params)
+  }
+
+  getAccounts(params: GetAccountsParams) {
+    return this.fetch<string[]>(RPCMethod.GetAccounts, params)
   }
 }
 
