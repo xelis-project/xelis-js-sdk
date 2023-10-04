@@ -16,7 +16,12 @@ class RPC {
       const res = await fetch(this.endpoint, { method: `POST`, body })
 
       if (res.ok) {
-        const data = await res.json()
+        const data = await res.json() as RPCResponse<T>
+
+        if (data.error) {
+          return Promise.reject(new Error(data.error.message))
+        }
+
         return Promise.resolve(data)
       } else {
         return Promise.reject(new Error(`${res.status} - ${res.statusText}`))

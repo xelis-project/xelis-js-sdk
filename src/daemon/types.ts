@@ -13,7 +13,7 @@ export interface RPCError {
 export interface RPCResponse<T> {
   id: number
   result: T
-  error: RPCError
+  error?: RPCError
 }
 
 export interface GetInfoResult {
