@@ -20,6 +20,7 @@ function createRequestMethod(method: string, params?: any): { data: string, id: 
 interface EventData {
   id?: number
   listeners: ((msgEvent: MessageEvent) => void)[]
+  unsubscribeTimeoutId?: any
 }
 
 class WS {
@@ -27,6 +28,7 @@ class WS {
   socket?: WebSocket
   timeout: number
   connected: boolean
+  unsubscribeSuspense: number
   private events: Record<string, EventData>
 
   constructor() {
@@ -34,6 +36,7 @@ class WS {
     this.timeout = 3000
     this.connected = false
     this.events = {}
+    this.unsubscribeSuspense = 1000
   }
 
   connect(endpoint: string) {
@@ -120,6 +123,13 @@ class WS {
     }
 
     if (this.events[event]) {
+      const { unsubscribeTimeoutId } = this.events[event]
+      if (unsubscribeTimeoutId) {
+        // clear timeout to unsubscribe 
+        // because we got a new registered event and want to cancel the pending unsubscribe grace period
+        clearTimeout(unsubscribeTimeoutId)
+      }
+
       this.events[event].listeners.push(onMessage)
     } else {
       // important if multiple listenEvent are called without await atleast we store listener before getting id
@@ -135,12 +145,24 @@ class WS {
 
     this.socket && this.socket.addEventListener(`message`, onMessage)
 
-    const closeListen = async () => {
-      if (this.events[event] && this.events[event].listeners.length === 1) {
-        // this is the last listen callback so we unsubscribe from daemon ws
-        const [err, _] = await to(this.call<boolean>(`unsubscribe`, { notify: event }))
-        if (err) return Promise.reject(err)
-        Reflect.deleteProperty(this.events, event)
+    const closeListen = () => {
+      const eventData = this.events[event]
+      if (eventData) {
+        const listeners = eventData.listeners
+        for (let i = 0; i < listeners.length; i++) {
+          if (listeners[i] === onMessage) {
+            listeners.splice(i, 1)
+            break
+          }
+        }
+
+        if (listeners.length === 0) {
+          this.events[event].unsubscribeTimeoutId = setTimeout(async () => {
+            // no more listener so we unsubscribe from daemon websocket
+            this.call<boolean>(`unsubscribe`, { notify: event })
+            Reflect.deleteProperty(this.events, event)
+          }, this.unsubscribeSuspense)
+        }
       }
 
       this.socket && this.socket.removeEventListener(`message`, onMessage)
