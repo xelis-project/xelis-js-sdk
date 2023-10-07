@@ -11,7 +11,7 @@ class RPC {
     this.endpoint = endpoint
   }
 
-  async fetch<T>(method: RPCMethod, params?: any): Promise<RPCResponse<T>> {
+  async post<T>(method: RPCMethod, params?: any): Promise<RPCResponse<T>> {
     try {
       const body = JSON.stringify({ id: 1, jsonrpc: '2.0', method: method, params })
       const res = await fetch(this.endpoint, { method: `POST`, body })
@@ -33,103 +33,111 @@ class RPC {
   }
 
   getVersion() {
-    return this.fetch<string>(RPCMethod.GetVersion)
+    return this.post<string>(RPCMethod.GetVersion)
   }
 
   getInfo() {
-    return this.fetch<GetInfoResult>(RPCMethod.GetInfo)
+    return this.post<GetInfoResult>(RPCMethod.GetInfo)
   }
 
   getHeight() {
-    return this.fetch<number>(RPCMethod.GetHeight)
+    return this.post<number>(RPCMethod.GetHeight)
   }
 
   getTopoHeight() {
-    return this.fetch<number>(RPCMethod.GetTopoHeight)
+    return this.post<number>(RPCMethod.GetTopoHeight)
   }
 
   getStableHeight() {
-    return this.fetch<number>(RPCMethod.GetStableHeight)
+    return this.post<number>(RPCMethod.GetStableHeight)
   }
 
   getBlockTemplate(address: string) {
-    return this.fetch<string>(RPCMethod.GetBlockTemplate, { address })
+    return this.post<string>(RPCMethod.GetBlockTemplate, { address })
   }
 
   getBlockAtTopoHeight(params: GetBlockAtTopoHeightParams) {
-    return this.fetch<Block>(RPCMethod.GetBlockAtTopoHeight, params)
+    return this.post<Block>(RPCMethod.GetBlockAtTopoHeight, params)
   }
 
   getBlocksAtHeight(params: GetBlocksAtHeightParams) {
-    return this.fetch<Block[]>(RPCMethod.GetBlocksAtHeight, params)
+    return this.post<Block[]>(RPCMethod.GetBlocksAtHeight, params)
   }
 
   getBlockByHash(params: GetBlockByHashParams) {
-    return this.fetch<Block>(RPCMethod.GetBlockByHash, params)
+    return this.post<Block>(RPCMethod.GetBlockByHash, params)
   }
 
   getTopBlock(params: GetTopBlockParams) {
-    return this.fetch<Block>(RPCMethod.GetTopBlock, params)
+    return this.post<Block>(RPCMethod.GetTopBlock, params)
   }
 
   getNonce(address: string) {
-    return this.fetch<number>(RPCMethod.GetNonce, { address })
+    return this.post<number>(RPCMethod.GetNonce, { address })
   }
 
   getLastBalance(params: GetLastBalanceParams) {
-    return this.fetch<GetLastBalanceResult>(RPCMethod.GetLastBalance, params)
+    return this.post<GetLastBalanceResult>(RPCMethod.GetLastBalance, params)
   }
 
   getBalanceAtTopoHeight(params: GetBalanceAtTopoHeightParams) {
-    return this.fetch<Balance>(RPCMethod.GetBalanceAtTopoHeight, params)
+    return this.post<Balance>(RPCMethod.GetBalanceAtTopoHeight, params)
   }
 
   getAssets() {
-    return this.fetch<string[]>(RPCMethod.GetAssets)
+    return this.post<string[]>(RPCMethod.GetAssets)
   }
 
   countTransactions() {
-    return this.fetch<number>(RPCMethod.CountTransactions)
+    return this.post<number>(RPCMethod.CountTransactions)
   }
 
   countAssets() {
-    return this.fetch<number>(RPCMethod.CountAssets)
+    return this.post<number>(RPCMethod.CountAssets)
   }
 
   getTips() {
-    return this.fetch<string[]>(RPCMethod.GetTips)
+    return this.post<string[]>(RPCMethod.GetTips)
   }
 
   p2pStatus() {
-    return this.fetch<P2PStatusResult>(RPCMethod.P2PStatus)
+    return this.post<P2PStatusResult>(RPCMethod.P2PStatus)
   }
 
   getDAGOrder(params: TopoHeightRangeParams) {
-    return this.fetch<string[]>(RPCMethod.GetDAGOrder, params)
+    return this.post<string[]>(RPCMethod.GetDAGOrder, params)
   }
 
   getMemPool() {
-    return this.fetch<Transaction[]>(RPCMethod.GetMempool)
+    return this.post<Transaction[]>(RPCMethod.GetMempool)
   }
 
   getTransaction(hash: string) {
-    return this.fetch<Transaction>(RPCMethod.GetTransaction, { hash })
+    return this.post<Transaction>(RPCMethod.GetTransaction, { hash })
   }
 
   getTransactions(txHashes: string[]) {
-    return this.fetch<Transaction[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
+    return this.post<Transaction[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
   }
 
   getBlocksRangeByTopoheight(params: TopoHeightRangeParams) {
-    return this.fetch<Block[]>(RPCMethod.GetBlocksRangeByTopoheight, params)
+    return this.post<Block[]>(RPCMethod.GetBlocksRangeByTopoheight, params)
   }
 
   getBlocksRangeByHeight(params: HeightRangeParams) {
-    return this.fetch<Block[]>(RPCMethod.GetBlocksRangeByHeight, params)
+    return this.post<Block[]>(RPCMethod.GetBlocksRangeByHeight, params)
   }
 
   getAccounts(params: GetAccountsParams) {
-    return this.fetch<string[]>(RPCMethod.GetAccounts, params)
+    return this.post<string[]>(RPCMethod.GetAccounts, params)
+  }
+
+  submitBlock(blockTemplate: string) {
+    return this.post<boolean>(RPCMethod.SubmitBlock, { block_template: blockTemplate })
+  }
+
+  submitTransaction(hexData: string) {
+    return this.post<boolean>(RPCMethod.SubmitTransaction, { data: hexData })
   }
 }
 

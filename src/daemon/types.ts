@@ -102,17 +102,31 @@ export interface BlockOrdered {
   block_type: string
 }
 
+export interface Transfer {
+  amount: number
+  asset: string
+  extra_data?: any
+  to: string
+}
+
+export interface TransactionData {
+  transfers: Transfer[]
+  burn: {
+    asset: string
+    amount: number
+  }
+  call_contract: {
+    contract: string
+    // assets
+    // params
+  }
+  deploy_contract: string
+}
+
 export interface Transaction {
   hash: string
   blocks: string[],
-  data: {
-    Transfer: {
-      amount: number
-      asset: string
-      extra_data: any
-      to: string
-    }[]
-  }
+  data: TransactionData
   fee: number
   nonce: number
   owner: string
@@ -170,7 +184,9 @@ export enum RPCMethod {
   GetTransactions = 'get_transactions',
   GetBlocksRangeByTopoheight = 'get_blocks_range_by_topoheight',
   GetBlocksRangeByHeight = 'get_blocks_range_by_height',
-  GetAccounts = 'get_accounts'
+  GetAccounts = 'get_accounts',
+  SubmitBlock = 'submit_block',
+  SubmitTransaction = 'submit_transaction'
 }
 
 export enum RPCEvent {

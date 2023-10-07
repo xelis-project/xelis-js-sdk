@@ -317,6 +317,14 @@ class WS {
   getAccounts(params: GetAccountsParams) {
     return this.dataCall<string[]>(RPCMethod.GetAccounts, params)
   }
+
+  submitBlock(blockTemplate: string) {
+    return this.dataCall<boolean>(RPCMethod.SubmitBlock, { block_template: blockTemplate })
+  }
+
+  submitTransaction(hexData: string) {
+    return this.dataCall<boolean>(RPCMethod.SubmitTransaction, { data: hexData })
+  }
 }
 
 export default WS
