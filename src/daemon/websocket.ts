@@ -6,7 +6,8 @@ import {
   RPCRequest, Block, RPCResponse, GetInfoResult, RPCEvent, RPCMethod,
   RPCEventResult, Transaction, TopoHeightRangeParams, P2PStatusResult, Balance,
   GetBalanceAtTopoHeightParams, GetLastBalanceResult, HeightRangeParams, BlockOrdered,
-  GetLastBalanceParams, GetAccountsParams
+  GetLastBalanceParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
+  GetBlocksAtHeightParams, GetTopBlockParams
 } from './types'
 
 function createRequestMethod(method: string, params?: any): { data: string, id: number } {
@@ -245,20 +246,20 @@ class WS {
     return this.dataCall<string>(RPCMethod.GetBlockTemplate, { address })
   }
 
-  getBlockAtTopoHeight(topoHeight: number) {
-    return this.dataCall<Block>(RPCMethod.GetBlockAtTopoHeight, { topoheight: topoHeight })
+  getBlockAtTopoHeight(params: GetBlockAtTopoHeightParams) {
+    return this.dataCall<Block>(RPCMethod.GetBlockAtTopoHeight, params)
   }
 
-  getBlocksAtHeight(height: number) {
-    return this.dataCall<Block[]>(RPCMethod.GetBlocksAtHeight, { height })
+  getBlocksAtHeight(params: GetBlocksAtHeightParams) {
+    return this.dataCall<Block[]>(RPCMethod.GetBlocksAtHeight, params)
   }
 
-  getBlockByHash(hash: string) {
-    return this.dataCall<Block>(RPCMethod.GetBlockByHash, { hash })
+  getBlockByHash(params: GetBlockByHashParams) {
+    return this.dataCall<Block>(RPCMethod.GetBlockByHash, params)
   }
 
-  getTopBlock() {
-    return this.dataCall<Block>(RPCMethod.GetTopBlock)
+  getTopBlock(params: GetTopBlockParams) {
+    return this.dataCall<Block>(RPCMethod.GetTopBlock, params)
   }
 
   getNonce(address: string) {

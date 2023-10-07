@@ -1,7 +1,8 @@
 import {
   Balance, Block, TopoHeightRangeParams, GetInfoResult, HeightRangeParams,
   GetLastBalanceResult, P2PStatusResult, RPCMethod, RPCResponse, Transaction, GetLastBalanceParams,
-  GetBalanceAtTopoHeightParams, GetAccountsParams
+  GetBalanceAtTopoHeightParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
+  GetBlocksAtHeightParams, GetTopBlockParams
 } from './types'
 
 class RPC {
@@ -55,20 +56,20 @@ class RPC {
     return this.fetch<string>(RPCMethod.GetBlockTemplate, { address })
   }
 
-  getBlockAtTopoHeight(topoHeight: number) {
-    return this.fetch<Block>(RPCMethod.GetBlockAtTopoHeight, { topoheight: topoHeight })
+  getBlockAtTopoHeight(params: GetBlockAtTopoHeightParams) {
+    return this.fetch<Block>(RPCMethod.GetBlockAtTopoHeight, params)
   }
 
-  getBlocksAtHeight(height: number) {
-    return this.fetch<Block[]>(RPCMethod.GetBlocksAtHeight, { height })
+  getBlocksAtHeight(params: GetBlocksAtHeightParams) {
+    return this.fetch<Block[]>(RPCMethod.GetBlocksAtHeight, params)
   }
 
-  getBlockByHash(hash: string) {
-    return this.fetch<Block>(RPCMethod.GetBlockByHash, { hash })
+  getBlockByHash(params: GetBlockByHashParams) {
+    return this.fetch<Block>(RPCMethod.GetBlockByHash, params)
   }
 
-  getTopBlock() {
-    return this.fetch<Block>(RPCMethod.GetTopBlock)
+  getTopBlock(params: GetTopBlockParams) {
+    return this.fetch<Block>(RPCMethod.GetTopBlock, params)
   }
 
   getNonce(address: string) {

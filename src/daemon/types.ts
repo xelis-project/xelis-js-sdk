@@ -126,6 +126,25 @@ export interface GetAccountsParams {
   maximum_topoheight?: number
 }
 
+export interface GetBlockAtTopoHeightParams {
+  topoheight: number
+  include_txs?: boolean
+}
+
+export interface GetBlocksAtHeightParams {
+  height: number
+  include_txs?: boolean
+}
+
+export interface GetBlockByHashParams {
+  hash: string
+  include_txs?: boolean
+}
+
+export interface GetTopBlockParams {
+  include_txs?: boolean
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetInfo = 'get_info',
