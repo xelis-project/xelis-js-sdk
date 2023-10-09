@@ -1,7 +1,7 @@
 import to from 'await-to-js'
 
 import { DEV_NODE_WS, TESTNET_NODE_WS } from '../config/nodes'
-import { RPCEvent } from '../types'
+import { RPCEvent } from './types'
 import DaemonWS from './websocket'
 
 describe('WS', () => {

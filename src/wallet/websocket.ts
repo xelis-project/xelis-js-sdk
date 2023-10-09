@@ -1,53 +1,55 @@
 import { WS as BaseWS } from '../lib/websocket'
 
+import { Transaction } from '../daemon/types'
+
 import {
   BuildTransactionParams, BuildTransactionResult, GetAddressParams,
-  ListTransactionParams, SplitAddressParams, SplitAddressResult, Transaction, WalletRPCMethod
-} from '../lib/types'
+  ListTransactionParams, SplitAddressParams, SplitAddressResult, RPCMethod
+} from './types'
 
 class WS extends BaseWS {
   getVersion() {
-    return this.dataCall<string>(WalletRPCMethod.GetVersion)
+    return this.dataCall<string>(RPCMethod.GetVersion)
   }
 
   getNetwork() {
-    return this.dataCall<string>(WalletRPCMethod.GetNetwork)
+    return this.dataCall<string>(RPCMethod.GetNetwork)
   }
 
   getNonce() {
-    return this.dataCall<number>(WalletRPCMethod.GetNonce)
+    return this.dataCall<number>(RPCMethod.GetNonce)
   }
 
   getTopoheight() {
-    return this.dataCall<number>(WalletRPCMethod.GetTopoheight)
+    return this.dataCall<number>(RPCMethod.GetTopoheight)
   }
 
   getAddress(params?: GetAddressParams) {
-    return this.dataCall<string>(WalletRPCMethod.GetAddress, params)
+    return this.dataCall<string>(RPCMethod.GetAddress, params)
   }
 
   splitAddress(params: SplitAddressParams) {
-    return this.dataCall<SplitAddressResult>(WalletRPCMethod.SplitAddress, params)
+    return this.dataCall<SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
 
   getBalance(asset?: string) {
-    return this.dataCall<number>(WalletRPCMethod.GetBalance, { asset })
+    return this.dataCall<number>(RPCMethod.GetBalance, { asset })
   }
 
   getTrackedAssets() {
-    return this.dataCall<string[]>(WalletRPCMethod.GetTrackedAssets)
+    return this.dataCall<string[]>(RPCMethod.GetTrackedAssets)
   }
 
   getTransaction(hash: string) {
-    return this.dataCall<Transaction>(WalletRPCMethod.GetTransaction, { hash })
+    return this.dataCall<Transaction>(RPCMethod.GetTransaction, { hash })
   }
 
   buildTransaction(params: BuildTransactionParams) {
-    return this.dataCall<BuildTransactionResult>(WalletRPCMethod.BuildTransaction, params)
+    return this.dataCall<BuildTransactionResult>(RPCMethod.BuildTransaction, params)
   }
 
   listTransactions(params?: ListTransactionParams) {
-    return this.dataCall<Transaction[]>(WalletRPCMethod.GetTransaction, params)
+    return this.dataCall<Transaction[]>(RPCMethod.GetTransaction, params)
   }
 }
 

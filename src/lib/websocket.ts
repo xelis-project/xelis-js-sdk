@@ -3,7 +3,7 @@ import WebSocket from 'isomorphic-ws'
 import to from 'await-to-js'
 
 import {
-  RPCRequest, RPCResponse, RPCEvent, RPCEventResult
+  RPCRequest, RPCResponse
 } from './types'
 
 function createRequestMethod(method: string, params?: any): { data: string, id: number } {
@@ -80,7 +80,7 @@ export class WS {
     })
   }
 
-  private clearEvent(event: RPCEvent) {
+  private clearEvent(event: string) {
     this.events[event].listeners.forEach(listener => {
       this.socket && this.socket.removeEventListener(`message`, listener)
     })
@@ -88,7 +88,7 @@ export class WS {
     Reflect.deleteProperty(this.events, event)
   }
 
-  async closeAllListens(event: RPCEvent) {
+  async closeAllListens(event: string) {
     if (this.events[event]) {
       const [err, _] = await to(this.call<boolean>(`unsubscribe`, { notify: event }))
       if (err) return Promise.reject(err)
@@ -98,7 +98,7 @@ export class WS {
     return Promise.resolve()
   }
 
-  async listenEvent<T>(event: RPCEvent, onData: (msgEvent: MessageEvent, data?: T & RPCEventResult, err?: Error) => void) {
+  async listenEvent<T>(event: string, onData: (msgEvent: MessageEvent, data?: T, err?: Error) => void) {
     const onMessage = (msgEvent: MessageEvent) => {
       if (this.events[event]) {
         const { id } = this.events[event]

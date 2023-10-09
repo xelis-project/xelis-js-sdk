@@ -1,49 +1,51 @@
+import { Transaction } from '../daemon/types'
+
 import {
-  Transaction, WalletRPCMethod, GetAddressParams, SplitAddressParams, SplitAddressResult,
+  RPCMethod, GetAddressParams, SplitAddressParams, SplitAddressResult,
   BuildTransactionParams, BuildTransactionResult, ListTransactionParams
-} from '../lib/types'
+} from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
 
 class RPC extends BaseRPC {
   getVersion() {
-    return this.post<string>(WalletRPCMethod.GetVersion)
+    return this.post<string>(RPCMethod.GetVersion)
   }
 
   getNonce() {
-    return this.post<number>(WalletRPCMethod.GetNonce)
+    return this.post<number>(RPCMethod.GetNonce)
   }
 
   getTopoheight() {
-    return this.post<number>(WalletRPCMethod.GetTopoheight)
+    return this.post<number>(RPCMethod.GetTopoheight)
   }
 
   getAddress(params?: GetAddressParams) {
-    return this.post<string>(WalletRPCMethod.GetAddress, params)
+    return this.post<string>(RPCMethod.GetAddress, params)
   }
 
   splitAddress(params: SplitAddressParams) {
-    return this.post<SplitAddressResult>(WalletRPCMethod.SplitAddress, params)
+    return this.post<SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
 
   getBalance(asset?: string) {
-    return this.post<number>(WalletRPCMethod.GetBalance, { asset })
+    return this.post<number>(RPCMethod.GetBalance, { asset })
   }
 
   getTrackedAssets() {
-    return this.post<string[]>(WalletRPCMethod.GetTrackedAssets)
+    return this.post<string[]>(RPCMethod.GetTrackedAssets)
   }
 
   getTransaction(hash: string) {
-    return this.post<Transaction>(WalletRPCMethod.GetTransaction, { hash })
+    return this.post<Transaction>(RPCMethod.GetTransaction, { hash })
   }
 
   buildTransaction(params: BuildTransactionParams) {
-    return this.post<BuildTransactionResult>(WalletRPCMethod.BuildTransaction, params)
+    return this.post<BuildTransactionResult>(RPCMethod.BuildTransaction, params)
   }
 
   listTransactions(params?: ListTransactionParams) {
-    return this.post<Transaction[]>(WalletRPCMethod.ListTransactions, params)
+    return this.post<Transaction[]>(RPCMethod.ListTransactions, params)
   }
 }
 

@@ -1,12 +1,12 @@
 import { MessageEvent } from 'ws'
 
 import {
-  Block, GetInfoResult, RPCEvent, DaemonRPCMethod,
+  Block, GetInfoResult, RPCEvent, RPCMethod,
   RPCEventResult, Transaction, TopoHeightRangeParams, P2PStatusResult, Balance,
   GetBalanceAtTopoHeightParams, GetLastBalanceResult, HeightRangeParams, BlockOrdered,
   GetLastBalanceParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams
-} from '../lib/types'
+} from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
 
@@ -28,107 +28,107 @@ class WS extends BaseWS {
   }
 
   getVersion() {
-    return this.dataCall<string>(DaemonRPCMethod.GetVersion)
+    return this.dataCall<string>(RPCMethod.GetVersion)
   }
 
   getInfo() {
-    return this.dataCall<GetInfoResult>(DaemonRPCMethod.GetInfo)
+    return this.dataCall<GetInfoResult>(RPCMethod.GetInfo)
   }
 
   getHeight() {
-    return this.dataCall<number>(DaemonRPCMethod.GetHeight)
+    return this.dataCall<number>(RPCMethod.GetHeight)
   }
 
   getTopoHeight() {
-    return this.dataCall<number>(DaemonRPCMethod.GetTopoHeight)
+    return this.dataCall<number>(RPCMethod.GetTopoHeight)
   }
 
   getStableHeight() {
-    return this.dataCall<number>(DaemonRPCMethod.GetStableHeight)
+    return this.dataCall<number>(RPCMethod.GetStableHeight)
   }
 
   getBlockTemplate(address: string) {
-    return this.dataCall<string>(DaemonRPCMethod.GetBlockTemplate, { address })
+    return this.dataCall<string>(RPCMethod.GetBlockTemplate, { address })
   }
 
   getBlockAtTopoHeight(params: GetBlockAtTopoHeightParams) {
-    return this.dataCall<Block>(DaemonRPCMethod.GetBlockAtTopoHeight, params)
+    return this.dataCall<Block>(RPCMethod.GetBlockAtTopoHeight, params)
   }
 
   getBlocksAtHeight(params: GetBlocksAtHeightParams) {
-    return this.dataCall<Block[]>(DaemonRPCMethod.GetBlocksAtHeight, params)
+    return this.dataCall<Block[]>(RPCMethod.GetBlocksAtHeight, params)
   }
 
   getBlockByHash(params: GetBlockByHashParams) {
-    return this.dataCall<Block>(DaemonRPCMethod.GetBlockByHash, params)
+    return this.dataCall<Block>(RPCMethod.GetBlockByHash, params)
   }
 
   getTopBlock(params: GetTopBlockParams) {
-    return this.dataCall<Block>(DaemonRPCMethod.GetTopBlock, params)
+    return this.dataCall<Block>(RPCMethod.GetTopBlock, params)
   }
 
   getNonce(address: string) {
-    return this.dataCall<number>(DaemonRPCMethod.GetNonce, { address })
+    return this.dataCall<number>(RPCMethod.GetNonce, { address })
   }
 
   getLastBalance(params: GetLastBalanceParams) {
-    return this.dataCall<GetLastBalanceResult>(DaemonRPCMethod.GetLastBalance, params)
+    return this.dataCall<GetLastBalanceResult>(RPCMethod.GetLastBalance, params)
   }
 
   getBalanceAtTopoHeight(params: GetBalanceAtTopoHeightParams) {
-    return this.dataCall<Balance>(DaemonRPCMethod.GetBalanceAtTopoHeight, params)
+    return this.dataCall<Balance>(RPCMethod.GetBalanceAtTopoHeight, params)
   }
 
   getAssets() {
-    return this.dataCall<string[]>(DaemonRPCMethod.GetAssets)
+    return this.dataCall<string[]>(RPCMethod.GetAssets)
   }
 
   countTransactions() {
-    return this.dataCall<number>(DaemonRPCMethod.CountTransactions)
+    return this.dataCall<number>(RPCMethod.CountTransactions)
   }
 
   getTips() {
-    return this.dataCall<string[]>(DaemonRPCMethod.GetTips)
+    return this.dataCall<string[]>(RPCMethod.GetTips)
   }
 
   p2pStatus() {
-    return this.dataCall<P2PStatusResult>(DaemonRPCMethod.P2PStatus)
+    return this.dataCall<P2PStatusResult>(RPCMethod.P2PStatus)
   }
 
   getDAGOrder(params: TopoHeightRangeParams) {
-    return this.dataCall<string[]>(DaemonRPCMethod.GetDAGOrder, params)
+    return this.dataCall<string[]>(RPCMethod.GetDAGOrder, params)
   }
 
   getMemPool() {
-    return this.dataCall<Transaction[]>(DaemonRPCMethod.GetMempool)
+    return this.dataCall<Transaction[]>(RPCMethod.GetMempool)
   }
 
   getTransaction(hash: string) {
-    return this.dataCall<Transaction>(DaemonRPCMethod.GetTransaction, { hash })
+    return this.dataCall<Transaction>(RPCMethod.GetTransaction, { hash })
   }
 
   getTransactions(txHashes: string[]) {
-    return this.dataCall<Transaction[]>(DaemonRPCMethod.GetTransactions, { tx_hashes: txHashes })
+    return this.dataCall<Transaction[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
   }
 
   getBlocksRangeByTopoheight(params: TopoHeightRangeParams) {
-    return this.dataCall<Block[]>(DaemonRPCMethod.GetBlocksRangeByTopoheight, params)
+    return this.dataCall<Block[]>(RPCMethod.GetBlocksRangeByTopoheight, params)
   }
 
   getBlocksRangeByHeight(params: HeightRangeParams) {
-    return this.dataCall<Block[]>(DaemonRPCMethod.GetBlocksRangeByHeight, params)
+    return this.dataCall<Block[]>(RPCMethod.GetBlocksRangeByHeight, params)
   }
 
   getAccounts(params: GetAccountsParams) {
-    return this.dataCall<string[]>(DaemonRPCMethod.GetAccounts, params)
+    return this.dataCall<string[]>(RPCMethod.GetAccounts, params)
   }
 
   submitBlock(blockTemplate: string) {
-    return this.dataCall<boolean>(DaemonRPCMethod.SubmitBlock, { block_template: blockTemplate })
+    return this.dataCall<boolean>(RPCMethod.SubmitBlock, { block_template: blockTemplate })
   }
 
   submitTransaction(hexData: string) {
-    return this.dataCall<boolean>(DaemonRPCMethod.SubmitTransaction, { data: hexData })
+    return this.dataCall<boolean>(RPCMethod.SubmitTransaction, { data: hexData })
   }
 }
 

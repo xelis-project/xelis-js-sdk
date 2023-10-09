@@ -1,119 +1,119 @@
 import {
   Balance, Block, TopoHeightRangeParams, GetInfoResult, HeightRangeParams,
-  GetLastBalanceResult, P2PStatusResult, DaemonRPCMethod, Transaction, GetLastBalanceParams,
+  GetLastBalanceResult, P2PStatusResult, RPCMethod, Transaction, GetLastBalanceParams,
   GetBalanceAtTopoHeightParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams
-} from '../lib/types'
+} from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
 
 class RPC extends BaseRPC {
   getVersion() {
-    return this.post<string>(DaemonRPCMethod.GetVersion)
+    return this.post<string>(RPCMethod.GetVersion)
   }
 
   getInfo() {
-    return this.post<GetInfoResult>(DaemonRPCMethod.GetInfo)
+    return this.post<GetInfoResult>(RPCMethod.GetInfo)
   }
 
   getHeight() {
-    return this.post<number>(DaemonRPCMethod.GetHeight)
+    return this.post<number>(RPCMethod.GetHeight)
   }
 
   getTopoHeight() {
-    return this.post<number>(DaemonRPCMethod.GetTopoHeight)
+    return this.post<number>(RPCMethod.GetTopoHeight)
   }
 
   getStableHeight() {
-    return this.post<number>(DaemonRPCMethod.GetStableHeight)
+    return this.post<number>(RPCMethod.GetStableHeight)
   }
 
   getBlockTemplate(address: string) {
-    return this.post<string>(DaemonRPCMethod.GetBlockTemplate, { address })
+    return this.post<string>(RPCMethod.GetBlockTemplate, { address })
   }
 
   getBlockAtTopoHeight(params: GetBlockAtTopoHeightParams) {
-    return this.post<Block>(DaemonRPCMethod.GetBlockAtTopoHeight, params)
+    return this.post<Block>(RPCMethod.GetBlockAtTopoHeight, params)
   }
 
   getBlocksAtHeight(params: GetBlocksAtHeightParams) {
-    return this.post<Block[]>(DaemonRPCMethod.GetBlocksAtHeight, params)
+    return this.post<Block[]>(RPCMethod.GetBlocksAtHeight, params)
   }
 
   getBlockByHash(params: GetBlockByHashParams) {
-    return this.post<Block>(DaemonRPCMethod.GetBlockByHash, params)
+    return this.post<Block>(RPCMethod.GetBlockByHash, params)
   }
 
   getTopBlock(params: GetTopBlockParams) {
-    return this.post<Block>(DaemonRPCMethod.GetTopBlock, params)
+    return this.post<Block>(RPCMethod.GetTopBlock, params)
   }
 
   getNonce(address: string) {
-    return this.post<number>(DaemonRPCMethod.GetNonce, { address })
+    return this.post<number>(RPCMethod.GetNonce, { address })
   }
 
   getLastBalance(params: GetLastBalanceParams) {
-    return this.post<GetLastBalanceResult>(DaemonRPCMethod.GetLastBalance, params)
+    return this.post<GetLastBalanceResult>(RPCMethod.GetLastBalance, params)
   }
 
   getBalanceAtTopoHeight(params: GetBalanceAtTopoHeightParams) {
-    return this.post<Balance>(DaemonRPCMethod.GetBalanceAtTopoHeight, params)
+    return this.post<Balance>(RPCMethod.GetBalanceAtTopoHeight, params)
   }
 
   getAssets() {
-    return this.post<string[]>(DaemonRPCMethod.GetAssets)
+    return this.post<string[]>(RPCMethod.GetAssets)
   }
 
   countTransactions() {
-    return this.post<number>(DaemonRPCMethod.CountTransactions)
+    return this.post<number>(RPCMethod.CountTransactions)
   }
 
   countAssets() {
-    return this.post<number>(DaemonRPCMethod.CountAssets)
+    return this.post<number>(RPCMethod.CountAssets)
   }
 
   getTips() {
-    return this.post<string[]>(DaemonRPCMethod.GetTips)
+    return this.post<string[]>(RPCMethod.GetTips)
   }
 
   p2pStatus() {
-    return this.post<P2PStatusResult>(DaemonRPCMethod.P2PStatus)
+    return this.post<P2PStatusResult>(RPCMethod.P2PStatus)
   }
 
   getDAGOrder(params: TopoHeightRangeParams) {
-    return this.post<string[]>(DaemonRPCMethod.GetDAGOrder, params)
+    return this.post<string[]>(RPCMethod.GetDAGOrder, params)
   }
 
   getMemPool() {
-    return this.post<Transaction[]>(DaemonRPCMethod.GetMempool)
+    return this.post<Transaction[]>(RPCMethod.GetMempool)
   }
 
   getTransaction(hash: string) {
-    return this.post<Transaction>(DaemonRPCMethod.GetTransaction, { hash })
+    return this.post<Transaction>(RPCMethod.GetTransaction, { hash })
   }
 
   getTransactions(txHashes: string[]) {
-    return this.post<Transaction[]>(DaemonRPCMethod.GetTransactions, { tx_hashes: txHashes })
+    return this.post<Transaction[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
   }
 
   getBlocksRangeByTopoheight(params: TopoHeightRangeParams) {
-    return this.post<Block[]>(DaemonRPCMethod.GetBlocksRangeByTopoheight, params)
+    return this.post<Block[]>(RPCMethod.GetBlocksRangeByTopoheight, params)
   }
 
   getBlocksRangeByHeight(params: HeightRangeParams) {
-    return this.post<Block[]>(DaemonRPCMethod.GetBlocksRangeByHeight, params)
+    return this.post<Block[]>(RPCMethod.GetBlocksRangeByHeight, params)
   }
 
   getAccounts(params: GetAccountsParams) {
-    return this.post<string[]>(DaemonRPCMethod.GetAccounts, params)
+    return this.post<string[]>(RPCMethod.GetAccounts, params)
   }
 
   submitBlock(blockTemplate: string) {
-    return this.post<boolean>(DaemonRPCMethod.SubmitBlock, { block_template: blockTemplate })
+    return this.post<boolean>(RPCMethod.SubmitBlock, { block_template: blockTemplate })
   }
 
   submitTransaction(hexData: string) {
-    return this.post<boolean>(DaemonRPCMethod.SubmitTransaction, { data: hexData })
+    return this.post<boolean>(RPCMethod.SubmitTransaction, { data: hexData })
   }
 }
 
