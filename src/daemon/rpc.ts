@@ -1,143 +1,119 @@
 import {
   Balance, Block, TopoHeightRangeParams, GetInfoResult, HeightRangeParams,
-  GetLastBalanceResult, P2PStatusResult, RPCMethod, RPCResponse, Transaction, GetLastBalanceParams,
+  GetLastBalanceResult, P2PStatusResult, DaemonRPCMethod, Transaction, GetLastBalanceParams,
   GetBalanceAtTopoHeightParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams
-} from './types'
+} from '../lib/types'
 
-class RPC {
-  endpoint: string
-  constructor(endpoint: string) {
-    this.endpoint = endpoint
-  }
+import { RPC as BaseRPC } from '../lib/rpc'
 
-  async post<T>(method: RPCMethod, params?: any): Promise<RPCResponse<T>> {
-    try {
-      const body = JSON.stringify({ id: 1, jsonrpc: '2.0', method: method, params })
-      const res = await fetch(this.endpoint, { method: `POST`, body })
-
-      if (res.ok) {
-        const data = await res.json() as RPCResponse<T>
-
-        if (data.error) {
-          return Promise.reject(new Error(data.error.message))
-        }
-
-        return Promise.resolve(data)
-      } else {
-        return Promise.reject(new Error(`${res.status} - ${res.statusText}`))
-      }
-    } catch (err) {
-      return Promise.reject(err)
-    }
-  }
-
+class RPC extends BaseRPC {
   getVersion() {
-    return this.post<string>(RPCMethod.GetVersion)
+    return this.post<string>(DaemonRPCMethod.GetVersion)
   }
 
   getInfo() {
-    return this.post<GetInfoResult>(RPCMethod.GetInfo)
+    return this.post<GetInfoResult>(DaemonRPCMethod.GetInfo)
   }
 
   getHeight() {
-    return this.post<number>(RPCMethod.GetHeight)
+    return this.post<number>(DaemonRPCMethod.GetHeight)
   }
 
   getTopoHeight() {
-    return this.post<number>(RPCMethod.GetTopoHeight)
+    return this.post<number>(DaemonRPCMethod.GetTopoHeight)
   }
 
   getStableHeight() {
-    return this.post<number>(RPCMethod.GetStableHeight)
+    return this.post<number>(DaemonRPCMethod.GetStableHeight)
   }
 
   getBlockTemplate(address: string) {
-    return this.post<string>(RPCMethod.GetBlockTemplate, { address })
+    return this.post<string>(DaemonRPCMethod.GetBlockTemplate, { address })
   }
 
   getBlockAtTopoHeight(params: GetBlockAtTopoHeightParams) {
-    return this.post<Block>(RPCMethod.GetBlockAtTopoHeight, params)
+    return this.post<Block>(DaemonRPCMethod.GetBlockAtTopoHeight, params)
   }
 
   getBlocksAtHeight(params: GetBlocksAtHeightParams) {
-    return this.post<Block[]>(RPCMethod.GetBlocksAtHeight, params)
+    return this.post<Block[]>(DaemonRPCMethod.GetBlocksAtHeight, params)
   }
 
   getBlockByHash(params: GetBlockByHashParams) {
-    return this.post<Block>(RPCMethod.GetBlockByHash, params)
+    return this.post<Block>(DaemonRPCMethod.GetBlockByHash, params)
   }
 
   getTopBlock(params: GetTopBlockParams) {
-    return this.post<Block>(RPCMethod.GetTopBlock, params)
+    return this.post<Block>(DaemonRPCMethod.GetTopBlock, params)
   }
 
   getNonce(address: string) {
-    return this.post<number>(RPCMethod.GetNonce, { address })
+    return this.post<number>(DaemonRPCMethod.GetNonce, { address })
   }
 
   getLastBalance(params: GetLastBalanceParams) {
-    return this.post<GetLastBalanceResult>(RPCMethod.GetLastBalance, params)
+    return this.post<GetLastBalanceResult>(DaemonRPCMethod.GetLastBalance, params)
   }
 
   getBalanceAtTopoHeight(params: GetBalanceAtTopoHeightParams) {
-    return this.post<Balance>(RPCMethod.GetBalanceAtTopoHeight, params)
+    return this.post<Balance>(DaemonRPCMethod.GetBalanceAtTopoHeight, params)
   }
 
   getAssets() {
-    return this.post<string[]>(RPCMethod.GetAssets)
+    return this.post<string[]>(DaemonRPCMethod.GetAssets)
   }
 
   countTransactions() {
-    return this.post<number>(RPCMethod.CountTransactions)
+    return this.post<number>(DaemonRPCMethod.CountTransactions)
   }
 
   countAssets() {
-    return this.post<number>(RPCMethod.CountAssets)
+    return this.post<number>(DaemonRPCMethod.CountAssets)
   }
 
   getTips() {
-    return this.post<string[]>(RPCMethod.GetTips)
+    return this.post<string[]>(DaemonRPCMethod.GetTips)
   }
 
   p2pStatus() {
-    return this.post<P2PStatusResult>(RPCMethod.P2PStatus)
+    return this.post<P2PStatusResult>(DaemonRPCMethod.P2PStatus)
   }
 
   getDAGOrder(params: TopoHeightRangeParams) {
-    return this.post<string[]>(RPCMethod.GetDAGOrder, params)
+    return this.post<string[]>(DaemonRPCMethod.GetDAGOrder, params)
   }
 
   getMemPool() {
-    return this.post<Transaction[]>(RPCMethod.GetMempool)
+    return this.post<Transaction[]>(DaemonRPCMethod.GetMempool)
   }
 
   getTransaction(hash: string) {
-    return this.post<Transaction>(RPCMethod.GetTransaction, { hash })
+    return this.post<Transaction>(DaemonRPCMethod.GetTransaction, { hash })
   }
 
   getTransactions(txHashes: string[]) {
-    return this.post<Transaction[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
+    return this.post<Transaction[]>(DaemonRPCMethod.GetTransactions, { tx_hashes: txHashes })
   }
 
   getBlocksRangeByTopoheight(params: TopoHeightRangeParams) {
-    return this.post<Block[]>(RPCMethod.GetBlocksRangeByTopoheight, params)
+    return this.post<Block[]>(DaemonRPCMethod.GetBlocksRangeByTopoheight, params)
   }
 
   getBlocksRangeByHeight(params: HeightRangeParams) {
-    return this.post<Block[]>(RPCMethod.GetBlocksRangeByHeight, params)
+    return this.post<Block[]>(DaemonRPCMethod.GetBlocksRangeByHeight, params)
   }
 
   getAccounts(params: GetAccountsParams) {
-    return this.post<string[]>(RPCMethod.GetAccounts, params)
+    return this.post<string[]>(DaemonRPCMethod.GetAccounts, params)
   }
 
   submitBlock(blockTemplate: string) {
-    return this.post<boolean>(RPCMethod.SubmitBlock, { block_template: blockTemplate })
+    return this.post<boolean>(DaemonRPCMethod.SubmitBlock, { block_template: blockTemplate })
   }
 
   submitTransaction(hexData: string) {
-    return this.post<boolean>(RPCMethod.SubmitTransaction, { data: hexData })
+    return this.post<boolean>(DaemonRPCMethod.SubmitTransaction, { data: hexData })
   }
 }
 

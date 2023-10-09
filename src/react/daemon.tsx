@@ -3,7 +3,7 @@ import to from 'await-to-js'
 import { MessageEvent } from 'ws'
 
 import DaemonWS from '../daemon/websocket'
-import { RPCEvent } from '../daemon/types'
+import { RPCEvent } from '../lib/types'
 
 const daemon = new DaemonWS()
 
