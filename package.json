@@ -10,7 +10,6 @@
   "scripts": {
     "test": "jest",
     "build": "npx tsc --declaration && cp package.json ./dist && cp README.md ./dist",
-    "prepublishOnly": "npm run build",
     "publish": "cd ./dist && npm publish"
   },
   "devDependencies": {
