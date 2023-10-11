@@ -2,7 +2,7 @@ import {
   Balance, Block, TopoHeightRangeParams, GetInfoResult, HeightRangeParams,
   GetLastBalanceResult, P2PStatusResult, RPCMethod, Transaction, GetLastBalanceParams,
   GetBalanceAtTopoHeightParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
-  GetBlocksAtHeightParams, GetTopBlockParams
+  GetBlocksAtHeightParams, GetTopBlockParams, GetNonceResult, GetNonceParams
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -48,8 +48,8 @@ class RPC extends BaseRPC {
     return this.post<Block>(RPCMethod.GetTopBlock, params)
   }
 
-  getNonce(address: string) {
-    return this.post<number>(RPCMethod.GetNonce, { address })
+  getNonce(params: GetNonceParams) {
+    return this.post<GetNonceResult>(RPCMethod.GetNonce, params)
   }
 
   getLastBalance(params: GetLastBalanceParams) {
@@ -70,6 +70,10 @@ class RPC extends BaseRPC {
 
   countAssets() {
     return this.post<number>(RPCMethod.CountAssets)
+  }
+
+  countAccounts() {
+    return this.post<number>(RPCMethod.CountAccounts)
   }
 
   getTips() {

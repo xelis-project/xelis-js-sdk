@@ -45,6 +45,17 @@ export interface GetBalanceAtTopoHeightParams {
   topoheight: number
 }
 
+export interface GetNonceParams {
+  address: string
+  topoheight: number
+}
+
+export interface GetNonceResult {
+  nonce: number
+  previous_topoheight: number
+  topoheight: number
+}
+
 export interface Balance {
   balance: number
   previous_topoheight: number
@@ -168,7 +179,8 @@ export enum RPCMethod {
   GetBlocksRangeByHeight = 'get_blocks_range_by_height',
   GetAccounts = 'get_accounts',
   SubmitBlock = 'submit_block',
-  SubmitTransaction = 'submit_transaction'
+  SubmitTransaction = 'submit_transaction',
+  CountAccounts = 'count_accounts'
 }
 
 export enum RPCEvent {

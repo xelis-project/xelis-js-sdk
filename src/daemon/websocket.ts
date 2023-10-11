@@ -5,7 +5,7 @@ import {
   RPCEventResult, Transaction, TopoHeightRangeParams, P2PStatusResult, Balance,
   GetBalanceAtTopoHeightParams, GetLastBalanceResult, HeightRangeParams, BlockOrdered,
   GetLastBalanceParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
-  GetBlocksAtHeightParams, GetTopBlockParams
+  GetBlocksAtHeightParams, GetTopBlockParams, GetNonceParams, GetNonceResult
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -67,8 +67,8 @@ class WS extends BaseWS {
     return this.dataCall<Block>(RPCMethod.GetTopBlock, params)
   }
 
-  getNonce(address: string) {
-    return this.dataCall<number>(RPCMethod.GetNonce, { address })
+  getNonce(params: GetNonceParams) {
+    return this.dataCall<GetNonceResult>(RPCMethod.GetNonce, params)
   }
 
   getLastBalance(params: GetLastBalanceParams) {
@@ -129,6 +129,10 @@ class WS extends BaseWS {
 
   submitTransaction(hexData: string) {
     return this.dataCall<boolean>(RPCMethod.SubmitTransaction, { data: hexData })
+  }
+
+  countAccounts() {
+    return this.dataCall<number>(RPCMethod.CountAccounts)
   }
 }
 
