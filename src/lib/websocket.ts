@@ -24,59 +24,63 @@ export class WS {
   endpoint: string
   socket?: WebSocket
   timeout: number
-  connected: boolean
   unsubscribeSuspense: number
+  reconnectOnConnectionLoss: boolean
+  maxConnectionTries: number
+  connectionTries = 0
+
   private events: Record<string, EventData>
 
   constructor() {
     this.endpoint = ""
     this.timeout = 3000
-    this.connected = false
     this.events = {}
     this.unsubscribeSuspense = 1000
+    this.maxConnectionTries = 3
+    this.reconnectOnConnectionLoss = true
   }
 
   connect(endpoint: string) {
-    if (this.socket && this.socket.readyState !== WebSocket.CLOSED) {
+    // force disconnect if already connected
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.close()
     }
 
+    this.connectionTries = 0
     return new Promise((resolve, reject) => {
       this.socket = new WebSocket(endpoint)
       this.endpoint = endpoint
 
       this.socket.addEventListener(`open`, (event) => {
-        this.connected = true
         resolve(event)
       })
 
-      this.socket.addEventListener(`close`, () => {
-        this.connected = false
-        reject()
+      this.socket.addEventListener(`close`, (event) => {
+        if (this.reconnectOnConnectionLoss && !event.wasClean) {
+          this.tryReconnect()
+          reject(new Error(`Reconnecting.`))
+        } else {
+          reject(event)
+        }
       })
 
       this.socket.addEventListener(`error`, (err) => {
-        this.connected = false
         reject(err)
       })
     })
   }
 
-  close(code?: number | undefined, data?: string | Buffer | undefined): void {
-    this.socket && this.socket.close(code, data)
-  }
+  tryReconnect() {
+    this.connectionTries++
 
-  onClose(cb: (event: WebSocket.CloseEvent) => void) {
-    if (!this.socket) return
+    if (this.connectionTries > this.maxConnectionTries) {
+      return
+    }
+
+    this.socket = new WebSocket(this.endpoint)
+
     this.socket.addEventListener(`close`, (event) => {
-      cb(event)
-    })
-  }
-
-  onError(cb: (err: WebSocket.ErrorEvent) => void) {
-    if (!this.socket) return
-    this.socket.addEventListener(`error`, (err) => {
-      cb(err)
+      this.tryReconnect()
     })
   }
 
@@ -194,7 +198,9 @@ export class WS {
         reject(new Error(`timeout`))
       }, this.timeout)
 
-      this.socket && this.socket.send(data)
+      if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+        this.socket.send(data)
+      }
     })
   }
 
