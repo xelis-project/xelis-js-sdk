@@ -46,6 +46,7 @@ export class WS {
       this.socket.close()
     }
 
+    this.events = {}
     this.connectionTries = 0
     return new Promise((resolve, reject) => {
       this.socket = new WebSocket(endpoint)
@@ -58,7 +59,7 @@ export class WS {
       this.socket.addEventListener(`close`, (event) => {
         if (this.reconnectOnConnectionLoss && !event.wasClean) {
           this.tryReconnect()
-          reject(new Error(`Reconnecting.`))
+          reject(new Error(`Unhandled close. Reconnecting...`))
         } else {
           reject(event)
         }
@@ -78,6 +79,10 @@ export class WS {
     }
 
     this.socket = new WebSocket(this.endpoint)
+
+    this.socket.addEventListener(`open`, () => {
+      this.connectionTries = 0
+    })
 
     this.socket.addEventListener(`close`, (event) => {
       this.tryReconnect()
@@ -133,7 +138,7 @@ export class WS {
 
       this.events[event].listeners.push(onMessage)
     } else {
-      // important if multiple listenEvent are called without await atleast we store listener before getting id
+      // important if multiple listenEvent are called without await at least we store listener before getting id
       this.events[event] = { listeners: [onMessage] }
       const [err, res] = await to(this.call<boolean>(`subscribe`, { notify: event }))
       if (err) {
@@ -157,12 +162,18 @@ export class WS {
           }
         }
 
+        // no more listener so we unsubscribe from daemon websocket if socket still open
         if (listeners.length === 0) {
-          this.events[event].unsubscribeTimeoutId = setTimeout(async () => {
-            // no more listener so we unsubscribe from daemon websocket
-            this.call<boolean>(`unsubscribe`, { notify: event })
+          if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+            // we use a grace period to unsubscribe (mostly because of react useEffect and avoid unecessary subscribe)
+            this.events[event].unsubscribeTimeoutId = setTimeout(async () => {
+              this.call<boolean>(`unsubscribe`, { notify: event })
+              Reflect.deleteProperty(this.events, event)
+            }, this.unsubscribeSuspense)
+          } else {
+            // socket is closed so we don't send unsubscribe and no grace period delete right away
             Reflect.deleteProperty(this.events, event)
-          }, this.unsubscribeSuspense)
+          }
         }
       }
 
