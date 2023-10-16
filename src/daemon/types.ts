@@ -152,6 +152,23 @@ export interface GetTopBlockParams {
   include_txs?: boolean
 }
 
+export interface GetAccountHistoryParams {
+  address: string
+  asset?: string
+  minimum_topoheight?: number
+  maximum_topoheight?: number
+}
+
+export interface GetAccountHistoryResult {
+  topoheight: number
+  block_timestamp: number
+  hash: string
+  mining?: { reward: number }
+  burn?: { amount: number }
+  outgoing?: { amount: number }
+  incoming?: { amount: number }
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetInfo = 'get_info',
@@ -180,7 +197,9 @@ export enum RPCMethod {
   GetAccounts = 'get_accounts',
   SubmitBlock = 'submit_block',
   SubmitTransaction = 'submit_transaction',
-  CountAccounts = 'count_accounts'
+  CountAccounts = 'count_accounts',
+  GetAccountHistory = 'get_account_history',
+  GetAccountAssets = 'get_account_assets'
 }
 
 export enum RPCEvent {

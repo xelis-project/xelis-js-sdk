@@ -2,7 +2,7 @@ import {
   Balance, Block, TopoHeightRangeParams, GetInfoResult, HeightRangeParams,
   GetLastBalanceResult, P2PStatusResult, RPCMethod, Transaction, GetLastBalanceParams,
   GetBalanceAtTopoHeightParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
-  GetBlocksAtHeightParams, GetTopBlockParams, GetNonceResult, GetNonceParams
+  GetBlocksAtHeightParams, GetTopBlockParams, GetNonceResult, GetNonceParams, GetAccountHistoryParams, GetAccountHistoryResult
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -118,6 +118,14 @@ class RPC extends BaseRPC {
 
   submitTransaction(hexData: string) {
     return this.post<boolean>(RPCMethod.SubmitTransaction, { data: hexData })
+  }
+
+  getAccountHistory(params: GetAccountHistoryParams) {
+    return this.post<GetAccountHistoryResult>(RPCMethod.GetAccountHistory, params)
+  }
+
+  getAccountAssets(address: string) {
+    return this.post<string[]>(RPCMethod.GetAccountAssets, { address })
   }
 }
 
