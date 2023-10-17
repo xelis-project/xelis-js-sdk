@@ -86,6 +86,19 @@ export interface RPCEventResult {
   event: string
 }
 
+export interface Peer {
+  addr: string
+  cumulative_difficulty: number
+  height: number
+  id: number
+  last_ping: number
+  pruned_topoheight: number
+  tag: string
+  top_block_hash: string
+  topoheight: number
+  version: string
+}
+
 export interface BlockOrdered {
   topoheight: number
   block_hash: string
@@ -196,7 +209,8 @@ export enum RPCMethod {
   SubmitTransaction = 'submit_transaction',
   CountAccounts = 'count_accounts',
   GetAccountHistory = 'get_account_history',
-  GetAccountAssets = 'get_account_assets'
+  GetAccountAssets = 'get_account_assets',
+  GetPeers = 'get_peers'
 }
 
 export enum RPCEvent {

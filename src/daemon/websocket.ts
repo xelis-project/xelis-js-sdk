@@ -6,7 +6,7 @@ import {
   GetBalanceAtTopoHeightParams, GetLastBalanceResult, HeightRangeParams, BlockOrdered,
   GetLastBalanceParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams, GetNonceParams, GetNonceResult, GetAccountHistoryParams,
-  AccounHistory
+  AccounHistory, Peer
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -142,6 +142,10 @@ class WS extends BaseWS {
 
   getAccountAssets(address: string) {
     return this.dataCall<string[]>(RPCMethod.GetAccountAssets, { address })
+  }
+
+  getPeers() {
+    return this.dataCall<Peer[]>(RPCMethod.GetPeers)
   }
 }
 

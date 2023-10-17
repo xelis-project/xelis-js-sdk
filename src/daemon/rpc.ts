@@ -3,7 +3,7 @@ import {
   GetLastBalanceResult, P2PStatusResult, RPCMethod, Transaction, GetLastBalanceParams,
   GetBalanceAtTopoHeightParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams, GetNonceResult, GetNonceParams, GetAccountHistoryParams,
-  AccounHistory
+  AccounHistory, Peer
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -127,6 +127,10 @@ class RPC extends BaseRPC {
 
   getAccountAssets(address: string) {
     return this.post<string[]>(RPCMethod.GetAccountAssets, { address })
+  }
+
+  getPeers() {
+    return this.post<Peer[]>(RPCMethod.GetPeers)
   }
 }
 
