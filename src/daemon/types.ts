@@ -20,18 +20,15 @@ export interface Block {
   extra_nonce: string
   hash: string
   height: number
-  miner_tx: {
-    owner: string
-    signature: null
-    variant: string
-  }
   miner: string
   nonce: number
   tips: string[]
   topoheight: number
-  total_fees: number
+  total_fees: number // is null if include_txs is false
   total_size_in_bytes: number
+  transactions?: Transaction[] // if include_txs is true in params
   txs_hashes: string[]
+  version: number
 }
 
 export interface GetLastBalanceParams {
@@ -62,7 +59,7 @@ export interface Balance {
 }
 
 export interface GetLastBalanceResult {
-  topoheight: number,
+  topoheight: number
   balance: Balance
 }
 
@@ -70,8 +67,8 @@ export interface P2PStatusResult {
   peer_count: number
   tag?: string
   peer_id: number
-  our_topoheight: number,
-  best_topoheight: number,
+  our_topoheight: number
+  best_topoheight: number
   max_peers: number
 }
 
@@ -118,7 +115,7 @@ export interface TransactionData {
 
 export interface Transaction {
   hash: string
-  blocks: string[],
+  blocks: string[]
   data: TransactionData
   fee: number
   nonce: number
@@ -159,7 +156,7 @@ export interface GetAccountHistoryParams {
   maximum_topoheight?: number
 }
 
-export interface GetAccountHistoryResult {
+export interface AccounHistory {
   topoheight: number
   block_timestamp: number
   hash: string

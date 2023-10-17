@@ -5,7 +5,8 @@ import {
   RPCEventResult, Transaction, TopoHeightRangeParams, P2PStatusResult, Balance,
   GetBalanceAtTopoHeightParams, GetLastBalanceResult, HeightRangeParams, BlockOrdered,
   GetLastBalanceParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
-  GetBlocksAtHeightParams, GetTopBlockParams, GetNonceParams, GetNonceResult, GetAccountHistoryParams, GetAccountHistoryResult
+  GetBlocksAtHeightParams, GetTopBlockParams, GetNonceParams, GetNonceResult, GetAccountHistoryParams,
+  AccounHistory
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -136,7 +137,7 @@ class WS extends BaseWS {
   }
 
   getAccountHistory(params: GetAccountHistoryParams) {
-    return this.dataCall<GetAccountHistoryResult>(RPCMethod.GetAccountHistory, params)
+    return this.dataCall<AccounHistory[]>(RPCMethod.GetAccountHistory, params)
   }
 
   getAccountAssets(address: string) {
