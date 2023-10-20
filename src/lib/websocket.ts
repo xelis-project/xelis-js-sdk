@@ -6,14 +6,6 @@ import {
   RPCRequest, RPCResponse
 } from './types'
 
-function createRequestMethod(method: string, params?: any): { data: string, id: number } {
-  const id = Math.floor(Date.now() * Math.random())
-  const request = { id: id, jsonrpc: `2.0`, method } as RPCRequest
-  if (params) request.params = params
-  const data = JSON.stringify(request)
-  return { data, id }
-}
-
 interface EventData {
   id?: number
   listeners: ((msgEvent: MessageEvent) => void)[]
@@ -27,7 +19,9 @@ export class WS {
   unsubscribeSuspense: number
   reconnectOnConnectionLoss: boolean
   maxConnectionTries: number
+
   connectionTries = 0
+  methodIdIncrement = 0
 
   private events: Record<string, EventData>
 
@@ -87,6 +81,11 @@ export class WS {
     this.socket.addEventListener(`close`, (event) => {
       this.tryReconnect()
     })
+  }
+
+  close() {
+    if (!this.socket) return
+    this.socket.close()
   }
 
   private clearEvent(event: string) {
@@ -186,7 +185,7 @@ export class WS {
 
   call<T>(method: string, params?: any): Promise<RPCResponse<T>> {
     return new Promise((resolve, reject) => {
-      const { data, id } = createRequestMethod(method, params)
+      const { data, id } = this.createRequestMethod(method, params)
 
       let timeoutId: any = null
       const onMessage = (msgEvent: MessageEvent) => {
@@ -221,5 +220,13 @@ export class WS {
       if (err) return reject(err)
       return resolve(res.result)
     })
+  }
+
+  createRequestMethod(method: string, params?: any): { data: string, id: number } {
+    const id = this.methodIdIncrement++
+    const request = { id: id, jsonrpc: `2.0`, method } as RPCRequest
+    if (params) request.params = params
+    const data = JSON.stringify(request)
+    return { data, id }
   }
 }

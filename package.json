@@ -1,5 +1,5 @@
 {
-  "version": "0.5.7",
+  "version": "0.5.8",
   "name": "@xelis/sdk",
   "description": "Xelis software development kit for JS",
   "repository": {
@@ -9,7 +9,7 @@
   "homepage": "https://github.com/xelis-project/xelis-js-sdk#readme",
   "scripts": {
     "test": "jest",
-    "build": "npx tsc --declaration && cp package.json ./dist && cp README.md ./dist",
+    "build": "rm -r ./dist && npx tsc --declaration && cp package.json ./dist && cp README.md ./dist",
     "publish": "cd ./dist && npm publish"
   },
   "devDependencies": {
