@@ -87,16 +87,17 @@ export interface RPCEventResult {
 }
 
 export interface Peer {
-  addr: string
-  cumulative_difficulty: number
-  height: number
   id: number
-  last_ping: number
-  pruned_topoheight: number
+  addr: string
   tag: string
+  version: string
   top_block_hash: string
   topoheight: number
-  version: string
+  height: number
+  last_ping: number
+  pruned_topoheight: number
+  peers: string[]
+  cumulative_difficulty: number
 }
 
 export interface BlockOrdered {
@@ -179,6 +180,16 @@ export interface AccounHistory {
   incoming?: { amount: number }
 }
 
+export interface PeerPeerListUpdated {
+  peer_id: number
+  peerlist: string[]
+}
+
+export interface PeerPeerDisconnected {
+  peer_id: number
+  peer_addr: string
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetInfo = 'get_info',
@@ -218,4 +229,8 @@ export enum RPCEvent {
   TransactionAddedInMempool = `TransactionAddedInMempool`,
   TransactionExecuted = `TransactionExecuted`,
   BlockOrdered = `BlockOrdered`,
+  PeerConnected = `PeerConnected`,
+  PeerDisconnected = `PeerDisconnected`,
+  PeerPeerListUpdated = `PeerPeerListUpdated`,
+  PeerPeerDisconnected = `PeerPeerDisconnected`
 }

@@ -6,7 +6,7 @@ import {
   GetBalanceAtTopoHeightParams, GetLastBalanceResult, HeightRangeParams, BlockOrdered,
   GetLastBalanceParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams, GetNonceParams, GetNonceResult, GetAccountHistoryParams,
-  AccounHistory, Peer
+  AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -26,6 +26,22 @@ class WS extends BaseWS {
 
   onBlockOrdered(onData: (msgEvent: MessageEvent, data?: BlockOrdered & RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.BlockOrdered, onData)
+  }
+
+  onPeerConnected(onData: (msgEvent: MessageEvent, data?: Peer & RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.PeerConnected, onData)
+  }
+
+  onPeerDisconnected(onData: (msgEvent: MessageEvent, data?: number & RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.PeerDisconnected, onData)
+  }
+
+  onPeerPeerListUpdated(onData: (msgEvent: MessageEvent, data?: PeerPeerListUpdated & RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.PeerPeerListUpdated, onData)
+  }
+
+  onPeerPeerDisconnected(onData: (msgEvent: MessageEvent, data?: PeerPeerDisconnected & RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.PeerPeerDisconnected, onData)
   }
 
   getVersion() {
