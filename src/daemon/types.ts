@@ -135,6 +135,7 @@ export interface Transaction {
   nonce: number
   owner: string
   signature: string
+  first_seen?: number
 }
 
 export interface GetAccountsParams {
@@ -232,5 +233,6 @@ export enum RPCEvent {
   PeerConnected = `PeerConnected`,
   PeerDisconnected = `PeerDisconnected`,
   PeerPeerListUpdated = `PeerPeerListUpdated`,
-  PeerPeerDisconnected = `PeerPeerDisconnected`
+  PeerPeerDisconnected = `PeerPeerDisconnected`,
+  PeerStateUpdated = `PeerStateUpdated`
 }

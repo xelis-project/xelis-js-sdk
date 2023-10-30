@@ -44,6 +44,10 @@ class WS extends BaseWS {
     return this.listenEvent(RPCEvent.PeerPeerDisconnected, onData)
   }
 
+  onPeerStateUpdated(onData: (msgEvent: MessageEvent, data?: Peer & RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.PeerStateUpdated, onData)
+  }
+
   getVersion() {
     return this.dataCall<string>(RPCMethod.GetVersion)
   }
