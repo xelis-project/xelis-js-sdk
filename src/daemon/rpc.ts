@@ -3,7 +3,7 @@ import {
   GetLastBalanceResult, P2PStatusResult, RPCMethod, Transaction, GetLastBalanceParams,
   GetBalanceAtTopoHeightParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams, GetNonceResult, GetNonceParams, GetAccountHistoryParams,
-  AccounHistory, Peer
+  AccounHistory, Peer, DevFee, DiskSize
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -131,6 +131,14 @@ class RPC extends BaseRPC {
 
   getPeers() {
     return this.post<Peer[]>(RPCMethod.GetPeers)
+  }
+
+  getDevFeeThresholds() {
+    return this.post<DevFee[]>(RPCMethod.GetDevFeeThresholds)
+  }
+
+  getSizeOnDisk() {
+    return this.post<DiskSize>(RPCMethod.GetSizeOnDisk)
   }
 }
 

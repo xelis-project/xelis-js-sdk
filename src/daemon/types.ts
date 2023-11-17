@@ -3,9 +3,10 @@ export interface GetInfoResult {
   difficulty: number
   height: number
   mempool_size: number
-  native_supply: number
+  circulating_supply: number
+  maximum_supply: number
   stableheight: number
-  top_hash: string
+  top_block_hash: string
   version: string
   network: string
   topoheight: number
@@ -191,6 +192,16 @@ export interface PeerPeerDisconnected {
   peer_addr: string
 }
 
+export interface DevFee {
+  fee_percentage: number
+  height: number
+}
+
+export interface DiskSize {
+  size_bytes: number
+  size_formatted: string
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetInfo = 'get_info',
@@ -222,7 +233,9 @@ export enum RPCMethod {
   CountAccounts = 'count_accounts',
   GetAccountHistory = 'get_account_history',
   GetAccountAssets = 'get_account_assets',
-  GetPeers = 'get_peers'
+  GetPeers = 'get_peers',
+  GetDevFeeThresholds = 'get_dev_fee_thresholds',
+  GetSizeOnDisk = 'get_size_on_disk'
 }
 
 export enum RPCEvent {

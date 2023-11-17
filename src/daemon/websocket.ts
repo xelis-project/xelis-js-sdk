@@ -6,7 +6,7 @@ import {
   GetBalanceAtTopoHeightParams, GetLastBalanceResult, HeightRangeParams, BlockOrdered,
   GetLastBalanceParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams, GetNonceParams, GetNonceResult, GetAccountHistoryParams,
-  AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected
+  AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected, DevFee, DiskSize
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -166,6 +166,14 @@ class WS extends BaseWS {
 
   getPeers() {
     return this.dataCall<Peer[]>(RPCMethod.GetPeers)
+  }
+
+  getDevFeeThresholds() {
+    return this.dataCall<DevFee[]>(RPCMethod.GetDevFeeThresholds)
+  }
+
+  getSizeOnDisk() {
+    return this.dataCall<DiskSize>(RPCMethod.GetSizeOnDisk)
   }
 }
 

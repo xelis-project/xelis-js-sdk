@@ -185,6 +185,9 @@ export class WS {
 
   call<T>(method: string, params?: any): Promise<RPCResponse<T>> {
     return new Promise((resolve, reject) => {
+      if (!this.socket) return reject(new Error(`Socket is not initialized.`))
+      if (this.socket.readyState !== WebSocket.OPEN) return reject(new Error(`Can't send msg. Socket is not opened.`))
+
       const { data, id } = this.createRequestMethod(method, params)
 
       let timeoutId: any = null
