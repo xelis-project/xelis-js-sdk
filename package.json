@@ -9,7 +9,7 @@
   "homepage": "https://github.com/xelis-project/xelis-js-sdk#readme",
   "scripts": {
     "test": "jest",
-    "build": "rm -r ./dist && npx tsc --declaration && cp package.json ./dist && cp README.md ./dist",
+    "build": "rm -rf ./dist && npx tsc --declaration && cp package.json ./dist && cp README.md ./dist",
     "publish": "cd ./dist && npm publish"
   },
   "devDependencies": {
