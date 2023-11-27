@@ -87,6 +87,10 @@ export interface RPCEventResult {
   event: string
 }
 
+export type PeerPeers = {
+  [ip: string]: `In` | `Out` | `Both`
+}
+
 export interface Peer {
   id: number
   addr: string
@@ -97,7 +101,7 @@ export interface Peer {
   height: number
   last_ping: number
   pruned_topoheight: number
-  peers: string[]
+  peers: PeerPeers
   cumulative_difficulty: number
 }
 
