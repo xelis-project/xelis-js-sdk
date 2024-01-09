@@ -15,11 +15,11 @@ Import library and start working :).
 Use http/rpc connection.
 
 ```js
-import { DEV_NODE_RPC } from '@xelis/sdk/config/nodes'
+import { TESTNET_NODE_RPC } from '@xelis/sdk/config/nodes'
 import DaemonRPC from '@xelis/sdk/daemon/rpc'
 
 const main = async () => {
-  const daemonRPC = new DaemonRPC(DEV_NODE_RPC)
+  const daemonRPC = new DaemonRPC(TESTNET_NODE_RPC)
   const info = await daemonRPC.getInfo()
   console.log(info)
 }
@@ -30,12 +30,12 @@ main()
 Use websocket connection.
 
 ```js
-import { DEV_NODE_RPC } from '@xelis/sdk/config/nodes'
+import { TESTNET_NODE_WS } from '@xelis/sdk/config/nodes'
 import DaemonWS from '@xelis/sdk/daemon/websocket'
 
 const main = async () => {
   const daemonWS = new DaemonWS()
-  await daemonWS.connect(DEV_NODE_RPC)
+  await daemonWS.connect(TESTNET_NODE_WS)
   const info = await daemonWS.getInfo()
   console.log(info)
 }
