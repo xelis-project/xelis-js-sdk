@@ -243,13 +243,13 @@ export enum RPCMethod {
 }
 
 export enum RPCEvent {
-  NewBlock = `NewBlock`,
-  TransactionAddedInMempool = `TransactionAddedInMempool`,
-  TransactionExecuted = `TransactionExecuted`,
-  BlockOrdered = `BlockOrdered`,
-  PeerConnected = `PeerConnected`,
-  PeerDisconnected = `PeerDisconnected`,
-  PeerPeerListUpdated = `PeerPeerListUpdated`,
-  PeerPeerDisconnected = `PeerPeerDisconnected`,
-  PeerStateUpdated = `PeerStateUpdated`
+  NewBlock = `new_block`,
+  TransactionAddedInMempool = `transaction_added_in_mempool`,
+  TransactionExecuted = `transaction_executed`,
+  BlockOrdered = `block_ordered`,
+  PeerConnected = `peer_connected`,
+  PeerDisconnected = `peer_disconnected`,
+  PeerPeerListUpdated = `peer_peer_list_updated`,
+  PeerPeerDisconnected = `peer_peer_disconnected`,
+  PeerStateUpdated = `peer_state_updated`
 }
