@@ -206,6 +206,14 @@ export interface DiskSize {
   size_formatted: string
 }
 
+export interface AssetData {
+  asset: string
+  data: {
+    topoheight: number
+    decimals: number
+  }
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetInfo = 'get_info',
@@ -247,9 +255,11 @@ export enum RPCEvent {
   TransactionAddedInMempool = `transaction_added_in_mempool`,
   TransactionExecuted = `transaction_executed`,
   BlockOrdered = `block_ordered`,
+  TransactionSCResult = `transaction_sc_result`,
+  NewAsset = `new_asset`,
   PeerConnected = `peer_connected`,
   PeerDisconnected = `peer_disconnected`,
+  PeerStateUpdated = `peer_state_updated`,
   PeerPeerListUpdated = `peer_peer_list_updated`,
-  PeerPeerDisconnected = `peer_peer_disconnected`,
-  PeerStateUpdated = `peer_state_updated`
+  PeerPeerDisconnected = `peer_peer_disconnected`
 }
