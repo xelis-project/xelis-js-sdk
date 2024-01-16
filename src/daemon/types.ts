@@ -60,8 +60,8 @@ export interface Balance {
 }
 
 export interface GetBalanceResult {
+  version: Balance
   topoheight: number
-  balance: Balance
 }
 
 export interface P2PStatusResult {
