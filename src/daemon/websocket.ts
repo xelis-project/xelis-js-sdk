@@ -3,8 +3,8 @@ import { MessageEvent } from 'ws'
 import {
   Block, GetInfoResult, RPCEvent, RPCMethod,
   RPCEventResult, Transaction, TopoHeightRangeParams, P2PStatusResult, Balance,
-  GetBalanceAtTopoHeightParams, GetLastBalanceResult, HeightRangeParams, BlockOrdered,
-  GetLastBalanceParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
+  GetBalanceAtTopoHeightParams, GetBalanceResult, HeightRangeParams, BlockOrdered,
+  GetBalanceParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams, GetNonceParams, GetNonceResult, GetAccountHistoryParams,
   AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected, DevFee, DiskSize, AssetData
 } from './types'
@@ -96,8 +96,8 @@ class WS extends BaseWS {
     return this.dataCall<GetNonceResult>(RPCMethod.GetNonce, params)
   }
 
-  getLastBalance(params: GetLastBalanceParams) {
-    return this.dataCall<GetLastBalanceResult>(RPCMethod.GetLastBalance, params)
+  getBalance(params: GetBalanceParams) {
+    return this.dataCall<GetBalanceResult>(RPCMethod.GetBalance, params)
   }
 
   getBalanceAtTopoHeight(params: GetBalanceAtTopoHeightParams) {

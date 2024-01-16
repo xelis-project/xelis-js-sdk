@@ -32,7 +32,7 @@ export interface Block {
   version: number
 }
 
-export interface GetLastBalanceParams {
+export interface GetBalanceParams {
   address: string
   asset: string
 }
@@ -59,7 +59,7 @@ export interface Balance {
   previous_topoheight: number
 }
 
-export interface GetLastBalanceResult {
+export interface GetBalanceResult {
   topoheight: number
   balance: Balance
 }
@@ -226,7 +226,7 @@ export enum RPCMethod {
   GetBlockByHash = 'get_block_by_hash',
   GetTopBlock = 'get_top_block',
   GetNonce = 'get_nonce',
-  GetLastBalance = 'get_last_balance',
+  GetBalance = 'get_balance',
   GetBalanceAtTopoHeight = 'get_balance_at_topoheight',
   GetAssets = 'get_assets',
   CountAssets = 'count_assets',
