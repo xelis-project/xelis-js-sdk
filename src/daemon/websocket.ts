@@ -6,7 +6,7 @@ import {
   GetBalanceAtTopoHeightParams, GetBalanceResult, HeightRangeParams, BlockOrdered,
   GetBalanceParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams, GetNonceParams, GetNonceResult, GetAccountHistoryParams,
-  AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected, DevFee, DiskSize, AssetData
+  AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected, DevFee, DiskSize, AssetWithData
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -48,7 +48,7 @@ class WS extends BaseWS {
     return this.listenEvent(RPCEvent.PeerStateUpdated, onData)
   }
 
-  onNewAsset(onData: (msgEvent: MessageEvent, data?: AssetData & RPCEventResult, err?: Error) => void) {
+  onNewAsset(onData: (msgEvent: MessageEvent, data?: AssetWithData & RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.NewAsset, onData)
   }
 

@@ -207,11 +207,32 @@ export interface DiskSize {
 }
 
 export interface AssetData {
+  topoheight: number
+  decimals: number
+}
+
+export interface AssetWithData {
   asset: string
-  data: {
-    topoheight: number
-    decimals: number
-  }
+  data: AssetData
+}
+
+export interface HasBalanceParams {
+  address: string
+  asset: string
+  topoheight: number
+}
+
+export interface HasBalanceResult {
+  exists: boolean
+}
+
+export interface IsTxExecutedInBlockParams {
+  tx_hash: string
+  block_hash: string
+}
+
+export interface GetAssetParams {
+  asset: string
 }
 
 export enum RPCMethod {
@@ -227,7 +248,9 @@ export enum RPCMethod {
   GetTopBlock = 'get_top_block',
   GetNonce = 'get_nonce',
   GetBalance = 'get_balance',
+  HasBalance = 'has_balance',
   GetBalanceAtTopoHeight = 'get_balance_at_topoheight',
+  GetAsset = 'get_asset',
   GetAssets = 'get_assets',
   CountAssets = 'count_assets',
   CountTransactions = 'count_transactions',
@@ -247,7 +270,8 @@ export enum RPCMethod {
   GetAccountAssets = 'get_account_assets',
   GetPeers = 'get_peers',
   GetDevFeeThresholds = 'get_dev_fee_thresholds',
-  GetSizeOnDisk = 'get_size_on_disk'
+  GetSizeOnDisk = 'get_size_on_disk',
+  IsTxExecutedInBlock = 'is_tx_executed_in_block'
 }
 
 export enum RPCEvent {

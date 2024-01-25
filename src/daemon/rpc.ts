@@ -3,7 +3,7 @@ import {
   GetBalanceResult, P2PStatusResult, RPCMethod, Transaction, GetBalanceParams,
   GetBalanceAtTopoHeightParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams, GetNonceResult, GetNonceParams, GetAccountHistoryParams,
-  AccounHistory, Peer, DevFee, DiskSize
+  AccounHistory, Peer, DevFee, DiskSize, HasBalanceParams, HasBalanceResult, AssetData, IsTxExecutedInBlockParams, GetAssetParams
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -57,8 +57,16 @@ class RPC extends BaseRPC {
     return this.post<GetBalanceResult>(RPCMethod.GetBalance, params)
   }
 
+  hasBalance(params: HasBalanceParams) {
+    return this.post<HasBalanceResult>(RPCMethod.HasBalance, params)
+  }
+
   getBalanceAtTopoHeight(params: GetBalanceAtTopoHeightParams) {
     return this.post<Balance>(RPCMethod.GetBalanceAtTopoHeight, params)
+  }
+
+  getAsset(params: GetAssetParams) {
+    return this.post<AssetData>(RPCMethod.GetAsset, params)
   }
 
   getAssets() {
@@ -139,6 +147,10 @@ class RPC extends BaseRPC {
 
   getSizeOnDisk() {
     return this.post<DiskSize>(RPCMethod.GetSizeOnDisk)
+  }
+
+  isTxExecutedInBlock(params: IsTxExecutedInBlockParams) {
+    return this.post<boolean>(RPCMethod.IsTxExecutedInBlock, params)
   }
 }
 
