@@ -41,9 +41,14 @@ export enum RPCMethod {
   GetTopoheight = 'get_topoheight',
   GetAddress = 'get_address',
   SplitAddress = 'split_address',
+  Rescan = 'rescan',
   GetBalance = 'get_balance',
   GetTrackedAssets = 'get_tracked_assets',
+  GetAssetPrecision = 'get_asset_precision',
   GetTransaction = 'get_transaction',
   BuildTransaction = 'build_transaction',
   ListTransactions = 'list_transactions',
+  IsOnline = 'is_online',
+  SignData = 'sign_data',
+  EstimateFees = 'estimate_fees'
 }

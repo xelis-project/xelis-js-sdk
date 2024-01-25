@@ -1,4 +1,4 @@
-import { Transaction } from '../daemon/types'
+import { Transaction, GetAssetParams } from '../daemon/types'
 
 import {
   RPCMethod, GetAddressParams, SplitAddressParams, SplitAddressResult,
@@ -24,6 +24,10 @@ class RPC extends BaseRPC {
     return this.post<string>(RPCMethod.GetAddress, params)
   }
 
+  rescan() {
+    return this.post<void>(RPCMethod.Rescan)
+  }
+
   splitAddress(params: SplitAddressParams) {
     return this.post<SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
@@ -36,6 +40,10 @@ class RPC extends BaseRPC {
     return this.post<string[]>(RPCMethod.GetTrackedAssets)
   }
 
+  getAssetPrecision(params: GetAssetParams) {
+    return this.post<number>(RPCMethod.GetAssetPrecision, params)
+  }
+
   getTransaction(hash: string) {
     return this.post<Transaction>(RPCMethod.GetTransaction, { hash })
   }
@@ -46,6 +54,10 @@ class RPC extends BaseRPC {
 
   listTransactions(params?: ListTransactionParams) {
     return this.post<Transaction[]>(RPCMethod.ListTransactions, params)
+  }
+
+  isOnline() {
+    return this.post<boolean>(RPCMethod.IsOnline)
   }
 }
 
