@@ -240,6 +240,13 @@ export interface GetAssetParams {
   asset: string
 }
 
+export enum BlockType {
+  Sync = 'Sync',
+  Normal = 'Normal',
+  Side = 'Side',
+  Orphaned = 'Orphaned'
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetInfo = 'get_info',
