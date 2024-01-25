@@ -10,7 +10,7 @@
   "scripts": {
     "test": "jest",
     "build": "rm -rf ./dist && npx tsc --declaration && cp package.json ./dist && cp README.md ./dist",
-    "publish": "cd ./dist && npm publish"
+    "publish-npm": "npm run build && cd ./dist && npm publish"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",
