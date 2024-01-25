@@ -111,6 +111,11 @@ export interface BlockOrdered {
   block_type: string
 }
 
+export interface BlockOrphaned {
+  block_hash: string
+  old_topoheight: number
+}
+
 export interface Transfer {
   amount: number
   asset: string
@@ -285,5 +290,6 @@ export enum RPCEvent {
   PeerDisconnected = `peer_disconnected`,
   PeerStateUpdated = `peer_state_updated`,
   PeerPeerListUpdated = `peer_peer_list_updated`,
-  PeerPeerDisconnected = `peer_peer_disconnected`
+  PeerPeerDisconnected = `peer_peer_disconnected`,
+  BlockOrphaned = `block_orphaned`
 }

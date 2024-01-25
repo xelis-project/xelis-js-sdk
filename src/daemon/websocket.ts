@@ -6,7 +6,8 @@ import {
   GetBalanceAtTopoHeightParams, GetBalanceResult, HeightRangeParams, BlockOrdered,
   GetBalanceParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams, GetNonceParams, GetNonceResult, GetAccountHistoryParams,
-  AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected, DevFee, DiskSize, AssetWithData, AssetData, GetAssetParams, HasBalanceParams, HasBalanceResult, IsTxExecutedInBlockParams
+  AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected, DevFee, DiskSize, AssetWithData, AssetData,
+  GetAssetParams, HasBalanceParams, HasBalanceResult, IsTxExecutedInBlockParams, BlockOrphaned
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -50,6 +51,10 @@ class WS extends BaseWS {
 
   onNewAsset(onData: (msgEvent: MessageEvent, data?: AssetWithData & RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.NewAsset, onData)
+  }
+
+  onBlockOrphaned(onData: (msgEvent: MessageEvent, data?: BlockOrphaned & RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.BlockOrphaned, onData)
   }
 
   getVersion() {
