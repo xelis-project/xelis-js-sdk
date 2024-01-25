@@ -1,6 +1,6 @@
 import { WS as BaseWS } from '../lib/websocket'
 
-import { Transaction } from '../daemon/types'
+import { GetAssetParams, Transaction } from '../daemon/types'
 
 import {
   BuildTransactionParams, BuildTransactionResult, GetAddressParams,
@@ -28,6 +28,10 @@ class WS extends BaseWS {
     return this.dataCall<string>(RPCMethod.GetAddress, params)
   }
 
+  rescan() {
+    return this.dataCall<void>(RPCMethod.Rescan)
+  }
+
   splitAddress(params: SplitAddressParams) {
     return this.dataCall<SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
@@ -40,6 +44,10 @@ class WS extends BaseWS {
     return this.dataCall<string[]>(RPCMethod.GetTrackedAssets)
   }
 
+  getAssetPrecision(params: GetAssetParams) {
+    return this.dataCall<number>(RPCMethod.GetAssetPrecision, params)
+  }
+
   getTransaction(hash: string) {
     return this.dataCall<Transaction>(RPCMethod.GetTransaction, { hash })
   }
@@ -50,6 +58,10 @@ class WS extends BaseWS {
 
   listTransactions(params?: ListTransactionParams) {
     return this.dataCall<Transaction[]>(RPCMethod.GetTransaction, params)
+  }
+
+  isOnline() {
+    return this.dataCall<boolean>(RPCMethod.IsOnline)
   }
 }
 

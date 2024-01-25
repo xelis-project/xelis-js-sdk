@@ -6,7 +6,7 @@ import {
   GetBalanceAtTopoHeightParams, GetBalanceResult, HeightRangeParams, BlockOrdered,
   GetBalanceParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams, GetNonceParams, GetNonceResult, GetAccountHistoryParams,
-  AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected, DevFee, DiskSize, AssetWithData
+  AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected, DevFee, DiskSize, AssetWithData, AssetData, GetAssetParams, HasBalanceParams, HasBalanceResult, IsTxExecutedInBlockParams
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -100,8 +100,16 @@ class WS extends BaseWS {
     return this.dataCall<GetBalanceResult>(RPCMethod.GetBalance, params)
   }
 
+  hasBalance(params: HasBalanceParams) {
+    return this.dataCall<HasBalanceResult>(RPCMethod.HasBalance, params)
+  }
+
   getBalanceAtTopoHeight(params: GetBalanceAtTopoHeightParams) {
     return this.dataCall<Balance>(RPCMethod.GetBalanceAtTopoHeight, params)
+  }
+
+  getAsset(params: GetAssetParams) {
+    return this.dataCall<AssetData>(RPCMethod.GetAsset, params)
   }
 
   getAssets() {
@@ -178,6 +186,10 @@ class WS extends BaseWS {
 
   getSizeOnDisk() {
     return this.dataCall<DiskSize>(RPCMethod.GetSizeOnDisk)
+  }
+
+  isTxExecutedInBlock(params: IsTxExecutedInBlockParams) {
+    return this.dataCall<boolean>(RPCMethod.IsTxExecutedInBlock, params)
   }
 }
 
