@@ -9,7 +9,7 @@ describe('WS', () => {
     const daemonWS = new DaemonWS()
     const [err] = await to(daemonWS.connect(TESTNET_NODE_WS))
     expect(err).toBeNull()
-    const [err2, res] = await to(daemonWS.getInfo())
+    const [err2, res] = await to(daemonWS.methods.getInfo())
     expect(err2).toBeNull()
 
     console.log(res)
@@ -42,7 +42,7 @@ describe('WS', () => {
         resolve(null)
       }
 
-      const closeListen = await daemonWS.onNewBlock(async (newBlock, msgEvent) => {
+      const closeListen = await daemonWS.methods.onNewBlock(async (newBlock, msgEvent) => {
         console.log(newBlock)
         if (closeListen) await closeListen()
         doneTest()
@@ -71,7 +71,7 @@ describe('WS', () => {
       }
 
       for (let i = 0; i < count; i++) {
-        daemonWS.onNewBlock(async (newBlock, msgEvent) => {
+        daemonWS.methods.onNewBlock(async (newBlock, msgEvent) => {
           console.log(newBlock)
           doneTest()
         }).catch(err => doneTest(err))

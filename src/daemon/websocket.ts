@@ -12,7 +12,23 @@ import {
 
 import { WS as BaseWS } from '../lib/websocket'
 
-class WS extends BaseWS {
+export class DaemonMethods {
+  ws: BaseWS
+  prefix: string
+
+  constructor(ws: BaseWS, prefix: string = "") {
+    this.ws = ws
+    this.prefix = prefix
+  }
+
+  async listenEvent<T>(event: string, onData: (msgEvent: MessageEvent, data?: T, err?: Error) => void) {
+    return this.ws.listenEvent(this.prefix + event, onData)
+  }
+
+  dataCall<T>(method: string, params?: any): Promise<T> {
+    return this.ws.dataCall(this.prefix + method, params)
+  }
+
   onNewBlock(onData: (msgEvent: MessageEvent, data?: Block & RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.NewBlock, onData)
   }
@@ -195,6 +211,14 @@ class WS extends BaseWS {
 
   isTxExecutedInBlock(params: IsTxExecutedInBlockParams) {
     return this.dataCall<boolean>(RPCMethod.IsTxExecutedInBlock, params)
+  }
+}
+
+class WS extends BaseWS {
+  methods: DaemonMethods
+  constructor() {
+    super()
+    this.methods = new DaemonMethods(this)
   }
 }
 

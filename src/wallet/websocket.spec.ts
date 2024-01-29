@@ -5,15 +5,15 @@ import WalletWS from './websocket'
 
 describe('WS', () => {
   test('GetAddress', async () => {
-    const daemonWS = new WalletWS(`test`, `test`)
-    const [err] = await to(daemonWS.connect(LOCAL_WALLET_WS))
+    const walletWS = new WalletWS(`test`, `test`)
+    const [err] = await to(walletWS.connect(LOCAL_WALLET_WS))
     expect(err).toBeNull()
-    const [err2, res] = await to(daemonWS.getAddress())
+    const [err2, res] = await to(walletWS.methods.getAddress())
     expect(err2).toBeNull()
 
     console.log(res)
     expect(res)
 
-    daemonWS.close()
+    walletWS.close()
   })
 })

@@ -1,5 +1,5 @@
 export interface RPCRequest {
-  id: number
+  id: number | null
   jsonrpc: string
   method: string
   params: string

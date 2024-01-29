@@ -7,9 +7,17 @@ import {
   ListTransactionParams, SplitAddressParams, SplitAddressResult, RPCMethod
 } from './types'
 
-class WS extends BaseWS {
-  constructor(username: string, password: string) {
-    super({ auth: `${username}:${password}` })
+export class WalletMethods {
+  ws: BaseWS
+  prefix: string
+
+  constructor(ws: BaseWS, prefix: string = "") {
+    this.ws = ws
+    this.prefix = prefix
+  }
+
+  dataCall<T>(method: string, params?: any): Promise<T> {
+    return this.ws.dataCall(this.prefix + method, params)
   }
 
   getVersion() {
@@ -66,6 +74,15 @@ class WS extends BaseWS {
 
   isOnline() {
     return this.dataCall<boolean>(RPCMethod.IsOnline)
+  }
+}
+
+class WS extends BaseWS {
+  methods: WalletMethods
+
+  constructor(username: string, password: string) {
+    super({ auth: `${username}:${password}` })
+    this.methods = new WalletMethods(this)
   }
 }
 

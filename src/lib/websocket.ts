@@ -186,18 +186,23 @@ export class WS {
     return Promise.resolve(closeListen)
   }
 
-  call<T>(method: string, params?: any): Promise<RPCResponse<T>> {
+  call<T>(method: string, params?: any, overwriteData?: string): Promise<RPCResponse<T>> {
     return new Promise((resolve, reject) => {
       if (!this.socket) return reject(new Error(`Socket is not initialized.`))
       if (this.socket.readyState !== WebSocket.OPEN) return reject(new Error(`Can't send msg. Socket is not opened.`))
 
-      const { data, id } = this.createRequestMethod(method, params)
+      let requestMethod = this.createRequestMethod(method, params)
+      // for XSWD we want to send the application data without request method wrapping
+      if (overwriteData) {
+        requestMethod.id = null
+        requestMethod.data = overwriteData
+      }
 
       let timeoutId: any = null
       const onMessage = (msgEvent: MessageEvent) => {
         if (typeof msgEvent.data === `string`) {
           const data = JSON.parse(msgEvent.data) as RPCResponse<T>
-          if (data.id === id) {
+          if (data.id === requestMethod.id) {
             clearTimeout(timeoutId)
             this.socket && this.socket.removeEventListener(`message`, onMessage)
             if (data.error) return reject(new Error(data.error.message))
@@ -209,13 +214,15 @@ export class WS {
       // make sure you listen before sending data
       this.socket && this.socket.addEventListener(`message`, onMessage) // we don't use { once: true } option because of timeout feature
 
-      timeoutId = setTimeout(() => {
-        this.socket && this.socket.removeEventListener(`message`, onMessage)
-        reject(new Error(`timeout`))
-      }, this.timeout)
+      if (this.timeout > 0) {
+        timeoutId = setTimeout(() => {
+          this.socket && this.socket.removeEventListener(`message`, onMessage)
+          reject(new Error(`timeout`))
+        }, this.timeout)
+      }
 
       if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-        this.socket.send(data)
+        this.socket.send(requestMethod.data)
       }
     })
   }
@@ -228,7 +235,7 @@ export class WS {
     })
   }
 
-  createRequestMethod(method: string, params?: any): { data: string, id: number } {
+  createRequestMethod(method: string, params?: any): { data: string, id: number | null } {
     const id = this.methodIdIncrement++
     const request = { id: id, jsonrpc: `2.0`, method } as RPCRequest
     if (params) request.params = params
