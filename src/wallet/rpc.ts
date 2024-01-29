@@ -1,4 +1,5 @@
 import { Transaction, GetAssetParams } from '../daemon/types'
+import { Base64 } from 'js-base64'
 
 import {
   RPCMethod, GetAddressParams, SplitAddressParams, SplitAddressResult,
@@ -6,8 +7,23 @@ import {
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
+import { RPCResponse } from '../lib/types'
 
 class RPC extends BaseRPC {
+  auth: string
+
+  constructor(endpoint: string, username: string, password: string) {
+    super(endpoint)
+    const authValue = Base64.encode(`${username}:${password}`)
+    this.auth = `Basic ${authValue}`
+  }
+
+  async post<T>(method: string, params?: any): Promise<RPCResponse<T>> {
+    const headers = new Headers()
+    headers.set(`Authorization`, this.auth)
+    return super.post(method, params, headers)
+  }
+
   getVersion() {
     return this.post<string>(RPCMethod.GetVersion)
   }
@@ -20,7 +36,7 @@ class RPC extends BaseRPC {
     return this.post<number>(RPCMethod.GetTopoheight)
   }
 
-  getAddress(params?: GetAddressParams) {
+  getAddress(params: GetAddressParams = {}) {
     return this.post<string>(RPCMethod.GetAddress, params)
   }
 

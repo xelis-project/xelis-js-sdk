@@ -1,6 +1,6 @@
 import to from 'await-to-js'
 
-import { TESTNET_NODE_WS } from '../config/nodes'
+import { TESTNET_NODE_WS } from '../config'
 import DaemonRPC from './rpc'
 
 describe('RPC', () => {

@@ -1,6 +1,6 @@
 import to from 'await-to-js'
 
-import { TESTNET_NODE_WS } from '../config/nodes'
+import { TESTNET_NODE_WS } from '../config'
 import { RPCEvent } from './types'
 import DaemonWS from './websocket'
 

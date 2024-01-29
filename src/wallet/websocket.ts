@@ -8,6 +8,10 @@ import {
 } from './types'
 
 class WS extends BaseWS {
+  constructor(username: string, password: string) {
+    super({ auth: `${username}:${password}` })
+  }
+
   getVersion() {
     return this.dataCall<string>(RPCMethod.GetVersion)
   }
@@ -24,7 +28,7 @@ class WS extends BaseWS {
     return this.dataCall<number>(RPCMethod.GetTopoheight)
   }
 
-  getAddress(params?: GetAddressParams) {
+  getAddress(params: GetAddressParams = {}) {
     return this.dataCall<string>(RPCMethod.GetAddress, params)
   }
 

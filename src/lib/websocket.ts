@@ -1,5 +1,6 @@
-import { MessageEvent } from 'ws'
+import { ClientOptions, MessageEvent } from 'ws'
 import WebSocket from 'isomorphic-ws'
+import { ClientRequestArgs } from 'http'
 import to from 'await-to-js'
 
 import {
@@ -19,19 +20,21 @@ export class WS {
   unsubscribeSuspense: number
   reconnectOnConnectionLoss: boolean
   maxConnectionTries: number
+  options?: ClientOptions | ClientRequestArgs
 
   connectionTries = 0
   methodIdIncrement = 0
 
   private events: Record<string, EventData>
 
-  constructor() {
+  constructor(options?: ClientOptions | ClientRequestArgs) {
     this.endpoint = ""
     this.timeout = 3000
     this.events = {}
     this.unsubscribeSuspense = 1000
     this.maxConnectionTries = 3
     this.reconnectOnConnectionLoss = true
+    this.options = options
   }
 
   connect(endpoint: string) {
@@ -43,7 +46,7 @@ export class WS {
     this.events = {}
     this.connectionTries = 0
     return new Promise((resolve, reject) => {
-      this.socket = new WebSocket(endpoint)
+      this.socket = new WebSocket(endpoint, this.options)
       this.endpoint = endpoint
 
       this.socket.addEventListener(`open`, (event) => {
@@ -72,7 +75,7 @@ export class WS {
       return
     }
 
-    this.socket = new WebSocket(this.endpoint)
+    this.socket = new WebSocket(this.endpoint, this.options)
 
     this.socket.addEventListener(`open`, () => {
       this.connectionTries = 0

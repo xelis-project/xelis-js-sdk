@@ -8,7 +8,7 @@ export class RPC {
     this.timeout = 3000
   }
 
-  async post<T>(method: string, params?: any): Promise<RPCResponse<T>> {
+  async post<T>(method: string, params?: any, headers?: Headers): Promise<RPCResponse<T>> {
     try {
       const controller = new AbortController()
       const body = JSON.stringify({ id: 1, jsonrpc: '2.0', method: method, params })
@@ -17,14 +17,16 @@ export class RPC {
         controller.abort()
       }, this.timeout)
 
+      headers = headers || new Headers()
+      headers.set(`Content-Type`, `application/json`)
       const res = await fetch(this.endpoint, {
+        headers,
         method: `POST`,
         body,
         signal: controller.signal
       })
 
       clearTimeout(timeoutId)
-
       if (res.ok) {
         const data = await res.json() as RPCResponse<T>
 
@@ -37,6 +39,7 @@ export class RPC {
         return Promise.reject(new Error(`${res.status} - ${res.statusText}`))
       }
     } catch (err) {
+      console.log(err)
       return Promise.reject(err)
     }
   }
