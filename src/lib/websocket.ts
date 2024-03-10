@@ -29,7 +29,7 @@ export class WS {
 
   constructor(options?: ClientOptions | ClientRequestArgs) {
     this.endpoint = ""
-    this.timeout = 3000
+    this.timeout = 15000 // default to 15s
     this.events = {}
     this.unsubscribeSuspense = 1000
     this.maxConnectionTries = 3

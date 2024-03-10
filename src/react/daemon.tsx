@@ -1,13 +1,13 @@
-import React, { DependencyList, PropsWithChildren, createContext, useContext, useEffect, useState } from 'react'
+import React, { DependencyList, PropsWithChildren, createContext, useContext, useEffect, useMemo, useState } from 'react'
 import to from 'await-to-js'
 import { CloseEvent, ErrorEvent, MessageEvent, } from 'ws'
 
 import DaemonWS from '../daemon/websocket'
 import { RPCEvent } from '../daemon/types'
 
-const daemon = new DaemonWS()
-
 export const INITIATING = -1
+
+const daemon = new DaemonWS()
 
 const Context = createContext<NodeSocket>({
   err: undefined,
@@ -23,10 +23,11 @@ interface NodeSocket {
 
 interface NodeSocketProviderProps {
   endpoint: string
+  timeout?: number
 }
 
 export const NodeSocketProvider = (props: PropsWithChildren<NodeSocketProviderProps>) => {
-  const { children, endpoint } = props
+  const { children, endpoint, timeout } = props
 
   const [readyState, setReadyState] = useState<number>(INITIATING)
   const [err, setErr] = useState<Error | undefined>()
@@ -40,6 +41,11 @@ export const NodeSocketProvider = (props: PropsWithChildren<NodeSocketProviderPr
 
     connect()
   }, [endpoint])
+
+  useEffect(() => {
+    if (!timeout) return
+    daemon.timeout = timeout
+  }, [timeout])
 
   useEffect(() => {
     if (!daemon.socket) return

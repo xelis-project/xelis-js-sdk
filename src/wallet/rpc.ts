@@ -9,7 +9,7 @@ import {
 import { RPC as BaseRPC } from '../lib/rpc'
 import { RPCResponse } from '../lib/types'
 
-class RPC extends BaseRPC {
+export class RPC extends BaseRPC {
   auth: string
 
   constructor(endpoint: string, username: string, password: string) {

@@ -3,7 +3,7 @@ import { ApplicationData } from '../wallet/types'
 import { DaemonMethods } from '../daemon/websocket'
 import { WalletMethods } from '../wallet/websocket'
 
-class WS extends BaseWS {
+export class WS extends BaseWS {
   daemon: DaemonMethods
   wallet: WalletMethods
 

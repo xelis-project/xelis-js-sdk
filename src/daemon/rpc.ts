@@ -8,7 +8,7 @@ import {
 
 import { RPC as BaseRPC } from '../lib/rpc'
 
-class RPC extends BaseRPC {
+export class RPC extends BaseRPC {
   getVersion() {
     return this.post<string>(RPCMethod.GetVersion)
   }

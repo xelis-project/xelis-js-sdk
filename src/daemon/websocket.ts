@@ -214,7 +214,7 @@ export class DaemonMethods {
   }
 }
 
-class WS extends BaseWS {
+export class WS extends BaseWS {
   methods: DaemonMethods
   constructor() {
     super()

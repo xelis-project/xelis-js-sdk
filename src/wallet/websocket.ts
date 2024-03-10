@@ -77,7 +77,7 @@ export class WalletMethods {
   }
 }
 
-class WS extends BaseWS {
+export class WS extends BaseWS {
   methods: WalletMethods
 
   constructor(username: string, password: string) {
