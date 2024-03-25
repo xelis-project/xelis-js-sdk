@@ -1,9 +1,10 @@
-import { Transaction, GetAssetParams } from '../daemon/types'
+import { GetAssetParams, HasBalanceResult, TransactionData } from '../daemon/types'
 import { Base64 } from 'js-base64'
 
 import {
   RPCMethod, GetAddressParams, SplitAddressParams, SplitAddressResult,
-  BuildTransactionParams, BuildTransactionResult, ListTransactionParams
+  BuildTransactionParams, BuildTransactionResult, ListTransactionParams,
+  Signature, TransactionEntry
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -28,6 +29,10 @@ export class RPC extends BaseRPC {
     return this.post<string>(RPCMethod.GetVersion)
   }
 
+  getNetwork() {
+    return this.post<string>(RPCMethod.GetNetwork)
+  }
+
   getNonce() {
     return this.post<number>(RPCMethod.GetNonce)
   }
@@ -40,16 +45,20 @@ export class RPC extends BaseRPC {
     return this.post<string>(RPCMethod.GetAddress, params)
   }
 
-  rescan() {
-    return this.post<void>(RPCMethod.Rescan)
-  }
-
   splitAddress(params: SplitAddressParams) {
     return this.post<SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
 
+  rescan() {
+    return this.post<void>(RPCMethod.Rescan)
+  }
+
   getBalance(asset?: string) {
     return this.post<number>(RPCMethod.GetBalance, { asset })
+  }
+
+  hasBalance(asset?: string) {
+    return this.post<HasBalanceResult>(RPCMethod.HasBalance, { asset })
   }
 
   getTrackedAssets() {
@@ -61,7 +70,7 @@ export class RPC extends BaseRPC {
   }
 
   getTransaction(hash: string) {
-    return this.post<Transaction>(RPCMethod.GetTransaction, { hash })
+    return this.post<TransactionEntry>(RPCMethod.GetTransaction, { hash })
   }
 
   buildTransaction(params: BuildTransactionParams) {
@@ -69,11 +78,19 @@ export class RPC extends BaseRPC {
   }
 
   listTransactions(params?: ListTransactionParams) {
-    return this.post<Transaction[]>(RPCMethod.ListTransactions, params)
+    return this.post<TransactionEntry[]>(RPCMethod.ListTransactions, params)
   }
 
   isOnline() {
     return this.post<boolean>(RPCMethod.IsOnline)
+  }
+
+  signData(data: any) {
+    return this.post<Signature>(RPCMethod.SignData, data)
+  }
+
+  estimateFees(txData: TransactionData) {
+    return this.post<number>(RPCMethod.EstimateFees, { tx_type: txData })
   }
 }
 

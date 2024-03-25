@@ -1,13 +1,13 @@
 import to from 'await-to-js'
 
-import { TESTNET_NODE_WS } from '../config'
+import { LOCAL_NODE_WS } from '../config'
 import { RPCEvent } from './types'
 import DaemonWS from './websocket'
 
 describe('WS', () => {
   test('GetInfo', async () => {
     const daemonWS = new DaemonWS()
-    const [err] = await to(daemonWS.connect(TESTNET_NODE_WS))
+    const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
     expect(err).toBeNull()
     const [err2, res] = await to(daemonWS.methods.getInfo())
     expect(err2).toBeNull()
@@ -20,11 +20,11 @@ describe('WS', () => {
 
   test('Reconnect', async () => {
     const daemonWS = new DaemonWS()
-    const [err] = await to(daemonWS.connect(TESTNET_NODE_WS))
+    const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
     expect(err).toBeNull()
 
     console.log('Reconnecting to testnet...')
-    await daemonWS.connect(TESTNET_NODE_WS)
+    await daemonWS.connect(LOCAL_NODE_WS)
     daemonWS.close()
     expect(true)
   })
@@ -33,7 +33,7 @@ describe('WS', () => {
   test('Listen [NewBlock]', () => {
     return new Promise(async (resolve, reject) => {
       const daemonWS = new DaemonWS()
-      const [err] = await to(daemonWS.connect(TESTNET_NODE_WS))
+      const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
       expect(err).toBeNull()
 
       const doneTest = (err?: any) => {
@@ -53,7 +53,7 @@ describe('WS', () => {
   test('Multi Listen', () => {
     return new Promise(async (resolve, reject) => {
       const daemonWS = new DaemonWS()
-      const [err] = await to(daemonWS.connect(TESTNET_NODE_WS))
+      const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
       expect(err).toBeNull()
 
       let count = 3
@@ -81,7 +81,7 @@ describe('WS', () => {
 
   test('Check invalid event', async () => {
     const daemonWS = new DaemonWS()
-    const [err] = await to(daemonWS.connect(TESTNET_NODE_WS))
+    const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
     expect(err).toBeNull()
 
     //@ts-ignore

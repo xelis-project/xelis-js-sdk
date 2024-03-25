@@ -1,13 +1,14 @@
 import { MessageEvent } from 'ws'
 
 import {
-  Block, GetInfoResult, RPCEvent, RPCMethod,
-  RPCEventResult, Transaction, TopoHeightRangeParams, P2PStatusResult, Balance,
+  Block, GetInfoResult, RPCEvent, RPCMethod, GetPeersResult,
+  RPCEventResult, TopoHeightRangeParams, P2PStatusResult,
   GetBalanceAtTopoHeightParams, GetBalanceResult, HeightRangeParams, BlockOrdered,
   GetBalanceParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams, GetNonceParams, GetNonceResult, GetAccountHistoryParams,
   AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected, DevFee, DiskSize, AssetWithData, AssetData,
-  GetAssetParams, HasBalanceParams, HasBalanceResult, IsTxExecutedInBlockParams, BlockOrphaned
+  GetAssetParams, HasBalanceParams, HasBalanceResult, IsTxExecutedInBlockParams, BlockOrphaned, VersionedBalance, 
+  StableHeightChanged, HasNonceResult, HasNonceParams, TransactionResponse
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -33,11 +34,11 @@ export class DaemonMethods {
     return this.listenEvent(RPCEvent.NewBlock, onData)
   }
 
-  onTransactionAddedInMempool(onData: (msgEvent: MessageEvent, data?: Transaction & RPCEventResult, err?: Error) => void) {
+  onTransactionAddedInMempool(onData: (msgEvent: MessageEvent, data?: TransactionResponse & RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.TransactionAddedInMempool, onData)
   }
 
-  onTransactionExecuted(onData: (msgEvent: MessageEvent, data?: Transaction & RPCEventResult, err?: Error) => void) {
+  onTransactionExecuted(onData: (msgEvent: MessageEvent, data?: TransactionResponse & RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.TransactionExecuted, onData)
   }
 
@@ -73,12 +74,16 @@ export class DaemonMethods {
     return this.listenEvent(RPCEvent.BlockOrphaned, onData)
   }
 
-  getVersion() {
-    return this.dataCall<string>(RPCMethod.GetVersion)
+  onTransactionOrphaned(onData: (msgEvent: MessageEvent, data?: TransactionResponse & RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.TransactionOrphaned, onData)
   }
 
-  getInfo() {
-    return this.dataCall<GetInfoResult>(RPCMethod.GetInfo)
+  onStableHeightChanged(onData: (msgEvent: MessageEvent, data?: StableHeightChanged & RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.StableHeightChanged, onData)
+  }
+
+  getVersion() {
+    return this.dataCall<string>(RPCMethod.GetVersion)
   }
 
   getHeight() {
@@ -113,8 +118,8 @@ export class DaemonMethods {
     return this.dataCall<Block>(RPCMethod.GetTopBlock, params)
   }
 
-  getNonce(params: GetNonceParams) {
-    return this.dataCall<GetNonceResult>(RPCMethod.GetNonce, params)
+  submitBlock(blockTemplate: string) {
+    return this.dataCall<boolean>(RPCMethod.SubmitBlock, { block_template: blockTemplate })
   }
 
   getBalance(params: GetBalanceParams) {
@@ -126,7 +131,19 @@ export class DaemonMethods {
   }
 
   getBalanceAtTopoHeight(params: GetBalanceAtTopoHeightParams) {
-    return this.dataCall<Balance>(RPCMethod.GetBalanceAtTopoHeight, params)
+    return this.dataCall<VersionedBalance>(RPCMethod.GetBalanceAtTopoHeight, params)
+  }
+
+  getInfo() {
+    return this.dataCall<GetInfoResult>(RPCMethod.GetInfo)
+  }
+
+  getNonce(params: GetNonceParams) {
+    return this.dataCall<GetNonceResult>(RPCMethod.GetNonce, params)
+  }
+
+  hasNonce(params: HasNonceParams) {
+    return this.dataCall<HasNonceResult>(RPCMethod.HasNonce, params)
   }
 
   getAsset(params: GetAssetParams) {
@@ -137,32 +154,44 @@ export class DaemonMethods {
     return this.dataCall<string[]>(RPCMethod.GetAssets)
   }
 
+  countAssets() {
+    return this.dataCall<number>(RPCMethod.CountAssets)
+  }
+
+  countAccounts() {
+    return this.dataCall<number>(RPCMethod.CountAccounts)
+  }
+
   countTransactions() {
     return this.dataCall<number>(RPCMethod.CountTransactions)
   }
 
-  getTips() {
-    return this.dataCall<string[]>(RPCMethod.GetTips)
+  submitTransaction(hexData: string) {
+    return this.dataCall<boolean>(RPCMethod.SubmitTransaction, { data: hexData })
+  }
+
+  getTransaction(hash: string) {
+    return this.dataCall<TransactionResponse>(RPCMethod.GetTransaction, { hash })
   }
 
   p2pStatus() {
     return this.dataCall<P2PStatusResult>(RPCMethod.P2PStatus)
   }
 
-  getDAGOrder(params: TopoHeightRangeParams) {
-    return this.dataCall<string[]>(RPCMethod.GetDAGOrder, params)
+  getPeers() {
+    return this.dataCall<GetPeersResult>(RPCMethod.GetPeers)
   }
 
   getMemPool() {
-    return this.dataCall<Transaction[]>(RPCMethod.GetMempool)
+    return this.dataCall<TransactionResponse[]>(RPCMethod.GetMempool)
   }
 
-  getTransaction(hash: string) {
-    return this.dataCall<Transaction>(RPCMethod.GetTransaction, { hash })
+  getTips() {
+    return this.dataCall<string[]>(RPCMethod.GetTips)
   }
 
-  getTransactions(txHashes: string[]) {
-    return this.dataCall<Transaction[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
+  getDAGOrder(params: TopoHeightRangeParams) {
+    return this.dataCall<string[]>(RPCMethod.GetDAGOrder, params)
   }
 
   getBlocksRangeByTopoheight(params: TopoHeightRangeParams) {
@@ -173,20 +202,8 @@ export class DaemonMethods {
     return this.dataCall<Block[]>(RPCMethod.GetBlocksRangeByHeight, params)
   }
 
-  getAccounts(params: GetAccountsParams) {
-    return this.dataCall<string[]>(RPCMethod.GetAccounts, params)
-  }
-
-  submitBlock(blockTemplate: string) {
-    return this.dataCall<boolean>(RPCMethod.SubmitBlock, { block_template: blockTemplate })
-  }
-
-  submitTransaction(hexData: string) {
-    return this.dataCall<boolean>(RPCMethod.SubmitTransaction, { data: hexData })
-  }
-
-  countAccounts() {
-    return this.dataCall<number>(RPCMethod.CountAccounts)
+  getTransactions(txHashes: string[]) {
+    return this.dataCall<TransactionResponse[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
   }
 
   getAccountHistory(params: GetAccountHistoryParams) {
@@ -197,8 +214,12 @@ export class DaemonMethods {
     return this.dataCall<string[]>(RPCMethod.GetAccountAssets, { address })
   }
 
-  getPeers() {
-    return this.dataCall<Peer[]>(RPCMethod.GetPeers)
+  getAccounts(params: GetAccountsParams) {
+    return this.dataCall<string[]>(RPCMethod.GetAccounts, params)
+  }
+
+  isTxExecutedInBlock(params: IsTxExecutedInBlockParams) {
+    return this.dataCall<boolean>(RPCMethod.IsTxExecutedInBlock, params)
   }
 
   getDevFeeThresholds() {
@@ -207,10 +228,6 @@ export class DaemonMethods {
 
   getSizeOnDisk() {
     return this.dataCall<DiskSize>(RPCMethod.GetSizeOnDisk)
-  }
-
-  isTxExecutedInBlock(params: IsTxExecutedInBlockParams) {
-    return this.dataCall<boolean>(RPCMethod.IsTxExecutedInBlock, params)
   }
 }
 

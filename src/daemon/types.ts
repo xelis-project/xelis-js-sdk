@@ -1,35 +1,39 @@
 export interface GetInfoResult {
-  block_time_target: number
-  difficulty: number
-  height: number
-  mempool_size: number
+  average_block_time: number
+  block_reward: number
+  block_time_target: number // in seconds
   circulating_supply: number
+  difficulty: string
+  height: number
   maximum_supply: number
+  mempool_size: number
+  network: string
+  pruned_topoheight?: number
   stableheight: number
   top_block_hash: string
-  version: string
-  network: string
   topoheight: number
+  version: string
 }
 
 export interface Block {
-  block_type: string
-  cumulative_difficulty: number
-  supply: number
-  difficulty: number
-  reward: number
-  extra_nonce: string
   hash: string
-  height: number
-  miner: string
-  nonce: number
-  tips: string[]
-  topoheight: number
-  total_fees: number // is null if include_txs is false
+  topoheight?: number
+  block_type: BlockType
+  difficulty: string
+  supply?: number
+  reward?: number
+  cumulative_difficulty: string
+  total_fees?: number // is null if include_txs is false
   total_size_in_bytes: number
-  transactions?: Transaction[] // if include_txs is true in params
-  txs_hashes: string[]
   version: number
+  tips: string[]
+  timestamp: number // in milliseconds
+  height: number
+  nonce: number
+  extra_nonce: string
+  miner: string
+  txs_hashes: string[]
+  transactions?: Transaction[] // if include_txs is true in params
 }
 
 export interface GetBalanceParams {
@@ -48,19 +52,41 @@ export interface GetNonceParams {
   topoheight: number
 }
 
-export interface GetNonceResult {
+export interface VersionedNonce {
   nonce: number
-  previous_topoheight: number
+  previous_topoheight?: number
+}
+
+export interface GetNonceResult {
+  version: VersionedNonce
   topoheight: number
 }
 
-export interface Balance {
-  balance: number
-  previous_topoheight: number
+export interface GetNonceAtTopoheightParams {
+  address: string
+  topoheight: number
+}
+
+export interface EncryptedBalance {
+  commitment: number[]
+  handle: number[]
+}
+
+export enum BalanceType {
+  Input = `input`,
+  Output = `output`,
+  Both = `both`
+}
+
+export interface VersionedBalance {
+  balance_type: BalanceType
+  final_balance: EncryptedBalance
+  output_balance?: EncryptedBalance
+  previous_topoheight?: number
 }
 
 export interface GetBalanceResult {
-  version: Balance
+  version: VersionedBalance
   topoheight: number
 }
 
@@ -88,21 +114,23 @@ export interface RPCEventResult {
 }
 
 export type PeerPeers = {
-  [ip: string]: `In` | `Out` | `Both`
+  [addr: string]: `In` | `Out` | `Both`
 }
 
 export interface Peer {
   id: number
   addr: string
-  tag: string
+  local_port: number
+  tag?: string
   version: string
   top_block_hash: string
   topoheight: number
   height: number
-  last_ping: number
-  pruned_topoheight: number
+  last_ping: number // in seconds
+  pruned_topoheight?: number
   peers: PeerPeers
-  cumulative_difficulty: number
+  cumulative_difficulty: string
+  connected_on: number // in seconds
 }
 
 export interface BlockOrdered {
@@ -116,36 +144,82 @@ export interface BlockOrphaned {
   old_topoheight: number
 }
 
+export interface StableHeightChanged {
+  previous_stable_height: number
+  new_stable_height: number
+}
+
+export interface Proof {
+  Y_0: number[]
+  Y_1: number[]
+  z_r: number[]
+  z_x: number[]
+}
+
+export interface EqProof {
+  Y_0: number[]
+  Y_1: number[]
+  Y_2: number[]
+  z_r: number[]
+  z_s: number[]
+  z_x: number[]
+}
+
 export interface Transfer {
-  amount: number
   asset: string
+  destination: string
   extra_data?: any
-  to: string
+  commitment: number[]
+  sender_handle: number[]
+  receiver_handle: number[]
+  ct_validity_proof: Proof
+}
+
+export interface Burn {
+  asset: string
+  amount: number
 }
 
 export interface TransactionData {
   transfers: Transfer[]
-  burn: {
-    asset: string
-    amount: number
-  }
-  call_contract: {
+  burn: Burn
+  /*call_contract: {
     contract: string
     // assets
     // params
   }
-  deploy_contract: string
+  deploy_contract: string*/
+}
+
+export interface SourceCommitment {
+  commitment: number[]
+  proof: EqProof
+  asset: string
+}
+
+export interface Reference {
+  hash: string
+  topoheight: number
 }
 
 export interface Transaction {
   hash: string
-  blocks: string[]
+  version: number
+  source: string
   data: TransactionData
   fee: number
   nonce: number
-  owner: string
+  source_commitments: SourceCommitment[]
+  range_proof: number[]
   signature: string
-  first_seen?: number
+  reference: Reference
+}
+
+export interface TransactionResponse extends Transaction {
+  blocks: string[]
+  executed_in_block: string
+  in_mempool: boolean
+  first_seen?: number // in seconds
 }
 
 export interface GetAccountsParams {
@@ -183,12 +257,12 @@ export interface GetAccountHistoryParams {
 
 export interface AccounHistory {
   topoheight: number
-  block_timestamp: number
   hash: string
   mining?: { reward: number }
   burn?: { amount: number }
-  outgoing?: { amount: number }
-  incoming?: { amount: number }
+  outgoing?: { to: string }
+  incoming?: { from: string }
+  block_timestamp: number // in milliseconds
 }
 
 export interface PeerPeerListUpdated {
@@ -231,6 +305,10 @@ export interface HasBalanceResult {
   exists: boolean
 }
 
+export interface HasNonceResult {
+  exists: boolean
+}
+
 export interface IsTxExecutedInBlockParams {
   tx_hash: string
   block_hash: string
@@ -240,11 +318,28 @@ export interface GetAssetParams {
   asset: string
 }
 
+export interface GetPeersResult {
+  peers: Peer[]
+  total_peers: number
+  hidden_peers: number
+}
+
 export enum BlockType {
   Sync = 'Sync',
   Normal = 'Normal',
   Side = 'Side',
   Orphaned = 'Orphaned'
+}
+
+export interface GetBlockTemplateResult {
+  template: string
+  height: number
+  difficulty: number
+}
+
+export interface HasNonceParams {
+  address: string
+  topoheight?: number
 }
 
 export enum RPCMethod {
@@ -259,6 +354,8 @@ export enum RPCMethod {
   GetBlockByHash = 'get_block_by_hash',
   GetTopBlock = 'get_top_block',
   GetNonce = 'get_nonce',
+  GetNonceAtTopoheight = 'get_nonce_at_topoheight',
+  HasNonce = 'has_nonce',
   GetBalance = 'get_balance',
   HasBalance = 'has_balance',
   GetBalanceAtTopoHeight = 'get_balance_at_topoheight',
@@ -288,15 +385,17 @@ export enum RPCMethod {
 
 export enum RPCEvent {
   NewBlock = `new_block`,
+  BlockOrdered = `block_ordered`,
+  BlockOrphaned = `block_orphaned`,
+  StableHeightChanged = `stable_height_changed`,
+  TransactionOrphaned = `transaction_orphaned`,
   TransactionAddedInMempool = `transaction_added_in_mempool`,
   TransactionExecuted = `transaction_executed`,
-  BlockOrdered = `block_ordered`,
   TransactionSCResult = `transaction_sc_result`,
   NewAsset = `new_asset`,
   PeerConnected = `peer_connected`,
   PeerDisconnected = `peer_disconnected`,
-  PeerStateUpdated = `peer_state_updated`,
   PeerPeerListUpdated = `peer_peer_list_updated`,
+  PeerStateUpdated = `peer_state_updated`,
   PeerPeerDisconnected = `peer_peer_disconnected`,
-  BlockOrphaned = `block_orphaned`
 }

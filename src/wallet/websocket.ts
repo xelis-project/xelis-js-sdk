@@ -1,10 +1,10 @@
 import { WS as BaseWS } from '../lib/websocket'
 
-import { GetAssetParams, Transaction } from '../daemon/types'
+import { GetAssetParams, TransactionData } from '../daemon/types'
 
 import {
   BuildTransactionParams, BuildTransactionResult, GetAddressParams,
-  ListTransactionParams, SplitAddressParams, SplitAddressResult, RPCMethod
+  ListTransactionParams, SplitAddressParams, SplitAddressResult, RPCMethod, Signature, TransactionEntry
 } from './types'
 
 export class WalletMethods {
@@ -40,12 +40,12 @@ export class WalletMethods {
     return this.dataCall<string>(RPCMethod.GetAddress, params)
   }
 
-  rescan() {
-    return this.dataCall<void>(RPCMethod.Rescan)
-  }
-
   splitAddress(params: SplitAddressParams) {
     return this.dataCall<SplitAddressResult>(RPCMethod.SplitAddress, params)
+  }
+
+  rescan() {
+    return this.dataCall<void>(RPCMethod.Rescan)
   }
 
   getBalance(asset?: string) {
@@ -61,7 +61,7 @@ export class WalletMethods {
   }
 
   getTransaction(hash: string) {
-    return this.dataCall<Transaction>(RPCMethod.GetTransaction, { hash })
+    return this.dataCall<TransactionEntry>(RPCMethod.GetTransaction, { hash })
   }
 
   buildTransaction(params: BuildTransactionParams) {
@@ -69,11 +69,19 @@ export class WalletMethods {
   }
 
   listTransactions(params?: ListTransactionParams) {
-    return this.dataCall<Transaction[]>(RPCMethod.GetTransaction, params)
+    return this.dataCall<TransactionEntry[]>(RPCMethod.GetTransaction, params)
   }
 
   isOnline() {
     return this.dataCall<boolean>(RPCMethod.IsOnline)
+  }
+
+  signData(data: any) {
+    return this.dataCall<Signature>(RPCMethod.SignData, data)
+  }
+
+  estimateFees(txData: TransactionData) {
+    return this.dataCall<number>(RPCMethod.EstimateFees, { tx_type: txData })
   }
 }
 
