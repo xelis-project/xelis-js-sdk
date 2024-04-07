@@ -1,4 +1,4 @@
-import { TransactionData, Transaction } from '../daemon/types'
+import { TransactionData, Transaction } from '../daemon/types.js'
 
 export interface GetAddressParams {
   integrated_data?: string

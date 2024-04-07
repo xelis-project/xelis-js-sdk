@@ -9,9 +9,9 @@ import {
   AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected, DevFee, DiskSize, AssetWithData, AssetData,
   GetAssetParams, HasBalanceParams, HasBalanceResult, IsTxExecutedInBlockParams, BlockOrphaned, VersionedBalance, 
   StableHeightChanged, HasNonceResult, HasNonceParams, TransactionResponse
-} from './types'
+} from './types.js'
 
-import { WS as BaseWS } from '../lib/websocket'
+import { WS as BaseWS } from '../lib/websocket.js'
 
 export class DaemonMethods {
   ws: BaseWS

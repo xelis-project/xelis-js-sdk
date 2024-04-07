@@ -1,7 +1,7 @@
 import to from 'await-to-js'
 
-import { LOCAL_NODE_RPC } from '../config'
-import DaemonRPC from './rpc'
+import { LOCAL_NODE_RPC } from '../config.js'
+import DaemonRPC from './rpc.js'
 
 describe('RPC', () => {
   test('GetInfo', async () => {

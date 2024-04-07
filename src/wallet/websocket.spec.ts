@@ -1,7 +1,7 @@
 import to from 'await-to-js'
 
-import { LOCAL_WALLET_WS } from '../config'
-import WalletWS from './websocket'
+import { LOCAL_WALLET_WS } from '../config.js'
+import WalletWS from './websocket.js'
 
 describe('WS', () => {
   test('GetAddress', async () => {

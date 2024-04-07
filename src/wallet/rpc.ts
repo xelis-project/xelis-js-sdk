@@ -1,14 +1,15 @@
-import { GetAssetParams, HasBalanceResult, TransactionData } from '../daemon/types'
 import { Base64 } from 'js-base64'
+
+import { GetAssetParams, HasBalanceResult, TransactionData } from '../daemon/types.js'
 
 import {
   RPCMethod, GetAddressParams, SplitAddressParams, SplitAddressResult,
   BuildTransactionParams, BuildTransactionResult, ListTransactionParams,
   Signature, TransactionEntry
-} from './types'
+} from './types.js'
 
-import { RPC as BaseRPC } from '../lib/rpc'
-import { RPCResponse } from '../lib/types'
+import { RPC as BaseRPC } from '../lib/rpc.js'
+import { RPCResponse } from '../lib/types.js'
 
 export class RPC extends BaseRPC {
   auth: string

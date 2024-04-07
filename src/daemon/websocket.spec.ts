@@ -1,8 +1,8 @@
 import to from 'await-to-js'
 
-import { LOCAL_NODE_WS } from '../config'
-import { RPCEvent } from './types'
-import DaemonWS from './websocket'
+import { LOCAL_NODE_WS } from '../config.js'
+import { RPCEvent } from './types.js'
+import DaemonWS from './websocket.js'
 
 describe('WS', () => {
   test('GetInfo', async () => {
