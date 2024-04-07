@@ -1,7 +1,15 @@
 {
-  "version": "0.7.0",
+  "version": "0.8.0",
   "name": "@xelis/sdk",
   "description": "Xelis software development kit for JS",
+  "exports": {
+    "./*": {
+      "types": "./dist/types/*.d.ts",
+      "require": "./dist/cjs/*.js",
+      "import": "./dist/esm/*.js",
+      "default": "./dist/esm/*.js"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/xelis-project/xelis-js-sdk"
@@ -9,8 +17,9 @@
   "homepage": "https://github.com/xelis-project/xelis-js-sdk#readme",
   "scripts": {
     "test": "jest",
-    "build": "rm -rf ./dist && npx tsc --declaration && cp package.json README.md LICENSE ./dist",
-    "publish-npm": "npm run build && cd ./dist && npm publish"
+    "compile": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
+    "clean": "rm -rf ./dist",
+    "build": "npm run clean && npm run compile && node create_esm_pkg.js"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",
