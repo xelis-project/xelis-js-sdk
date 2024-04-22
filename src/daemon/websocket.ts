@@ -7,7 +7,7 @@ import {
   GetBalanceParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams, GetNonceParams, GetNonceResult, GetAccountHistoryParams,
   AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected, DevFee, DiskSize, AssetWithData, AssetData,
-  GetAssetParams, HasBalanceParams, HasBalanceResult, IsTxExecutedInBlockParams, BlockOrphaned, VersionedBalance, 
+  GetAssetParams, HasBalanceParams, HasBalanceResult, IsTxExecutedInBlockParams, BlockOrphaned, VersionedBalance,
   StableHeightChanged, HasNonceResult, HasNonceParams, TransactionResponse
 } from './types.js'
 
@@ -228,6 +228,10 @@ export class DaemonMethods {
 
   getSizeOnDisk() {
     return this.dataCall<DiskSize>(RPCMethod.GetSizeOnDisk)
+  }
+
+  getAccountRegistrationTopoheight(address: String) {
+    return this.dataCall<Number>(RPCMethod.GetAccountRegistrationTopoheight, address)
   }
 }
 

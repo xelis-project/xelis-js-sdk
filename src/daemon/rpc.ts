@@ -162,6 +162,10 @@ export class RPC extends BaseRPC {
   getSizeOnDisk() {
     return this.post<DiskSize>(RPCMethod.GetSizeOnDisk)
   }
+
+  getAccountRegistrationTopoheight(address: String) {
+    return this.post<Number>(RPCMethod.GetAccountRegistrationTopoheight, { address })
+  }
 }
 
 export default RPC

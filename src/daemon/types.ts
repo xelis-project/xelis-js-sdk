@@ -380,7 +380,8 @@ export enum RPCMethod {
   GetPeers = 'get_peers',
   GetDevFeeThresholds = 'get_dev_fee_thresholds',
   GetSizeOnDisk = 'get_size_on_disk',
-  IsTxExecutedInBlock = 'is_tx_executed_in_block'
+  IsTxExecutedInBlock = 'is_tx_executed_in_block',
+  GetAccountRegistrationTopoheight = 'get_account_registration_topoheight'
 }
 
 export enum RPCEvent {
