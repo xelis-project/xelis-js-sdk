@@ -1,5 +1,5 @@
 {
-  "version": "0.8.2",
+  "version": "0.8.3",
   "name": "@xelis/sdk",
   "description": "Xelis software development kit for JS",
   "exports": {
@@ -19,7 +19,8 @@
     "test": "jest",
     "compile": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
     "clean": "rm -rf ./dist",
-    "build": "npm run clean && npm run compile && node create_esm_pkg.js"
+    "build": "npm run clean && npm run compile && node create_esm_pkg.js",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",
