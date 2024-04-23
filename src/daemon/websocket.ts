@@ -231,7 +231,7 @@ export class DaemonMethods {
   }
 
   getAccountRegistrationTopoheight(address: String) {
-    return this.dataCall<Number>(RPCMethod.GetAccountRegistrationTopoheight, address)
+    return this.dataCall<Number>(RPCMethod.GetAccountRegistrationTopoheight, { address })
   }
 }
 
