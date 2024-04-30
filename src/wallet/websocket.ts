@@ -5,7 +5,7 @@ import { GetAssetParams, TransactionData } from '../daemon/types'
 import {
   BuildTransactionParams, BuildTransactionResult, GetAddressParams,
   ListTransactionParams, SplitAddressParams, SplitAddressResult, RPCMethod, Signature, TransactionEntry,
-  RescanParams
+  RescanParams, SetOnlineModeParams
 } from './types'
 
 export class WalletMethods {
@@ -83,6 +83,14 @@ export class WalletMethods {
 
   estimateFees(txData: TransactionData) {
     return this.dataCall<number>(RPCMethod.EstimateFees, { tx_type: txData })
+  }
+
+  setOnlineMode(params: SetOnlineModeParams) {
+    return this.dataCall<boolean>(RPCMethod.SetOfflineMode, params)
+  }
+
+  setOfflineMode() {
+    return this.dataCall<boolean>(RPCMethod.SetOfflineMode)
   }
 }
 

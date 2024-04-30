@@ -5,8 +5,7 @@ import { GetAssetParams, HasBalanceResult, TransactionData } from '../daemon/typ
 import {
   RPCMethod, GetAddressParams, SplitAddressParams, SplitAddressResult,
   BuildTransactionParams, BuildTransactionResult, ListTransactionParams,
-  Signature, TransactionEntry,
-  RescanParams
+  Signature, TransactionEntry, RescanParams, SetOnlineModeParams
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -93,6 +92,14 @@ export class RPC extends BaseRPC {
 
   estimateFees(txData: TransactionData) {
     return this.post<number>(RPCMethod.EstimateFees, { tx_type: txData })
+  }
+
+  setOnlineMode(params: SetOnlineModeParams) {
+    return this.post<boolean>(RPCMethod.SetOnlineMode, params)
+  }
+
+  setOfflineMode() {
+    return this.post<boolean>(RPCMethod.SetOfflineMode)
   }
 }
 

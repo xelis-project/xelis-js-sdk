@@ -83,6 +83,11 @@ export interface RescanParams {
   auto_reconnect: boolean
 }
 
+export interface SetOnlineModeParams {
+  daemon_address: string
+  auto_reconnect: boolean
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetNetwork = 'get_network',
@@ -99,6 +104,8 @@ export enum RPCMethod {
   BuildTransaction = 'build_transaction',
   ListTransactions = 'list_transactions',
   IsOnline = 'is_online',
+  SetOnlineMode = 'set_online_mode',
+  SetOfflineMode = 'set_offline_mode',
   SignData = 'sign_data',
   EstimateFees = 'estimate_fees'
 }
