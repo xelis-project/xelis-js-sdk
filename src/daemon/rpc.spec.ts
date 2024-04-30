@@ -1,6 +1,6 @@
 import to from 'await-to-js'
 
-import { LOCAL_NODE_RPC } from '../config'
+import { LOCAL_NODE_RPC, MAINNET_NODE_RPC, TESTNET_NODE_RPC } from '../config'
 import DaemonRPC from './rpc'
 
 const TESTNET_ADDR = `xet:rsdm79np9eqar7cg5jy9sdhwas74l4ml5enaasmae8jtjcvpr3vqqnlpysy`
@@ -19,6 +19,15 @@ describe('RPC', () => {
     const daemonRPC = new DaemonRPC(LOCAL_NODE_RPC)
 
     const [err, res] = await to(daemonRPC.getBlockTemplate(TESTNET_ADDR))
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res)
+  })
+
+  test('GetTransaction', async () => {
+    const daemonRPC = new DaemonRPC(MAINNET_NODE_RPC)
+
+    const [err, res] = await to(daemonRPC.getTransaction(`de76d2447b91d93565e679de9bfb6f8361d0f3fd21b7e7fbaee9b36c98723b2c`))
     expect(err).toBeNull()
     console.log(res)
     expect(res)

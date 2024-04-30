@@ -96,6 +96,7 @@ export interface P2PStatusResult {
   peer_id: number
   our_topoheight: number
   best_topoheight: number
+  median_topoheight: number
   max_peers: number
 }
 
