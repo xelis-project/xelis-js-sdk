@@ -6,7 +6,8 @@ import {
   AccounHistory, DevFee, DiskSize, HasBalanceParams, HasBalanceResult, AssetData, IsTxExecutedInBlockParams,
   GetAssetParams, GetPeersResult, GetBlockTemplateResult, VersionedBalance, VersionedNonce,
   GetNonceAtTopoheightParams, HasNonceParams, HasNonceResult, TransactionResponse,
-  IsAccountRegisteredParams, GetMempoolCacheResult
+  IsAccountRegisteredParams, GetMempoolCacheResult,
+  GetDifficultyResult
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -174,6 +175,10 @@ export class RPC extends BaseRPC {
 
   getMempoolCache(address: String) {
     return this.post<GetMempoolCacheResult>(RPCMethod.GetMempoolCache, { address })
+  }
+
+  getDifficulty() {
+    return this.post<GetDifficultyResult>(RPCMethod.GetDifficulty)
   }
 }
 

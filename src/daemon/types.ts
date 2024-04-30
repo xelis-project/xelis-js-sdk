@@ -356,6 +356,12 @@ export interface GetMempoolCacheResult {
   balances: Map<string, string>
 }
 
+export interface GetDifficultyResult {
+  difficulty: string
+  hashrate: string
+  hashrate_formatted: string
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetInfo = 'get_info',
@@ -397,7 +403,8 @@ export enum RPCMethod {
   IsTxExecutedInBlock = 'is_tx_executed_in_block',
   GetAccountRegistrationTopoheight = 'get_account_registration_topoheight',
   IsAccountRegistered = 'is_account_registered',
-  GetMempoolCache = 'get_mempool_cache'
+  GetMempoolCache = 'get_mempool_cache',
+  GetDifficulty = 'get_difficulty'
 }
 
 export enum RPCEvent {

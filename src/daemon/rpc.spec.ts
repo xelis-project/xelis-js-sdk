@@ -54,4 +54,13 @@ describe('RPC', () => {
     console.log(res)
     expect(res)
   })
+
+  test('GetDifficulty', async () => {
+    const daemonRPC = new DaemonRPC(MAINNET_NODE_RPC)
+
+    const [err, res] = await to(daemonRPC.getDifficulty())
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res)
+  })
 })
