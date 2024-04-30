@@ -372,6 +372,11 @@ export interface ExtractKeyFromAddressParams {
   tx_as_hex: boolean
 }
 
+export interface SubmitBlockParams {
+  block_template: string
+  miner_work?: string
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetInfo = 'get_info',

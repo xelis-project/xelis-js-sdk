@@ -9,10 +9,8 @@ import {
   AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected, DevFee, DiskSize, AssetWithData, AssetData,
   GetAssetParams, HasBalanceParams, HasBalanceResult, IsTxExecutedInBlockParams, BlockOrphaned, VersionedBalance,
   StableHeightChanged, HasNonceResult, HasNonceParams, TransactionResponse,
-  IsAccountRegisteredParams, GetMempoolCacheResult,
-  GetDifficultyResult,
-  ValidateAddressParams,
-  ExtractKeyFromAddressParams
+  IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
+  ExtractKeyFromAddressParams, SubmitBlockParams
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -122,8 +120,8 @@ export class DaemonMethods {
     return this.dataCall<Block>(RPCMethod.GetTopBlock, params)
   }
 
-  submitBlock(blockTemplate: string) {
-    return this.dataCall<boolean>(RPCMethod.SubmitBlock, { block_template: blockTemplate })
+  submitBlock(params: SubmitBlockParams) {
+    return this.dataCall<boolean>(RPCMethod.SubmitBlock, params)
   }
 
   getBalance(params: GetBalanceParams) {

@@ -7,7 +7,7 @@ import {
   GetAssetParams, GetPeersResult, GetBlockTemplateResult, VersionedBalance, VersionedNonce,
   GetNonceAtTopoheightParams, HasNonceParams, HasNonceResult, TransactionResponse,
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
-  ExtractKeyFromAddressParams
+  ExtractKeyFromAddressParams, SubmitBlockParams
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -49,8 +49,8 @@ export class RPC extends BaseRPC {
     return this.post<Block>(RPCMethod.GetTopBlock, params)
   }
 
-  submitBlock(blockTemplate: string) {
-    return this.post<boolean>(RPCMethod.SubmitBlock, { block_template: blockTemplate })
+  submitBlock(params: SubmitBlockParams) {
+    return this.post<boolean>(RPCMethod.SubmitBlock, params)
   }
 
   getBalance(params: GetBalanceParams) {
