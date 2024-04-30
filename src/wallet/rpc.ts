@@ -5,7 +5,8 @@ import { GetAssetParams, HasBalanceResult, TransactionData } from '../daemon/typ
 import {
   RPCMethod, GetAddressParams, SplitAddressParams, SplitAddressResult,
   BuildTransactionParams, BuildTransactionResult, ListTransactionParams,
-  Signature, TransactionEntry
+  Signature, TransactionEntry,
+  RescanParams
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -50,8 +51,8 @@ export class RPC extends BaseRPC {
     return this.post<SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
 
-  rescan() {
-    return this.post<void>(RPCMethod.Rescan)
+  rescan(params: RescanParams) {
+    return this.post<boolean>(RPCMethod.Rescan, params)
   }
 
   getBalance(asset?: string) {

@@ -65,6 +65,11 @@ export interface TransactionEntry {
   entry: TxCoinbase | TxBurn | TxIncoming | TxOutgoing
 }
 
+export interface RescanParams {
+  until_topoheight?: number
+  auto_reconnect: boolean
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetNetwork = 'get_network',

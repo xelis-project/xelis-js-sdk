@@ -4,7 +4,8 @@ import { GetAssetParams, TransactionData } from '../daemon/types'
 
 import {
   BuildTransactionParams, BuildTransactionResult, GetAddressParams,
-  ListTransactionParams, SplitAddressParams, SplitAddressResult, RPCMethod, Signature, TransactionEntry
+  ListTransactionParams, SplitAddressParams, SplitAddressResult, RPCMethod, Signature, TransactionEntry,
+  RescanParams
 } from './types'
 
 export class WalletMethods {
@@ -44,8 +45,8 @@ export class WalletMethods {
     return this.dataCall<SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
 
-  rescan() {
-    return this.dataCall<void>(RPCMethod.Rescan)
+  rescan(params: RescanParams) {
+    return this.dataCall<boolean>(RPCMethod.Rescan, params)
   }
 
   getBalance(asset?: string) {
