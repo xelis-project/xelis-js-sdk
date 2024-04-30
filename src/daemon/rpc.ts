@@ -6,8 +6,7 @@ import {
   AccounHistory, DevFee, DiskSize, HasBalanceParams, HasBalanceResult, AssetData, IsTxExecutedInBlockParams,
   GetAssetParams, GetPeersResult, GetBlockTemplateResult, VersionedBalance, VersionedNonce,
   GetNonceAtTopoheightParams, HasNonceParams, HasNonceResult, TransactionResponse,
-  IsAccountRegisteredParams, GetMempoolCacheResult,
-  GetDifficultyResult
+  IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -179,6 +178,10 @@ export class RPC extends BaseRPC {
 
   getDifficulty() {
     return this.post<GetDifficultyResult>(RPCMethod.GetDifficulty)
+  }
+
+  validateAddress(params: ValidateAddressParams) {
+    return this.post<boolean>(RPCMethod.ValidateAddress, params)
   }
 }
 

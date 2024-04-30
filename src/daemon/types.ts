@@ -362,6 +362,11 @@ export interface GetDifficultyResult {
   hashrate_formatted: string
 }
 
+export interface ValidateAddressParams {
+  address: string
+  allow_integrated: boolean
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetInfo = 'get_info',
@@ -404,7 +409,8 @@ export enum RPCMethod {
   GetAccountRegistrationTopoheight = 'get_account_registration_topoheight',
   IsAccountRegistered = 'is_account_registered',
   GetMempoolCache = 'get_mempool_cache',
-  GetDifficulty = 'get_difficulty'
+  GetDifficulty = 'get_difficulty',
+  ValidateAddress = 'validate_address'
 }
 
 export enum RPCEvent {

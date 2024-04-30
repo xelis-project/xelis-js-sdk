@@ -10,7 +10,8 @@ import {
   GetAssetParams, HasBalanceParams, HasBalanceResult, IsTxExecutedInBlockParams, BlockOrphaned, VersionedBalance,
   StableHeightChanged, HasNonceResult, HasNonceParams, TransactionResponse,
   IsAccountRegisteredParams, GetMempoolCacheResult,
-  GetDifficultyResult
+  GetDifficultyResult,
+  ValidateAddressParams
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -246,6 +247,10 @@ export class DaemonMethods {
 
   getDifficulty() {
     return this.dataCall<GetDifficultyResult>(RPCMethod.GetDifficulty)
+  }
+
+  validateAddress(params: ValidateAddressParams) {
+    return this.dataCall<boolean>(RPCMethod.ValidateAddress, params)
   }
 }
 

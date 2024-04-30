@@ -63,4 +63,16 @@ describe('RPC', () => {
     console.log(res)
     expect(res)
   })
+
+  test('ValidateAddress', async () => {
+    const daemonRPC = new DaemonRPC(MAINNET_NODE_RPC)
+
+    const [err, res] = await to(daemonRPC.validateAddress({
+      address: MAINNET_ADDR,
+      allow_integrated: false
+    }))
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res).toBeTruthy()
+  })
 })
