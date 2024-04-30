@@ -7,7 +7,9 @@ import {
   GetAssetParams, GetPeersResult, GetBlockTemplateResult, VersionedBalance, VersionedNonce,
   GetNonceAtTopoheightParams, HasNonceParams, HasNonceResult, TransactionResponse,
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
-  ExtractKeyFromAddressParams, SubmitBlockParams
+  ExtractKeyFromAddressParams, SubmitBlockParams,
+  CreateMinerWorkParams,
+  CreateMinerWorkResult
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -187,6 +189,10 @@ export class RPC extends BaseRPC {
 
   extractKeyFromAddress(params: ExtractKeyFromAddressParams) {
     return this.post<string | number[]>(RPCMethod.ExtractKeyFromAddress, params)
+  }
+
+  createMinerWork(params: CreateMinerWorkParams) {
+    return this.post<CreateMinerWorkResult>(RPCMethod.CreateMinerWork, params)
   }
 }
 

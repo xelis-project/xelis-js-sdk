@@ -10,7 +10,9 @@ import {
   GetAssetParams, HasBalanceParams, HasBalanceResult, IsTxExecutedInBlockParams, BlockOrphaned, VersionedBalance,
   StableHeightChanged, HasNonceResult, HasNonceParams, TransactionResponse,
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
-  ExtractKeyFromAddressParams, SubmitBlockParams
+  ExtractKeyFromAddressParams, SubmitBlockParams,
+  CreateMinerWorkParams,
+  CreateMinerWorkResult
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -254,6 +256,10 @@ export class DaemonMethods {
 
   extractKeyFromAddress(params: ExtractKeyFromAddressParams) {
     return this.dataCall<string | number[]>(RPCMethod.ExtractKeyFromAddress, params)
+  }
+
+  createMinerWork(params: CreateMinerWorkParams) {
+    return this.dataCall<CreateMinerWorkResult>(RPCMethod.CreateMinerWork, params)
   }
 }
 

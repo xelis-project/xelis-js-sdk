@@ -377,6 +377,15 @@ export interface SubmitBlockParams {
   miner_work?: string
 }
 
+export interface CreateMinerWorkParams {
+  template: string
+  address?: string
+}
+
+export interface CreateMinerWorkResult {
+  miner_work: string
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetInfo = 'get_info',
@@ -421,7 +430,8 @@ export enum RPCMethod {
   GetMempoolCache = 'get_mempool_cache',
   GetDifficulty = 'get_difficulty',
   ValidateAddress = 'validate_address',
-  ExtractKeyFromAddress = 'extract_key_from_address'
+  ExtractKeyFromAddress = 'extract_key_from_address',
+  CreateMinerWork = 'create_miner_work'
 }
 
 export enum RPCEvent {
