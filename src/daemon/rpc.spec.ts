@@ -45,4 +45,13 @@ describe('RPC', () => {
     console.log(res)
     expect(res)
   })
+
+  test('GetMempoolCache', async () => {
+    const daemonRPC = new DaemonRPC(MAINNET_NODE_RPC)
+
+    const [err, res] = await to(daemonRPC.getMempoolCache(`xel:aj5fza64zg0x75shr6y8wren5733hfuemrq3vk9eztwntvcdasjqq5z78lj`))
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res)
+  })
 })

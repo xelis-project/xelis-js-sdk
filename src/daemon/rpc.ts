@@ -6,7 +6,7 @@ import {
   AccounHistory, DevFee, DiskSize, HasBalanceParams, HasBalanceResult, AssetData, IsTxExecutedInBlockParams,
   GetAssetParams, GetPeersResult, GetBlockTemplateResult, VersionedBalance, VersionedNonce,
   GetNonceAtTopoheightParams, HasNonceParams, HasNonceResult, TransactionResponse,
-  IsAccountRegisteredParams
+  IsAccountRegisteredParams, GetMempoolCacheResult
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -170,6 +170,10 @@ export class RPC extends BaseRPC {
 
   isAccountRegistered(params: IsAccountRegisteredParams) {
     return this.post<boolean>(RPCMethod.IsAccountRegistered, params)
+  }
+
+  getMempoolCache(address: String) {
+    return this.post<GetMempoolCacheResult>(RPCMethod.GetMempoolCache, { address })
   }
 }
 

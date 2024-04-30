@@ -9,7 +9,7 @@ import {
   AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected, DevFee, DiskSize, AssetWithData, AssetData,
   GetAssetParams, HasBalanceParams, HasBalanceResult, IsTxExecutedInBlockParams, BlockOrphaned, VersionedBalance,
   StableHeightChanged, HasNonceResult, HasNonceParams, TransactionResponse,
-  IsAccountRegisteredParams
+  IsAccountRegisteredParams, GetMempoolCacheResult
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -237,6 +237,10 @@ export class DaemonMethods {
 
   isAccountRegistered(params: IsAccountRegisteredParams) {
     return this.dataCall<boolean>(RPCMethod.IsAccountRegistered, params)
+  }
+
+  getMempoolCacheResult(address: string) {
+    return this.dataCall<GetMempoolCacheResult>(RPCMethod.GetMempoolCache, { address })
   }
 }
 

@@ -349,6 +349,13 @@ export interface IsAccountRegisteredParams {
   in_stable_height: boolean
 }
 
+export interface GetMempoolCacheResult {
+  min: number
+  max: number
+  txs: string[]
+  balances: Map<string, string>
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetInfo = 'get_info',
@@ -389,7 +396,8 @@ export enum RPCMethod {
   GetSizeOnDisk = 'get_size_on_disk',
   IsTxExecutedInBlock = 'is_tx_executed_in_block',
   GetAccountRegistrationTopoheight = 'get_account_registration_topoheight',
-  IsAccountRegistered = 'is_account_registered'
+  IsAccountRegistered = 'is_account_registered',
+  GetMempoolCache = 'get_mempool_cache'
 }
 
 export enum RPCEvent {
