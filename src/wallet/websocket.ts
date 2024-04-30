@@ -1,11 +1,11 @@
 import { WS as BaseWS } from '../lib/websocket'
 
-import { GetAssetParams, TransactionData } from '../daemon/types'
+import { GetAssetParams } from '../daemon/types'
 
 import {
   BuildTransactionParams, BuildTransactionResult, GetAddressParams,
   ListTransactionParams, SplitAddressParams, SplitAddressResult, RPCMethod, Signature, TransactionEntry,
-  RescanParams, SetOnlineModeParams
+  RescanParams, SetOnlineModeParams, EstimateFeesParams
 } from './types'
 
 export class WalletMethods {
@@ -81,8 +81,8 @@ export class WalletMethods {
     return this.dataCall<Signature>(RPCMethod.SignData, data)
   }
 
-  estimateFees(txData: TransactionData) {
-    return this.dataCall<number>(RPCMethod.EstimateFees, { tx_type: txData })
+  estimateFees(params: EstimateFeesParams) {
+    return this.dataCall<number>(RPCMethod.EstimateFees, params)
   }
 
   setOnlineMode(params: SetOnlineModeParams) {

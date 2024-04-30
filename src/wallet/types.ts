@@ -1,4 +1,4 @@
-import { TransactionData, Transaction } from '../daemon/types'
+import { Transaction } from '../daemon/types'
 
 export interface GetAddressParams {
   integrated_data?: string
@@ -13,15 +13,23 @@ export interface SplitAddressResult {
   integrated_data: string
 }
 
+export interface FeeBuilder {
+  multiplier?: number
+  value?: number
+}
+
 export interface BuildTransactionParams {
-  tx_type: TransactionData
+  transfers: TransferOut[]
+  burn?: TxBurn
   broadcast: boolean
-  fee?: number
+  fee?: FeeBuilder
+  tx_as_hex: boolean
 }
 
 export interface BuildTransactionResult {
   hash: string
   data: Transaction
+  txt_as_hex?: string
 }
 
 export interface ListTransactionParams {
@@ -86,6 +94,11 @@ export interface RescanParams {
 export interface SetOnlineModeParams {
   daemon_address: string
   auto_reconnect: boolean
+}
+
+export interface EstimateFeesParams {
+  transfers: TransferOut[]
+  burn?: TxBurn
 }
 
 export enum RPCMethod {

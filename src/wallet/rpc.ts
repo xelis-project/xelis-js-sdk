@@ -1,11 +1,11 @@
 import { Base64 } from 'js-base64'
 
-import { GetAssetParams, HasBalanceResult, TransactionData } from '../daemon/types'
+import { GetAssetParams, HasBalanceResult } from '../daemon/types'
 
 import {
   RPCMethod, GetAddressParams, SplitAddressParams, SplitAddressResult,
   BuildTransactionParams, BuildTransactionResult, ListTransactionParams,
-  Signature, TransactionEntry, RescanParams, SetOnlineModeParams
+  Signature, TransactionEntry, RescanParams, SetOnlineModeParams, EstimateFeesParams
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -90,8 +90,8 @@ export class RPC extends BaseRPC {
     return this.post<Signature>(RPCMethod.SignData, data)
   }
 
-  estimateFees(txData: TransactionData) {
-    return this.post<number>(RPCMethod.EstimateFees, { tx_type: txData })
+  estimateFees(params: EstimateFeesParams) {
+    return this.post<number>(RPCMethod.EstimateFees, params)
   }
 
   setOnlineMode(params: SetOnlineModeParams) {
