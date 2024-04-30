@@ -367,6 +367,11 @@ export interface ValidateAddressParams {
   allow_integrated: boolean
 }
 
+export interface ExtractKeyFromAddressParams {
+  address: string
+  tx_as_hex: boolean
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetInfo = 'get_info',
@@ -410,7 +415,8 @@ export enum RPCMethod {
   IsAccountRegistered = 'is_account_registered',
   GetMempoolCache = 'get_mempool_cache',
   GetDifficulty = 'get_difficulty',
-  ValidateAddress = 'validate_address'
+  ValidateAddress = 'validate_address',
+  ExtractKeyFromAddress = 'extract_key_from_address'
 }
 
 export enum RPCEvent {

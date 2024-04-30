@@ -11,7 +11,8 @@ import {
   StableHeightChanged, HasNonceResult, HasNonceParams, TransactionResponse,
   IsAccountRegisteredParams, GetMempoolCacheResult,
   GetDifficultyResult,
-  ValidateAddressParams
+  ValidateAddressParams,
+  ExtractKeyFromAddressParams
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -251,6 +252,10 @@ export class DaemonMethods {
 
   validateAddress(params: ValidateAddressParams) {
     return this.dataCall<boolean>(RPCMethod.ValidateAddress, params)
+  }
+
+  extractKeyFromAddress(params: ExtractKeyFromAddressParams) {
+    return this.dataCall<string | number[]>(RPCMethod.ExtractKeyFromAddress, params)
   }
 }
 
