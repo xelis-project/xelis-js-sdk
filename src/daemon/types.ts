@@ -344,6 +344,11 @@ export interface HasNonceParams {
   topoheight?: number
 }
 
+export interface IsAccountRegisteredParams {
+  address: string
+  in_stable_height: boolean
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetInfo = 'get_info',
@@ -383,7 +388,8 @@ export enum RPCMethod {
   GetDevFeeThresholds = 'get_dev_fee_thresholds',
   GetSizeOnDisk = 'get_size_on_disk',
   IsTxExecutedInBlock = 'is_tx_executed_in_block',
-  GetAccountRegistrationTopoheight = 'get_account_registration_topoheight'
+  GetAccountRegistrationTopoheight = 'get_account_registration_topoheight',
+  IsAccountRegistered = 'is_account_registered'
 }
 
 export enum RPCEvent {

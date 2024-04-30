@@ -5,7 +5,8 @@ import {
   GetBlocksAtHeightParams, GetTopBlockParams, GetNonceResult, GetNonceParams, GetAccountHistoryParams,
   AccounHistory, DevFee, DiskSize, HasBalanceParams, HasBalanceResult, AssetData, IsTxExecutedInBlockParams,
   GetAssetParams, GetPeersResult, GetBlockTemplateResult, VersionedBalance, VersionedNonce,
-  GetNonceAtTopoheightParams, HasNonceParams, HasNonceResult, TransactionResponse
+  GetNonceAtTopoheightParams, HasNonceParams, HasNonceResult, TransactionResponse,
+  IsAccountRegisteredParams
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -165,6 +166,10 @@ export class RPC extends BaseRPC {
 
   getAccountRegistrationTopoheight(address: String) {
     return this.post<Number>(RPCMethod.GetAccountRegistrationTopoheight, { address })
+  }
+
+  isAccountRegistered(params: IsAccountRegisteredParams) {
+    return this.post<boolean>(RPCMethod.IsAccountRegistered, params)
   }
 }
 

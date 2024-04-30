@@ -8,7 +8,8 @@ import {
   GetBlocksAtHeightParams, GetTopBlockParams, GetNonceParams, GetNonceResult, GetAccountHistoryParams,
   AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected, DevFee, DiskSize, AssetWithData, AssetData,
   GetAssetParams, HasBalanceParams, HasBalanceResult, IsTxExecutedInBlockParams, BlockOrphaned, VersionedBalance,
-  StableHeightChanged, HasNonceResult, HasNonceParams, TransactionResponse
+  StableHeightChanged, HasNonceResult, HasNonceParams, TransactionResponse,
+  IsAccountRegisteredParams
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -232,6 +233,10 @@ export class DaemonMethods {
 
   getAccountRegistrationTopoheight(address: String) {
     return this.dataCall<Number>(RPCMethod.GetAccountRegistrationTopoheight, { address })
+  }
+
+  isAccountRegistered(params: IsAccountRegisteredParams) {
+    return this.dataCall<boolean>(RPCMethod.IsAccountRegistered, params)
   }
 }
 
