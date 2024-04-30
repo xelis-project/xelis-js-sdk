@@ -334,7 +334,8 @@ export enum BlockType {
 export interface GetBlockTemplateResult {
   template: string
   height: number
-  difficulty: number
+  topoheight: number
+  difficulty: string
 }
 
 export interface HasNonceParams {

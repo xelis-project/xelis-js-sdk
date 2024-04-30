@@ -16,6 +16,7 @@
   },
   "homepage": "https://github.com/xelis-project/xelis-js-sdk#readme",
   "scripts": {
+    "test-func": "jest -t",
     "test": "jest",
     "compile": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
     "fix-esm": "fix-esm-import-path ./dist/esm",
