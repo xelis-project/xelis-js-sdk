@@ -1,7 +1,7 @@
 import to from 'await-to-js'
 
-import { LOCAL_WALLET_RPC } from '../config.js'
-import WalletRPC from './rpc.js'
+import { LOCAL_WALLET_RPC } from '../config'
+import WalletRPC from './rpc'
 
 describe('RPC', () => {
   test('GetAddress', async () => {

@@ -1,4 +1,4 @@
-import { RPCResponse } from './types.js'
+import { RPCResponse } from './types'
 
 export class RPC {
   endpoint: string

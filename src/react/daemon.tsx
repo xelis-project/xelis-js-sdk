@@ -2,8 +2,8 @@ import React, { DependencyList, PropsWithChildren, createContext, useContext, us
 import to from 'await-to-js'
 import { CloseEvent, ErrorEvent, MessageEvent, } from 'ws'
 
-import DaemonWS from '../daemon/websocket.js'
-import { RPCEvent } from '../daemon/types.js'
+import DaemonWS from '../daemon/websocket'
+import { RPCEvent } from '../daemon/types'
 
 export const INITIATING = -1
 

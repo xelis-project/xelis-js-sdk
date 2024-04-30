@@ -6,9 +6,9 @@ import {
   AccounHistory, DevFee, DiskSize, HasBalanceParams, HasBalanceResult, AssetData, IsTxExecutedInBlockParams,
   GetAssetParams, GetPeersResult, GetBlockTemplateResult, VersionedBalance, VersionedNonce,
   GetNonceAtTopoheightParams, HasNonceParams, HasNonceResult, TransactionResponse
-} from './types.js'
+} from './types'
 
-import { RPC as BaseRPC } from '../lib/rpc.js'
+import { RPC as BaseRPC } from '../lib/rpc'
 
 export class RPC extends BaseRPC {
   getVersion() {

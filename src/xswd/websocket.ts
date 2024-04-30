@@ -1,7 +1,7 @@
-import { WS as BaseWS } from '../lib/websocket.js'
-import { ApplicationData } from '../wallet/types.js'
-import { DaemonMethods } from '../daemon/websocket.js'
-import { WalletMethods } from '../wallet/websocket.js'
+import { WS as BaseWS } from '../lib/websocket'
+import { ApplicationData } from '../wallet/types'
+import { DaemonMethods } from '../daemon/websocket'
+import { WalletMethods } from '../wallet/websocket'
 
 export class WS extends BaseWS {
   daemon: DaemonMethods

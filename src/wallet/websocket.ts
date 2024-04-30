@@ -1,11 +1,11 @@
-import { WS as BaseWS } from '../lib/websocket.js'
+import { WS as BaseWS } from '../lib/websocket'
 
-import { GetAssetParams, TransactionData } from '../daemon/types.js'
+import { GetAssetParams, TransactionData } from '../daemon/types'
 
 import {
   BuildTransactionParams, BuildTransactionResult, GetAddressParams,
   ListTransactionParams, SplitAddressParams, SplitAddressResult, RPCMethod, Signature, TransactionEntry
-} from './types.js'
+} from './types'
 
 export class WalletMethods {
   ws: BaseWS

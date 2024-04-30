@@ -18,14 +18,16 @@
   "scripts": {
     "test": "jest",
     "compile": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
+    "fix-esm": "fix-esm-import-path ./dist/esm",
     "clean": "rm -rf ./dist",
-    "build": "npm run clean && npm run compile && node create_esm_pkg.js",
+    "build": "npm run clean && npm run compile && node create_esm_pkg.js && npm run fix-esm",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",
     "@types/react": "^18.2.23",
     "@types/ws": "^8.5.4",
+    "fix-esm-import-path": "^1.5.0",
     "ts-jest": "^29.0.5",
     "typescript": "^4.9.5"
   },

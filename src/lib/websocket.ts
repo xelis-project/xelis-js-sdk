@@ -5,7 +5,7 @@ import to from 'await-to-js'
 
 import {
   RPCRequest, RPCResponse
-} from './types.js'
+} from './types'
 
 interface EventData {
   id?: number

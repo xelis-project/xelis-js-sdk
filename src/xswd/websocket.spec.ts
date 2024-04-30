@@ -1,8 +1,8 @@
 import to from 'await-to-js'
 
-import { LOCAL_XSWD_WS } from '../config.js'
-import XSWD from '../xswd/websocket.js'
-import { ApplicationData } from './types.js'
+import { LOCAL_XSWD_WS } from '../config'
+import XSWD from '../xswd/websocket'
+import { ApplicationData } from './types'
 
 describe('WS', () => {
   test(`XSWD`, async () => {

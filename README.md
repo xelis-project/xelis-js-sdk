@@ -35,8 +35,8 @@ Use Daemon WebSocket RPC connection.
 
 ```js
 // ESM
-import { TESTNET_NODE_WS } from '@xelis/sdk/config'
-import DaemonWS from '@xelis/sdk/daemon/websocket'
+import { TESTNET_NODE_WS } from '@xelis/sdk/config.js'
+import DaemonWS from '@xelis/sdk/daemon/websocket.js'
 // CommonJS
 // const { TESTNET_NODE_RPC } = require('@xelis/sdk/config')
 // const { WS: DaemonWS } = require('@xelis/sdk/daemon/websocket')
@@ -55,8 +55,8 @@ Use Wallet WebSocket RPC connection.
 
 ```js
 // ESM
-import { LOCAL_WALLET_WS } from '@xelis/sdk/config'
-import DaemonWS from '@xelis/sdk/wallet/websocket'
+import { LOCAL_WALLET_WS } from '@xelis/sdk/config.js'
+import DaemonWS from '@xelis/sdk/wallet/websocket.js'
 // CommonJS
 // const { LOCAL_WALLET_WS } = require('@xelis/sdk/config')
 // const { WS: WalletWS } = require('@xelis/sdk/wallet/websocket')
@@ -75,8 +75,8 @@ Use XSWD protocol.
 
 ```js
 // ESM
-import { LOCAL_XSWD_WS } from '@xelis/sdk/config'
-import XSWD from '@xelis/sdk/xswd/websocket'
+import { LOCAL_XSWD_WS } from '@xelis/sdk/config.js'
+import XSWD from '@xelis/sdk/xswd/websocket.js'
 // CommonJS
 // const { LOCAL_XSWD_WS } = require('@xelis/sdk/config')
 // const { WS: XSWD } = require('@xelis/sdk/xswd/websocket')
