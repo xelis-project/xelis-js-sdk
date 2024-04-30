@@ -48,13 +48,26 @@ export interface TxBurn {
   amount: number
 }
 
+export interface TransferIn {
+  asset: string
+  amount: number
+  extra_data?: any
+}
+
 export interface TxIncoming {
   from: string
-  transfers: any
+  transfers: TransferIn[]
+}
+
+export interface TransferOut {
+  destination: string
+  asset: string
+  amount: number
+  extra_data?: any
 }
 
 export interface TxOutgoing {
-  transfers: any
+  transfers: TransferOut
   fees: number
   nonce: number
 }
