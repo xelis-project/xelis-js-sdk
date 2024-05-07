@@ -101,6 +101,19 @@ export interface EstimateFeesParams {
   burn?: TxBurn
 }
 
+export interface BalanceChangedResult {
+  asset: string
+  balance: number
+}
+
+export interface NewTopoheightResult {
+  topoheight: number
+}
+
+export interface RescanResult {
+  start_topoheight: number
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetNetwork = 'get_network',
@@ -121,6 +134,16 @@ export enum RPCMethod {
   SetOfflineMode = 'set_offline_mode',
   SignData = 'sign_data',
   EstimateFees = 'estimate_fees'
+}
+
+export enum RPCEvent {
+  NewTopoheight = 'new_topoheight',
+  NewAsset = 'new_asset',
+  NewTransaction = '',
+  BalanceChanged = 'balance_changed',
+  Rescan = 'rescan',
+  Online = 'online',
+  Offline = 'offline'
 }
 
 export enum Permission {

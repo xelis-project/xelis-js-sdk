@@ -1,11 +1,13 @@
 import { WS as BaseWS } from '../lib/websocket'
+import { MessageEvent } from 'ws'
 
-import { GetAssetParams } from '../daemon/types'
+import { AssetWithData, GetAssetParams, RPCEventResult } from '../daemon/types'
 
 import {
   BuildTransactionParams, BuildTransactionResult, GetAddressParams,
-  ListTransactionParams, SplitAddressParams, SplitAddressResult, RPCMethod, Signature, TransactionEntry,
-  RescanParams, SetOnlineModeParams, EstimateFeesParams
+  ListTransactionParams, SplitAddressParams, SplitAddressResult, RPCMethod, Signature,
+  RescanParams, SetOnlineModeParams, EstimateFeesParams, RPCEvent, TransactionEntry,
+  BalanceChangedResult, NewTopoheightResult, RescanResult
 } from './types'
 
 export class WalletMethods {
@@ -19,6 +21,34 @@ export class WalletMethods {
 
   dataCall<T>(method: string, params?: any): Promise<T> {
     return this.ws.dataCall(this.prefix + method, params)
+  }
+
+  onNewTopoheight(onData: (msgEvent: MessageEvent, data?: NewTopoheightResult & RPCEventResult, err?: Error) => void) {
+    return this.ws.listenEvent(RPCEvent.NewTopoheight, onData)
+  }
+
+  onNewAsset(onData: (msgEvent: MessageEvent, data?: AssetWithData & RPCEventResult, err?: Error) => void) {
+    return this.ws.listenEvent(RPCEvent.NewAsset, onData)
+  }
+
+  onNewTransaction(onData: (msgEvent: MessageEvent, data?: TransactionEntry & RPCEventResult, err?: Error) => void) {
+    return this.ws.listenEvent(RPCEvent.NewTransaction, onData)
+  }
+
+  onBalanceChanged(onData: (msgEvent: MessageEvent, data?: BalanceChangedResult & RPCEventResult, err?: Error) => void) {
+    return this.ws.listenEvent(RPCEvent.BalanceChanged, onData)
+  }
+
+  onRescan(onData: (msgEvent: MessageEvent, data?: RescanResult & RPCEventResult, err?: Error) => void) {
+    return this.ws.listenEvent(RPCEvent.Rescan, onData)
+  }
+
+  onOnline(onData: (msgEvent: MessageEvent, data?: RPCEventResult, err?: Error) => void) {
+    return this.ws.listenEvent(RPCEvent.Online, onData)
+  }
+
+  onOffline(onData: (msgEvent: MessageEvent, data?: RPCEventResult, err?: Error) => void) {
+    return this.ws.listenEvent(RPCEvent.Offline, onData)
   }
 
   getVersion() {
