@@ -22,6 +22,8 @@ export interface Block {
   difficulty: string
   supply?: number
   reward?: number
+  dev_reward?: number
+  miner_reward?: number
   cumulative_difficulty: string
   total_fees?: number // is null if include_txs is false
   total_size_in_bytes: number
