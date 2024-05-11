@@ -1,3 +1,4 @@
+import { parseData } from './parse_data'
 import { RPCResponse } from './types'
 
 export class RPC {
@@ -28,7 +29,8 @@ export class RPC {
 
       clearTimeout(timeoutId)
       if (res.ok) {
-        const data = await res.json() as RPCResponse<T>
+        const stringData = await res.text()
+        const data = parseData(stringData) as RPCResponse<T>
 
         if (data.error) {
           return Promise.reject(new Error(data.error.message))

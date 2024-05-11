@@ -25,6 +25,15 @@ describe('RPC', () => {
     expect(res)
   })
 
+  test('GetBlockByHash', async () => {
+    const daemonRPC = new DaemonRPC(MAINNET_NODE_RPC)
+
+    const [err, res] = await to(daemonRPC.getBlockByHash({ hash: `452d2dbecb7023322e7f4737a65ea3bdaad29a55c5e93e39cc1a253d91fa8f36` }))
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res)
+  })
+
   test('GetTransaction', async () => {
     const daemonRPC = new DaemonRPC(MAINNET_NODE_RPC)
 

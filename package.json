@@ -1,5 +1,5 @@
 {
-  "version": "0.9.1",
+  "version": "0.9.2",
   "name": "@xelis/sdk",
   "description": "Xelis software development kit for JS",
   "exports": {
@@ -36,6 +36,7 @@
     "await-to-js": "^3.0.0",
     "isomorphic-ws": "^5.0.0",
     "js-base64": "^3.7.6",
+    "lossless-json": "^4.0.1",
     "react": "^18.2.0",
     "ws": "^8.12.1"
   }
