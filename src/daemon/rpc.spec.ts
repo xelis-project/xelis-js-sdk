@@ -90,7 +90,7 @@ describe('RPC', () => {
 
     const [err, res] = await to(daemonRPC.extractKeyFromAddress({
       address: MAINNET_ADDR,
-      tx_as_hex: true
+      as_hex: true
     }))
     expect(err).toBeNull()
     console.log(res)

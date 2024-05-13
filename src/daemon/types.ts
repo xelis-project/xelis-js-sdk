@@ -369,9 +369,14 @@ export interface ValidateAddressParams {
   allow_integrated: boolean
 }
 
+export interface ValidateAddressResult {
+  is_integrated: boolean
+  is_valid: boolean
+}
+
 export interface ExtractKeyFromAddressParams {
   address: string
-  tx_as_hex: boolean
+  as_hex: boolean
 }
 
 export interface SubmitBlockParams {
