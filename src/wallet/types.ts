@@ -139,7 +139,7 @@ export enum RPCMethod {
 export enum RPCEvent {
   NewTopoheight = 'new_topoheight',
   NewAsset = 'new_asset',
-  NewTransaction = 'get_transaction',
+  NewTransaction = 'new_transaction',
   BalanceChanged = 'balance_changed',
   Rescan = 'rescan',
   Online = 'online',
