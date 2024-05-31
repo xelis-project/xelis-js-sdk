@@ -1,5 +1,5 @@
 import React, { DependencyList, PropsWithChildren, createContext, useContext, useEffect, useState } from 'react'
-import to from 'await-to-js'
+import { to } from 'await-to-js'
 import { CloseEvent, ErrorEvent, MessageEvent, } from 'ws'
 
 import DaemonWS from '../daemon/websocket'

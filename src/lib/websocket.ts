@@ -1,7 +1,7 @@
 import { ClientOptions, MessageEvent } from 'ws'
 import WebSocket from 'isomorphic-ws'
 import { ClientRequestArgs } from 'http'
-import to from 'await-to-js'
+import { to } from 'await-to-js'
 
 import { RPCRequest, RPCResponse } from './types'
 import { parseData } from './parse_data'

@@ -1,4 +1,4 @@
-import to from 'await-to-js'
+import { to } from 'await-to-js'
 
 import { LOCAL_XSWD_WS } from '../config'
 import XSWD from '../xswd/websocket'

@@ -1,4 +1,4 @@
-import to from 'await-to-js'
+import { to } from 'await-to-js'
 
 import { LOCAL_NODE_WS } from '../config'
 import { RPCEvent } from './types'

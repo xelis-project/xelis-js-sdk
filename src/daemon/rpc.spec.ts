@@ -1,4 +1,4 @@
-import to from 'await-to-js'
+import { to } from 'await-to-js'
 
 import { LOCAL_NODE_RPC, MAINNET_NODE_RPC, TESTNET_NODE_RPC } from '../config'
 import DaemonRPC from './rpc'
