@@ -11,7 +11,7 @@ import {
   StableHeightChanged, HasNonceResult, HasNonceParams, TransactionResponse,
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
   ExtractKeyFromAddressParams, SubmitBlockParams, CreateMinerWorkParams, CreateMinerWorkResult,
-  ValidateAddressResult
+  ValidateAddressResult, TransactionExecuted
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -41,7 +41,7 @@ export class DaemonMethods {
     return this.listenEvent(RPCEvent.TransactionAddedInMempool, onData)
   }
 
-  onTransactionExecuted(onData: (msgEvent: MessageEvent, data?: TransactionResponse & RPCEventResult, err?: Error) => void) {
+  onTransactionExecuted(onData: (msgEvent: MessageEvent, data?: TransactionExecuted & RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.TransactionExecuted, onData)
   }
 

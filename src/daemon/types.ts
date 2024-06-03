@@ -225,6 +225,12 @@ export interface TransactionResponse extends Transaction {
   first_seen?: number // in seconds
 }
 
+export interface TransactionExecuted {
+  tx_hash: string,
+  block_hash: string,
+  topoheight: number,
+}
+
 export interface GetAccountsParams {
   skip?: number
   maximum?: number
