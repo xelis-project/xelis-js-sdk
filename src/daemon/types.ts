@@ -49,6 +49,12 @@ export interface GetBalanceAtTopoHeightParams {
   topoheight: number
 }
 
+export interface GetStableBalanceResult {
+  stable_topoheight: number
+  stable_block_hash: string
+  version: VersionedBalance
+}
+
 export interface GetNonceParams {
   address: string
   topoheight: number
@@ -411,6 +417,8 @@ export enum RPCMethod {
   GetHeight = 'get_height',
   GetTopoheight = 'get_topoheight',
   GetStableHeight = 'get_stable_height',
+  GetStableTopoheight = 'get_stable_topoheight',
+  GetStableBalance = 'get_stable_balance',
   GetBlockTemplate = 'get_block_template',
   GetBlockAtTopoheight = 'get_block_at_topoheight',
   GetBlocksAtHeight = 'get_blocks_at_height',

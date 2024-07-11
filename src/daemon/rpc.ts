@@ -8,7 +8,7 @@ import {
   GetNonceAtTopoheightParams, HasNonceParams, HasNonceResult, TransactionResponse,
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
   ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
-  ValidateAddressResult
+  ValidateAddressResult, GetStableBalanceResult
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -28,6 +28,14 @@ export class RPC extends BaseRPC {
 
   getStableHeight() {
     return this.post<number>(RPCMethod.GetStableHeight)
+  }
+
+  getStableTopoheight() {
+    return this.post<number>(RPCMethod.GetStableTopoheight)
+  }
+
+  getStableBalance(params: GetBalanceParams) {
+    return this.post<GetStableBalanceResult>(RPCMethod.GetStableBalance)
   }
 
   getBlockTemplate(address: string) {
