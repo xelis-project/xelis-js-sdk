@@ -216,6 +216,7 @@ export interface Transaction {
   range_proof: number[]
   signature: string
   reference: Reference
+  size: number
 }
 
 export interface TransactionResponse extends Transaction {
@@ -345,6 +346,7 @@ export interface GetBlockTemplateResult {
   height: number
   topoheight: number
   difficulty: string
+  algorithm: string
 }
 
 export interface HasNonceParams {
@@ -397,6 +399,10 @@ export interface GetMinerWorkParams {
 
 export interface GetMinerWorkResult {
   miner_work: string
+  algorithm: string
+  height: number
+  difficulty: string
+  topoheight: number
 }
 
 export enum RPCMethod {
