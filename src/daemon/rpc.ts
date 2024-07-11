@@ -22,8 +22,8 @@ export class RPC extends BaseRPC {
     return this.post<number>(RPCMethod.GetHeight)
   }
 
-  getTopoHeight() {
-    return this.post<number>(RPCMethod.GetTopoHeight)
+  getTopoheight() {
+    return this.post<number>(RPCMethod.GetTopoheight)
   }
 
   getStableHeight() {
@@ -34,8 +34,8 @@ export class RPC extends BaseRPC {
     return this.post<GetBlockTemplateResult>(RPCMethod.GetBlockTemplate, { address })
   }
 
-  getBlockAtTopoHeight(params: GetBlockAtTopoHeightParams) {
-    return this.post<Block>(RPCMethod.GetBlockAtTopoHeight, params)
+  getBlockAtTopoheight(params: GetBlockAtTopoHeightParams) {
+    return this.post<Block>(RPCMethod.GetBlockAtTopoheight, params)
   }
 
   getBlocksAtHeight(params: GetBlocksAtHeightParams) {
@@ -62,8 +62,8 @@ export class RPC extends BaseRPC {
     return this.post<HasBalanceResult>(RPCMethod.HasBalance, params)
   }
 
-  getBalanceAtTopoHeight(params: GetBalanceAtTopoHeightParams) {
-    return this.post<VersionedBalance>(RPCMethod.GetBalanceAtTopoHeight, params)
+  getBalanceAtTopoheight(params: GetBalanceAtTopoHeightParams) {
+    return this.post<VersionedBalance>(RPCMethod.GetBalanceAtTopoheight, params)
   }
 
   getInfo() {

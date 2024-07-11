@@ -94,7 +94,7 @@ export class DaemonMethods {
   }
 
   getTopoHeight() {
-    return this.dataCall<number>(RPCMethod.GetTopoHeight)
+    return this.dataCall<number>(RPCMethod.GetTopoheight)
   }
 
   getStableHeight() {
@@ -106,7 +106,7 @@ export class DaemonMethods {
   }
 
   getBlockAtTopoHeight(params: GetBlockAtTopoHeightParams) {
-    return this.dataCall<Block>(RPCMethod.GetBlockAtTopoHeight, params)
+    return this.dataCall<Block>(RPCMethod.GetBlockAtTopoheight, params)
   }
 
   getBlocksAtHeight(params: GetBlocksAtHeightParams) {
@@ -134,7 +134,7 @@ export class DaemonMethods {
   }
 
   getBalanceAtTopoHeight(params: GetBalanceAtTopoHeightParams) {
-    return this.dataCall<VersionedBalance>(RPCMethod.GetBalanceAtTopoHeight, params)
+    return this.dataCall<VersionedBalance>(RPCMethod.GetBalanceAtTopoheight, params)
   }
 
   getInfo() {
