@@ -10,7 +10,7 @@ import {
   GetAssetParams, HasBalanceParams, HasBalanceResult, IsTxExecutedInBlockParams, BlockOrphaned, VersionedBalance,
   StableHeightChanged, HasNonceResult, HasNonceParams, TransactionResponse,
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
-  ExtractKeyFromAddressParams, SubmitBlockParams, CreateMinerWorkParams, CreateMinerWorkResult,
+  ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
   ValidateAddressResult, TransactionExecuted
 } from './types'
 
@@ -257,8 +257,8 @@ export class DaemonMethods {
     return this.dataCall<string | number[]>(RPCMethod.ExtractKeyFromAddress, params)
   }
 
-  createMinerWork(params: CreateMinerWorkParams) {
-    return this.dataCall<CreateMinerWorkResult>(RPCMethod.CreateMinerWork, params)
+  getMinerWork(params: GetMinerWorkParams) {
+    return this.dataCall<GetMinerWorkResult>(RPCMethod.GetMinerWork, params)
   }
 }
 

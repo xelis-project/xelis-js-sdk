@@ -390,12 +390,12 @@ export interface SubmitBlockParams {
   miner_work?: string
 }
 
-export interface CreateMinerWorkParams {
+export interface GetMinerWorkParams {
   template: string
   address?: string
 }
 
-export interface CreateMinerWorkResult {
+export interface GetMinerWorkResult {
   miner_work: string
 }
 
@@ -444,7 +444,7 @@ export enum RPCMethod {
   GetDifficulty = 'get_difficulty',
   ValidateAddress = 'validate_address',
   ExtractKeyFromAddress = 'extract_key_from_address',
-  CreateMinerWork = 'create_miner_work'
+  GetMinerWork = 'get_miner_work'
 }
 
 export enum RPCEvent {
