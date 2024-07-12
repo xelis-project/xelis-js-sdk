@@ -95,5 +95,7 @@ main()
 
 ## Tests
 
-To run single test function, use jest or npm script shortcut.
+To run single test function, use jest or npm script.
+`jest -t <describe> <test>`  
+
 Ex: `jest -t "DaemonRPC getInfo"` or `npm run test-func "DaemonRPC getInfo"`

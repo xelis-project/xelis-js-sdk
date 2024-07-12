@@ -11,7 +11,8 @@ import {
   StableHeightChanged, HasNonceResult, HasNonceParams, TransactionResponse,
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
   ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
-  ValidateAddressResult, TransactionExecuted, GetStableBalanceResult
+  ValidateAddressResult, TransactionExecuted, GetStableBalanceResult,
+  GetAssetsParams
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -106,7 +107,7 @@ export class DaemonMethods {
   }
 
   getStableBalance(params: GetBalanceParams) {
-    return this.dataCall<GetStableBalanceResult>(RPCMethod.GetStableBalance)
+    return this.dataCall<GetStableBalanceResult>(RPCMethod.GetStableBalance, params)
   }
 
   getBlockTemplate(address: string) {
@@ -161,8 +162,8 @@ export class DaemonMethods {
     return this.dataCall<AssetData>(RPCMethod.GetAsset, params)
   }
 
-  getAssets() {
-    return this.dataCall<string[]>(RPCMethod.GetAssets)
+  getAssets(params?: GetAssetsParams) {
+    return this.dataCall<string[]>(RPCMethod.GetAssets, params)
   }
 
   countAssets() {

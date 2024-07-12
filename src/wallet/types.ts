@@ -26,9 +26,7 @@ export interface BuildTransactionParams {
   tx_as_hex: boolean
 }
 
-export interface BuildTransactionResult {
-  hash: string
-  data: Transaction
+export interface BuildTransactionResult extends Transaction {
   txt_as_hex?: string
 }
 

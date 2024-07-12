@@ -8,7 +8,7 @@ import {
   GetNonceAtTopoheightParams, HasNonceParams, HasNonceResult, TransactionResponse,
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
   ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
-  ValidateAddressResult, GetStableBalanceResult
+  ValidateAddressResult, GetStableBalanceResult, GetAssetsParams
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -35,7 +35,7 @@ export class RPC extends BaseRPC {
   }
 
   getStableBalance(params: GetBalanceParams) {
-    return this.post<GetStableBalanceResult>(RPCMethod.GetStableBalance)
+    return this.post<GetStableBalanceResult>(RPCMethod.GetStableBalance, params)
   }
 
   getBlockTemplate(address: string) {
@@ -54,7 +54,7 @@ export class RPC extends BaseRPC {
     return this.post<Block>(RPCMethod.GetBlockByHash, params)
   }
 
-  getTopBlock(params: GetTopBlockParams) {
+  getTopBlock(params?: GetTopBlockParams) {
     return this.post<Block>(RPCMethod.GetTopBlock, params)
   }
 
@@ -94,8 +94,8 @@ export class RPC extends BaseRPC {
     return this.post<AssetData>(RPCMethod.GetAsset, params)
   }
 
-  getAssets() {
-    return this.post<string[]>(RPCMethod.GetAssets)
+  getAssets(params: GetAssetsParams) {
+    return this.post<string[]>(RPCMethod.GetAssets, params)
   }
 
   countAssets() {
@@ -134,7 +134,7 @@ export class RPC extends BaseRPC {
     return this.post<string[]>(RPCMethod.GetTips)
   }
 
-  getDAGOrder(params: TopoHeightRangeParams) {
+  getDAGOrder(params?: TopoHeightRangeParams) {
     return this.post<string[]>(RPCMethod.GetDAGOrder, params)
   }
 

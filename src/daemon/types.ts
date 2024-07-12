@@ -57,7 +57,6 @@ export interface GetStableBalanceResult {
 
 export interface GetNonceParams {
   address: string
-  topoheight: number
 }
 
 export interface VersionedNonce {
@@ -238,6 +237,11 @@ export interface TransactionExecuted {
   topoheight: number,
 }
 
+export interface GetAssetsParams {
+  skip?: number
+  maximum?: number
+}
+
 export interface GetAccountsParams {
   skip?: number
   maximum?: number
@@ -314,7 +318,7 @@ export interface AssetWithData {
 export interface HasBalanceParams {
   address: string
   asset: string
-  topoheight: number
+  topoheight?: number
 }
 
 export interface HasBalanceResult {
