@@ -1,13 +1,13 @@
 import { to } from 'await-to-js'
 
-import { LOCAL_NODE_WS } from '../config'
+import { TESTNET_NODE_RPC } from '../config'
 import { RPCEvent } from './types'
 import DaemonWS from './websocket'
 
-describe('WS', () => {
-  test('GetInfo', async () => {
+describe('DaemonWS', () => {
+  test('getInfo', async () => {
     const daemonWS = new DaemonWS()
-    const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
+    const [err] = await to(daemonWS.connect(TESTNET_NODE_RPC))
     expect(err).toBeNull()
     const [err2, res] = await to(daemonWS.methods.getInfo())
     expect(err2).toBeNull()
@@ -18,22 +18,22 @@ describe('WS', () => {
     daemonWS.close()
   })
 
-  test('Reconnect', async () => {
+  test('reconnect', async () => {
     const daemonWS = new DaemonWS()
-    const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
+    const [err] = await to(daemonWS.connect(TESTNET_NODE_RPC))
     expect(err).toBeNull()
 
     console.log('Reconnecting to testnet...')
-    await daemonWS.connect(LOCAL_NODE_WS)
+    await daemonWS.connect(TESTNET_NODE_RPC)
     daemonWS.close()
     expect(true)
   })
 
   const timeout = 40000
-  test('Listen [NewBlock]', () => {
+  test('listen_NewBlock', () => {
     return new Promise(async (resolve, reject) => {
       const daemonWS = new DaemonWS()
-      const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
+      const [err] = await to(daemonWS.connect(TESTNET_NODE_RPC))
       expect(err).toBeNull()
 
       const doneTest = (err?: any) => {
@@ -50,10 +50,10 @@ describe('WS', () => {
     })
   }, timeout)
 
-  test('Multi Listen', () => {
+  test('multi_listen', () => {
     return new Promise(async (resolve, reject) => {
       const daemonWS = new DaemonWS()
-      const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
+      const [err] = await to(daemonWS.connect(TESTNET_NODE_RPC))
       expect(err).toBeNull()
 
       let count = 3
@@ -79,9 +79,9 @@ describe('WS', () => {
     })
   }, timeout)
 
-  test('Check invalid event', async () => {
+  test('check_invalid_event', async () => {
     const daemonWS = new DaemonWS()
-    const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
+    const [err] = await to(daemonWS.connect(TESTNET_NODE_RPC))
     expect(err).toBeNull()
 
     //@ts-ignore

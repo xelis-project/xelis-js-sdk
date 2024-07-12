@@ -4,8 +4,8 @@ import { LOCAL_XSWD_WS } from '../config'
 import XSWD from '../xswd/websocket'
 import { ApplicationData } from './types'
 
-describe('WS', () => {
-  test(`XSWD`, async () => {
+describe('XSWD_WS', () => {
+  test(`connect`, async () => {
     const xswd = new XSWD()
     const [err] = await to(xswd.connect(LOCAL_XSWD_WS))
     expect(err).toBeNull()

@@ -92,3 +92,8 @@ const main = async () => {
 
 main()
 ```
+
+## Tests
+
+To run single test function, use jest or npm script shortcut.
+Ex: `jest -t "DaemonRPC getInfo"` or `npm run test-func "DaemonRPC getInfo"`
