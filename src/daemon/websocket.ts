@@ -11,8 +11,8 @@ import {
   StableHeightChanged, HasNonceResult, HasNonceParams, TransactionResponse,
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
   ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
-  ValidateAddressResult, TransactionExecuted, GetStableBalanceResult,
-  GetAssetsParams
+  ValidateAddressResult, TransactionExecuted, GetStableBalanceResult, GetAssetsParams,
+  SplitAddressParams, SplitAddressResult
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -268,6 +268,10 @@ export class DaemonMethods {
 
   getMinerWork(params: GetMinerWorkParams) {
     return this.dataCall<GetMinerWorkResult>(RPCMethod.GetMinerWork, params)
+  }
+
+  splitAddress(params: SplitAddressParams) {
+    return this.dataCall<SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
 }
 

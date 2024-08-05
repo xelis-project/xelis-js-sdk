@@ -4,15 +4,6 @@ export interface GetAddressParams {
   integrated_data?: string
 }
 
-export interface SplitAddressParams {
-  address: string
-}
-
-export interface SplitAddressResult {
-  address: string
-  integrated_data: string
-}
-
 export interface FeeBuilder {
   multiplier?: number
   value?: number

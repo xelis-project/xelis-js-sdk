@@ -1,10 +1,9 @@
 import { Base64 } from 'js-base64'
 
-import { GetAssetParams, HasBalanceResult } from '../daemon/types'
+import { GetAssetParams, HasBalanceResult, SplitAddressParams, SplitAddressResult } from '../daemon/types'
 
 import {
-  RPCMethod, GetAddressParams, SplitAddressParams, SplitAddressResult,
-  BuildTransactionParams, BuildTransactionResult, ListTransactionParams,
+  RPCMethod, GetAddressParams, BuildTransactionParams, BuildTransactionResult, ListTransactionParams,
   Signature, TransactionEntry, RescanParams, SetOnlineModeParams, EstimateFeesParams
 } from './types'
 

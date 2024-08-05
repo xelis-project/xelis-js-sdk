@@ -8,7 +8,7 @@ import {
   GetNonceAtTopoheightParams, HasNonceParams, HasNonceResult, TransactionResponse,
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
   ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
-  ValidateAddressResult, GetStableBalanceResult, GetAssetsParams
+  ValidateAddressResult, GetStableBalanceResult, GetAssetsParams, SplitAddressParams, SplitAddressResult
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -200,6 +200,10 @@ export class RPC extends BaseRPC {
 
   getMinerWork(params: GetMinerWorkParams) {
     return this.post<GetMinerWorkResult>(RPCMethod.GetMinerWork, params)
+  }
+  
+  splitAddress(params: SplitAddressParams) {
+    return this.post<SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
 }
 

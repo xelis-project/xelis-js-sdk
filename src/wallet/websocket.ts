@@ -1,13 +1,12 @@
 import { WS as BaseWS } from '../lib/websocket'
 import { MessageEvent } from 'ws'
 
-import { AssetWithData, GetAssetParams, RPCEventResult } from '../daemon/types'
+import { AssetWithData, GetAssetParams, RPCEventResult, SplitAddressParams, SplitAddressResult } from '../daemon/types'
 
 import {
   BuildTransactionParams, BuildTransactionResult, GetAddressParams,
-  ListTransactionParams, SplitAddressParams, SplitAddressResult, RPCMethod, Signature,
-  RescanParams, SetOnlineModeParams, EstimateFeesParams, RPCEvent, TransactionEntry,
-  BalanceChangedResult, NewTopoheightResult, RescanResult
+  ListTransactionParams, RPCMethod, Signature, RescanParams, SetOnlineModeParams, EstimateFeesParams,
+  RPCEvent, TransactionEntry, BalanceChangedResult, NewTopoheightResult, RescanResult
 } from './types'
 
 export class WalletMethods {

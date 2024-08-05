@@ -304,7 +304,7 @@ describe('DaemonRPC', () => {
     console.log(res)
     expect(res)
   })
-  
+
   test('getSizeOnDisk', async () => {
     const [err, res] = await to(mainnetDaemonRPC.getSizeOnDisk())
     expect(err).toBeNull()
@@ -384,5 +384,14 @@ describe('DaemonRPC', () => {
     expect(err2).toBeNull()
     console.log(res2)
     expect(res2)
+  })
+
+  test('splitAddress', async () => {
+    const [err1, res1] = await to(testnetDaemonRPC.splitAddress({ address: "xet:upqflhm65lmjtukavf4de93kphk4j990hw9x9hhrc8rwleduruhqzqqpqvcnydgd3plda" }))
+    console.log(err1, res1)
+    expect(err1).toBeNull()
+
+    console.log(res1)
+    expect(res1)
   })
 })

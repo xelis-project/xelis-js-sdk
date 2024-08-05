@@ -415,6 +415,15 @@ export interface GetMinerWorkResult {
   topoheight: number
 }
 
+export interface SplitAddressParams {
+  address: string
+}
+
+export interface SplitAddressResult {
+  address: string
+  integrated_data: string
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetInfo = 'get_info',
@@ -462,7 +471,8 @@ export enum RPCMethod {
   GetDifficulty = 'get_difficulty',
   ValidateAddress = 'validate_address',
   ExtractKeyFromAddress = 'extract_key_from_address',
-  GetMinerWork = 'get_miner_work'
+  GetMinerWork = 'get_miner_work',
+  SplitAddress = 'split_address'
 }
 
 export enum RPCEvent {
