@@ -1,7 +1,7 @@
 import {
-  Block, TopoHeightRangeParams, GetInfoResult, HeightRangeParams,
+  Block, TopoheightRangeParams, GetInfoResult, HeightRangeParams,
   GetBalanceResult, P2PStatusResult, RPCMethod, GetBalanceParams,
-  GetBalanceAtTopoHeightParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
+  GetBalanceAtTopoheightParams, GetAccountsParams, GetBlockAtTopoheightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams, GetNonceResult, GetNonceParams, GetAccountHistoryParams,
   AccounHistory, DevFee, DiskSize, HasBalanceParams, HasBalanceResult, AssetData, IsTxExecutedInBlockParams,
   GetAssetParams, GetPeersResult, GetBlockTemplateResult, VersionedBalance, VersionedNonce,
@@ -42,7 +42,7 @@ export class RPC extends BaseRPC {
     return this.post<GetBlockTemplateResult>(RPCMethod.GetBlockTemplate, { address })
   }
 
-  getBlockAtTopoheight(params: GetBlockAtTopoHeightParams) {
+  getBlockAtTopoheight(params: GetBlockAtTopoheightParams) {
     return this.post<Block>(RPCMethod.GetBlockAtTopoheight, params)
   }
 
@@ -70,7 +70,7 @@ export class RPC extends BaseRPC {
     return this.post<HasBalanceResult>(RPCMethod.HasBalance, params)
   }
 
-  getBalanceAtTopoheight(params: GetBalanceAtTopoHeightParams) {
+  getBalanceAtTopoheight(params: GetBalanceAtTopoheightParams) {
     return this.post<VersionedBalance>(RPCMethod.GetBalanceAtTopoheight, params)
   }
 
@@ -134,11 +134,11 @@ export class RPC extends BaseRPC {
     return this.post<string[]>(RPCMethod.GetTips)
   }
 
-  getDAGOrder(params?: TopoHeightRangeParams) {
+  getDAGOrder(params?: TopoheightRangeParams) {
     return this.post<string[]>(RPCMethod.GetDAGOrder, params)
   }
 
-  getBlocksRangeByTopoheight(params: TopoHeightRangeParams) {
+  getBlocksRangeByTopoheight(params: TopoheightRangeParams) {
     return this.post<Block[]>(RPCMethod.GetBlocksRangeByTopoheight, params)
   }
 

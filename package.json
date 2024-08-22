@@ -1,5 +1,5 @@
 {
-  "version": "0.9.10",
+  "version": "0.9.11",
   "name": "@xelis/sdk",
   "description": "Xelis software development kit for JS",
   "exports": {

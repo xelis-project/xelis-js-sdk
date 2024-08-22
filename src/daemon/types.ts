@@ -43,7 +43,7 @@ export interface GetBalanceParams {
   asset: string
 }
 
-export interface GetBalanceAtTopoHeightParams {
+export interface GetBalanceAtTopoheightParams {
   address: string
   asset: string
   topoheight: number
@@ -107,7 +107,7 @@ export interface P2PStatusResult {
   max_peers: number
 }
 
-export interface TopoHeightRangeParams {
+export interface TopoheightRangeParams {
   start_topoheight?: number
   end_topoheight?: number
 }
@@ -249,7 +249,7 @@ export interface GetAccountsParams {
   maximum_topoheight?: number
 }
 
-export interface GetBlockAtTopoHeightParams {
+export interface GetBlockAtTopoheightParams {
   topoheight: number
   include_txs?: boolean
 }

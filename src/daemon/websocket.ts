@@ -2,9 +2,9 @@ import { MessageEvent } from 'ws'
 
 import {
   Block, GetInfoResult, RPCEvent, RPCMethod, GetPeersResult,
-  RPCEventResult, TopoHeightRangeParams, P2PStatusResult,
-  GetBalanceAtTopoHeightParams, GetBalanceResult, HeightRangeParams, BlockOrdered,
-  GetBalanceParams, GetAccountsParams, GetBlockAtTopoHeightParams, GetBlockByHashParams,
+  RPCEventResult, TopoheightRangeParams, P2PStatusResult,
+  GetBalanceAtTopoheightParams, GetBalanceResult, HeightRangeParams, BlockOrdered,
+  GetBalanceParams, GetAccountsParams, GetBlockAtTopoheightParams, GetBlockByHashParams,
   GetBlocksAtHeightParams, GetTopBlockParams, GetNonceParams, GetNonceResult, GetAccountHistoryParams,
   AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected, DevFee, DiskSize, AssetWithData, AssetData,
   GetAssetParams, HasBalanceParams, HasBalanceResult, IsTxExecutedInBlockParams, BlockOrphaned, VersionedBalance,
@@ -94,7 +94,7 @@ export class DaemonMethods {
     return this.dataCall<number>(RPCMethod.GetHeight)
   }
 
-  getTopoHeight() {
+  getTopoheight() {
     return this.dataCall<number>(RPCMethod.GetTopoheight)
   }
 
@@ -114,7 +114,7 @@ export class DaemonMethods {
     return this.dataCall<string>(RPCMethod.GetBlockTemplate, { address })
   }
 
-  getBlockAtTopoHeight(params: GetBlockAtTopoHeightParams) {
+  getBlockAtTopoheight(params: GetBlockAtTopoheightParams) {
     return this.dataCall<Block>(RPCMethod.GetBlockAtTopoheight, params)
   }
 
@@ -142,7 +142,7 @@ export class DaemonMethods {
     return this.dataCall<HasBalanceResult>(RPCMethod.HasBalance, params)
   }
 
-  getBalanceAtTopoHeight(params: GetBalanceAtTopoHeightParams) {
+  getBalanceAtTopoheight(params: GetBalanceAtTopoheightParams) {
     return this.dataCall<VersionedBalance>(RPCMethod.GetBalanceAtTopoheight, params)
   }
 
@@ -202,11 +202,11 @@ export class DaemonMethods {
     return this.dataCall<string[]>(RPCMethod.GetTips)
   }
 
-  getDAGOrder(params: TopoHeightRangeParams) {
+  getDAGOrder(params: TopoheightRangeParams) {
     return this.dataCall<string[]>(RPCMethod.GetDAGOrder, params)
   }
 
-  getBlocksRangeByTopoheight(params: TopoHeightRangeParams) {
+  getBlocksRangeByTopoheight(params: TopoheightRangeParams) {
     return this.dataCall<Block[]>(RPCMethod.GetBlocksRangeByTopoheight, params)
   }
 
