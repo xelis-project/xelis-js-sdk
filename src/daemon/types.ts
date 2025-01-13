@@ -508,18 +508,20 @@ export enum RPCMethod {
 }
 
 export enum RPCEvent {
-  NewBlock = `new_block`,
-  BlockOrdered = `block_ordered`,
-  BlockOrphaned = `block_orphaned`,
-  StableHeightChanged = `stable_height_changed`,
-  TransactionOrphaned = `transaction_orphaned`,
-  TransactionAddedInMempool = `transaction_added_in_mempool`,
-  TransactionExecuted = `transaction_executed`,
-  TransactionSCResult = `transaction_sc_result`,
-  NewAsset = `new_asset`,
-  PeerConnected = `peer_connected`,
-  PeerDisconnected = `peer_disconnected`,
-  PeerPeerListUpdated = `peer_peer_list_updated`,
-  PeerStateUpdated = `peer_state_updated`,
-  PeerPeerDisconnected = `peer_peer_disconnected`,
+  NewBlock = 'new_block',
+  BlockOrdered = 'block_ordered',
+  BlockOrphaned = 'block_orphaned',
+  StableHeightChanged = 'stable_height_changed',
+  StableTopoHeightChanged = 'stable_topo_height_changed', // TODO
+  TransactionOrphaned = 'transaction_orphaned',
+  TransactionAddedInMempool = 'transaction_added_in_mempool',
+  TransactionExecuted = 'transaction_executed',
+  InvokeContract = 'invoke_contract', // TODO
+  DeployContract = 'deploy_contract', // TODO
+  NewAsset = 'new_asset',
+  PeerConnected = 'peer_connected',
+  PeerDisconnected = 'peer_disconnected',
+  PeerStateUpdated = 'peer_state_updated',
+  PeerPeerListUpdated = 'peer_peer_list_updated',
+  PeerPeerDisconnected = 'peer_peer_disconnected',
 }
