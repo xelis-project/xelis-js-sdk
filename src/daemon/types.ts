@@ -425,54 +425,86 @@ export interface SplitAddressResult {
 }
 
 export enum RPCMethod {
-  GetVersion = 'get_version',
-  GetInfo = 'get_info',
-  GetHeight = 'get_height',
-  GetTopoheight = 'get_topoheight',
-  GetStableHeight = 'get_stable_height',
-  GetStableTopoheight = 'get_stable_topoheight',
-  GetStableBalance = 'get_stable_balance',
-  GetBlockTemplate = 'get_block_template',
-  GetBlockAtTopoheight = 'get_block_at_topoheight',
-  GetBlocksAtHeight = 'get_blocks_at_height',
-  GetBlockByHash = 'get_block_by_hash',
-  GetTopBlock = 'get_top_block',
-  GetNonce = 'get_nonce',
-  GetNonceAtTopoheight = 'get_nonce_at_topoheight',
-  HasNonce = 'has_nonce',
-  GetBalance = 'get_balance',
-  HasBalance = 'has_balance',
-  GetBalanceAtTopoheight = 'get_balance_at_topoheight',
-  GetAsset = 'get_asset',
-  GetAssets = 'get_assets',
-  CountAssets = 'count_assets',
-  CountTransactions = 'count_transactions',
-  GetTips = 'get_tips',
-  P2PStatus = 'p2p_status',
-  GetDAGOrder = 'get_dag_order',
-  GetMempool = 'get_mempool',
-  GetTransaction = 'get_transaction',
-  GetTransactions = 'get_transactions',
-  GetBlocksRangeByTopoheight = 'get_blocks_range_by_topoheight',
-  GetBlocksRangeByHeight = 'get_blocks_range_by_height',
-  GetAccounts = 'get_accounts',
-  SubmitBlock = 'submit_block',
-  SubmitTransaction = 'submit_transaction',
-  CountAccounts = 'count_accounts',
-  GetAccountHistory = 'get_account_history',
-  GetAccountAssets = 'get_account_assets',
-  GetPeers = 'get_peers',
-  GetDevFeeThresholds = 'get_dev_fee_thresholds',
-  GetSizeOnDisk = 'get_size_on_disk',
-  IsTxExecutedInBlock = 'is_tx_executed_in_block',
-  GetAccountRegistrationTopoheight = 'get_account_registration_topoheight',
-  IsAccountRegistered = 'is_account_registered',
-  GetMempoolCache = 'get_mempool_cache',
-  GetDifficulty = 'get_difficulty',
-  ValidateAddress = 'validate_address',
-  ExtractKeyFromAddress = 'extract_key_from_address',
-  GetMinerWork = 'get_miner_work',
-  SplitAddress = 'split_address'
+  GetVersion = "get_version",
+  GetHeight = "get_height",
+  GetTopoheight = "get_topoheight",
+  GetPrunedTopoheight = "get_pruned_topoheight", // TODO
+  GetInfo = "get_info",
+  GetDifficulty = "get_difficulty",
+  GetTips = "get_tips",
+  GetDevFeeThresholds = "get_dev_fee_thresholds",
+  GetSizeOnDisk = "get_size_on_disk",
+
+  GetStableHeight = "get_stable_height",
+  GetStableTopoheight = "get_stable_topoheight",
+  GetHardForks = "get_hard_forks",  // TODO
+
+  GetBlockAtTopoheight = "get_block_at_topoheight",
+  GetBlocksAtHeight = "get_blocks_at_height",
+  GetBlockByHash = "get_block_by_hash",
+  GetTopBlock = "get_top_block",
+
+  GetBalance = "get_balance",
+  GetStableBalance = "get_stable_balance",
+  HasBalance = "has_balance",
+  GetBalanceAtTopoheight = "get_balance_at_topoheight",
+
+  GetNonce = "get_nonce",
+  HasNonce = "has_nonce",
+  GetNonceAtTopoheight = "get_nonce_at_topoheight",
+
+  GetAsset = "get_asset",
+  GetAssets = "get_assets",
+
+  CountAssets = "count_assets",
+  CountTransactions = "count_transactions",
+  CountAccounts = "count_accounts",
+  CountContracts = "count_contracts",
+
+  SubmitTransaction = "submit_transaction",
+  GetTransactionExecutor = "get_transaction_executor", // TODO
+  GetTransaction = "get_transaction",
+  GetTransactions = "get_transactions",
+  IsTxExecutedInBlock = "is_tx_executed_in_block",
+
+  P2PStatus = "p2p_status",
+  GetPeers = "get_peers",
+
+  GetMempool = "get_mempool",
+  GetMempoolCache = "get_mempool_cache",
+  GetEstimatedFeeRates = "get_estimated_fee_rates", // TODO
+
+  GetDAGOrder = "get_dag_order",
+  GetBlocksRangeByTopoheight = "get_blocks_range_by_topoheight",
+  GetBlocksRangeByHeight = "get_blocks_range_by_height",
+
+  GetAccountHistory = "get_account_history",
+  GetAccountAssets = "get_account_assets",
+  GetAccounts = "get_accounts",
+  IsAccountRegistered = "is_account_registered",
+  GetAccountRegistrationTopoheight = "get_account_registration_topoheight",
+
+  ValidateAddress = "validate_address",
+  SplitAddress = "split_address",
+  ExtractKeyFromAddress = "extract_key_from_address",
+  MakeIntegratedAddress = "make_integrated_address", // TODO
+  DecryptExtraData = "decrypt_extra_data", // TODO
+
+  GetMultisigAtTopoheight = "get_multisig_at_topoheight", // TODO
+  GetMultisig = "get_multisig", // TODO
+  HasMultisig = "has_multisig", // TODO
+  HasMultisigAtTopoheight = "has_multisig_at_topoheight", // TODO
+
+  GetContractOutputs = "get_contract_outputs", // TODO
+  GetContractModule = "get_contract_module", // TODO
+  GetContractData = "get_contract_data", // TODO
+  GetContractDataAtTopoheight = "get_contract_data_at_topoheight", // TODO
+  GetContractBalance = "get_contract_balance", // TODO
+  GetContractBalanceAtTopoheight = "get_contract_balance_at_topoheight", // TODO
+
+  GetBlockTemplate = "get_block_template",
+  GetMinerWork = "get_miner_work",
+  SubmitBlock = "submit_block"
 }
 
 export enum RPCEvent {
