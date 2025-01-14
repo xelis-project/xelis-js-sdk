@@ -98,6 +98,10 @@ export class DaemonMethods {
     return this.dataCall<number>(RPCMethod.GetTopoheight)
   }
 
+  getPrunedTopoheight() {
+    return this.dataCall<number>(RPCMethod.GetPrunedTopoheight)
+  }
+
   getStableHeight() {
     return this.dataCall<number>(RPCMethod.GetStableHeight)
   }

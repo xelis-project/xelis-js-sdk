@@ -39,6 +39,13 @@ describe('DaemonRPC', () => {
     expect(res)
   })
 
+  test(`getPrunedTopoheight`, async () => {
+    const [err, res] = await to(testnetDaemonRPC.getPrunedTopoheight())
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res)
+  })
+
   test(`getStableHeight`, async () => {
     const [err, res] = await to(testnetDaemonRPC.getStableHeight())
     expect(err).toBeNull()

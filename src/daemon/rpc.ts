@@ -26,6 +26,10 @@ export class RPC extends BaseRPC {
     return this.post<number>(RPCMethod.GetTopoheight)
   }
 
+  getPrunedTopoheight() {
+    return this.post<number>(RPCMethod.GetPrunedTopoheight)
+  }
+
   getStableHeight() {
     return this.post<number>(RPCMethod.GetStableHeight)
   }
@@ -201,7 +205,7 @@ export class RPC extends BaseRPC {
   getMinerWork(params: GetMinerWorkParams) {
     return this.post<GetMinerWorkResult>(RPCMethod.GetMinerWork, params)
   }
-  
+
   splitAddress(params: SplitAddressParams) {
     return this.post<SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
