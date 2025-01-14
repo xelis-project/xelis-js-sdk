@@ -31,6 +31,26 @@ export class RPC extends BaseRPC {
     return this.post<number>(RPCMethod.GetPrunedTopoheight)
   }
 
+  getInfo() {
+    return this.post<GetInfoResult>(RPCMethod.GetInfo)
+  }
+
+  getDifficulty() {
+    return this.post<GetDifficultyResult>(RPCMethod.GetDifficulty)
+  }
+
+  getTips() {
+    return this.post<string[]>(RPCMethod.GetTips)
+  }
+
+  getDevFeeThresholds() {
+    return this.post<DevFee[]>(RPCMethod.GetDevFeeThresholds)
+  }
+
+  getSizeOnDisk() {
+    return this.post<DiskSize>(RPCMethod.GetSizeOnDisk)
+  }
+
   getStableHeight() {
     return this.post<number>(RPCMethod.GetStableHeight)
   }
@@ -41,14 +61,6 @@ export class RPC extends BaseRPC {
 
   getHardForks() {
     return this.post<HardFork[]>(RPCMethod.GetHardForks)
-  }
-
-  getStableBalance(params: GetBalanceParams) {
-    return this.post<GetStableBalanceResult>(RPCMethod.GetStableBalance, params)
-  }
-
-  getBlockTemplate(address: string) {
-    return this.post<GetBlockTemplateResult>(RPCMethod.GetBlockTemplate, { address })
   }
 
   getBlockAtTopoheight(params: GetBlockAtTopoheightParams) {
@@ -67,12 +79,12 @@ export class RPC extends BaseRPC {
     return this.post<Block>(RPCMethod.GetTopBlock, params)
   }
 
-  submitBlock(params: SubmitBlockParams) {
-    return this.post<boolean>(RPCMethod.SubmitBlock, params)
-  }
-
   getBalance(params: GetBalanceParams) {
     return this.post<GetBalanceResult>(RPCMethod.GetBalance, params)
+  }
+
+  getStableBalance(params: GetBalanceParams) {
+    return this.post<GetStableBalanceResult>(RPCMethod.GetStableBalance, params)
   }
 
   hasBalance(params: HasBalanceParams) {
@@ -81,10 +93,6 @@ export class RPC extends BaseRPC {
 
   getBalanceAtTopoheight(params: GetBalanceAtTopoheightParams) {
     return this.post<VersionedBalance>(RPCMethod.GetBalanceAtTopoheight, params)
-  }
-
-  getInfo() {
-    return this.post<GetInfoResult>(RPCMethod.GetInfo)
   }
 
   getNonce(params: GetNonceParams) {
@@ -111,20 +119,28 @@ export class RPC extends BaseRPC {
     return this.post<number>(RPCMethod.CountAssets)
   }
 
-  countAccounts() {
-    return this.post<number>(RPCMethod.CountAccounts)
-  }
-
   countTransactions() {
     return this.post<number>(RPCMethod.CountTransactions)
+  }
+
+  countAccounts() {
+    return this.post<number>(RPCMethod.CountAccounts)
   }
 
   submitTransaction(hexData: string) {
     return this.post<boolean>(RPCMethod.SubmitTransaction, { data: hexData })
   }
 
+  getTransactions(txHashes: string[]) {
+    return this.post<TransactionResponse[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
+  }
+
   getTransaction(hash: string) {
     return this.post<TransactionResponse>(RPCMethod.GetTransaction, { hash })
+  }
+
+  isTxExecutedInBlock(params: IsTxExecutedInBlockParams) {
+    return this.post<boolean>(RPCMethod.IsTxExecutedInBlock, params)
   }
 
   p2pStatus() {
@@ -139,8 +155,8 @@ export class RPC extends BaseRPC {
     return this.post<TransactionResponse[]>(RPCMethod.GetMempool)
   }
 
-  getTips() {
-    return this.post<string[]>(RPCMethod.GetTips)
+  getMempoolCache(address: String) {
+    return this.post<GetMempoolCacheResult>(RPCMethod.GetMempoolCache, { address })
   }
 
   getDAGOrder(params?: TopoheightRangeParams) {
@@ -155,10 +171,6 @@ export class RPC extends BaseRPC {
     return this.post<Block[]>(RPCMethod.GetBlocksRangeByHeight, params)
   }
 
-  getTransactions(txHashes: string[]) {
-    return this.post<TransactionResponse[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
-  }
-
   getAccountHistory(params: GetAccountHistoryParams) {
     return this.post<AccounHistory[]>(RPCMethod.GetAccountHistory, params)
   }
@@ -171,48 +183,36 @@ export class RPC extends BaseRPC {
     return this.post<string[]>(RPCMethod.GetAccounts, params)
   }
 
-  isTxExecutedInBlock(params: IsTxExecutedInBlockParams) {
-    return this.post<boolean>(RPCMethod.IsTxExecutedInBlock, params)
-  }
-
-  getDevFeeThresholds() {
-    return this.post<DevFee[]>(RPCMethod.GetDevFeeThresholds)
-  }
-
-  getSizeOnDisk() {
-    return this.post<DiskSize>(RPCMethod.GetSizeOnDisk)
+  isAccountRegistered(params: IsAccountRegisteredParams) {
+    return this.post<boolean>(RPCMethod.IsAccountRegistered, params)
   }
 
   getAccountRegistrationTopoheight(address: String) {
     return this.post<Number>(RPCMethod.GetAccountRegistrationTopoheight, { address })
   }
 
-  isAccountRegistered(params: IsAccountRegisteredParams) {
-    return this.post<boolean>(RPCMethod.IsAccountRegistered, params)
-  }
-
-  getMempoolCache(address: String) {
-    return this.post<GetMempoolCacheResult>(RPCMethod.GetMempoolCache, { address })
-  }
-
-  getDifficulty() {
-    return this.post<GetDifficultyResult>(RPCMethod.GetDifficulty)
-  }
-
   validateAddress(params: ValidateAddressParams) {
     return this.post<ValidateAddressResult>(RPCMethod.ValidateAddress, params)
+  }
+
+  splitAddress(params: SplitAddressParams) {
+    return this.post<SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
 
   extractKeyFromAddress(params: ExtractKeyFromAddressParams) {
     return this.post<string | number[]>(RPCMethod.ExtractKeyFromAddress, params)
   }
 
+  getBlockTemplate(address: string) {
+    return this.post<GetBlockTemplateResult>(RPCMethod.GetBlockTemplate, { address })
+  }
+
   getMinerWork(params: GetMinerWorkParams) {
     return this.post<GetMinerWorkResult>(RPCMethod.GetMinerWork, params)
   }
 
-  splitAddress(params: SplitAddressParams) {
-    return this.post<SplitAddressResult>(RPCMethod.SplitAddress, params)
+  submitBlock(params: SubmitBlockParams) {
+    return this.post<boolean>(RPCMethod.SubmitBlock, params)
   }
 }
 
