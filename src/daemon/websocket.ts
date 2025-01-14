@@ -13,7 +13,9 @@ import {
   ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
   ValidateAddressResult, TransactionExecuted, GetStableBalanceResult, GetAssetsParams,
   SplitAddressParams, SplitAddressResult, HardFork, GetTransactionExecutorResult, GetNonceAtTopoheightParams,
-  VersionedNonce, FeeRatesEstimated, MakeIntegratedAddressParams, DecryptExtraDataParams
+  VersionedNonce, FeeRatesEstimated, MakeIntegratedAddressParams, DecryptExtraDataParams,
+  HasMultisigAtTopoheightParams, GetMultisigParams, HasMultisigParams, GetMutilsigAtTopoheightParams, GetMutilsigAtTopoheightResult,
+  GetMultisigResult
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -289,6 +291,22 @@ export class DaemonMethods {
 
   decryptExtraData(params: DecryptExtraDataParams) {
     return this.dataCall(RPCMethod.DecryptExtraData, params)
+  }
+
+  getMultisigAtTopoheight(params: GetMutilsigAtTopoheightParams) {
+    return this.dataCall<GetMutilsigAtTopoheightResult>(RPCMethod.GetMultisigAtTopoheight, params)
+  }
+
+  getMultisig(params: GetMultisigParams) {
+    return this.dataCall<GetMultisigResult>(RPCMethod.GetMultisig, params)
+  }
+
+  hasMultisig(params: HasMultisigParams) {
+    return this.dataCall<boolean>(RPCMethod.HasMultisig, params)
+  }
+
+  hasMultisigAtTopoheight(params: HasMultisigAtTopoheightParams) {
+    return this.dataCall<boolean>(RPCMethod.HasMultisigAtTopoheight, params)
   }
 
   getBlockTemplate(address: string) {

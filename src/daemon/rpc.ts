@@ -9,7 +9,9 @@ import {
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
   ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
   ValidateAddressResult, GetStableBalanceResult, GetAssetsParams, SplitAddressParams, SplitAddressResult,
-  HardFork, GetTransactionExecutorResult, FeeRatesEstimated, MakeIntegratedAddressParams, DecryptExtraDataParams
+  HardFork, GetTransactionExecutorResult, FeeRatesEstimated, MakeIntegratedAddressParams, DecryptExtraDataParams,
+  GetMutilsigAtTopoheightParams, GetMutilsigAtTopoheightResult, GetMultisigParams, GetMultisigResult,
+  HasMultisigParams, HasMultisigAtTopoheightParams
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -217,6 +219,22 @@ export class RPC extends BaseRPC {
 
   decryptExtraData(params: DecryptExtraDataParams) {
     return this.post(RPCMethod.DecryptExtraData, params)
+  }
+
+  getMultisigAtTopoheight(params: GetMutilsigAtTopoheightParams) {
+    return this.post<GetMutilsigAtTopoheightResult>(RPCMethod.GetMultisigAtTopoheight, params)
+  }
+
+  getMultisig(params: GetMultisigParams) {
+    return this.post<GetMultisigResult>(RPCMethod.GetMultisig, params)
+  }
+
+  hasMultisig(params: HasMultisigParams) {
+    return this.post<boolean>(RPCMethod.HasMultisig, params)
+  }
+
+  hasMultisigAtTopoheight(params: HasMultisigAtTopoheightParams) {
+    return this.post<boolean>(RPCMethod.HasMultisigAtTopoheight, params)
   }
 
   getBlockTemplate(address: string) {

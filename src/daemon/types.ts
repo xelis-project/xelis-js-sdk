@@ -454,6 +454,34 @@ export interface DecryptExtraDataParams {
   extra_data: number[]
 }
 
+export interface GetMutilsigAtTopoheightParams {
+  address: string
+  topoheight: number
+}
+
+export interface HasMultisigAtTopoheightParams {
+  address: string
+  topoheight: number
+}
+
+export interface GetMutilsigAtTopoheightResult {
+  state: string
+}
+
+export interface GetMultisigParams {
+  address: string
+}
+
+export interface GetMultisigResult {
+  state: string
+  topoheight: number
+}
+
+export interface HasMultisigParams {
+  address: string
+  topoheight?: number
+}
+
 export enum RPCMethod {
   GetVersion = "get_version",
   GetHeight = "get_height",
@@ -520,10 +548,10 @@ export enum RPCMethod {
   MakeIntegratedAddress = "make_integrated_address",
   DecryptExtraData = "decrypt_extra_data",
 
-  GetMultisigAtTopoheight = "get_multisig_at_topoheight", // TODO
-  GetMultisig = "get_multisig", // TODO
-  HasMultisig = "has_multisig", // TODO
-  HasMultisigAtTopoheight = "has_multisig_at_topoheight", // TODO
+  GetMultisigAtTopoheight = "get_multisig_at_topoheight",
+  GetMultisig = "get_multisig",
+  HasMultisig = "has_multisig",
+  HasMultisigAtTopoheight = "has_multisig_at_topoheight",
 
   GetContractOutputs = "get_contract_outputs", // TODO
   GetContractModule = "get_contract_module", // TODO
