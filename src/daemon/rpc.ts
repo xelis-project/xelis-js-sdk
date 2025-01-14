@@ -9,7 +9,7 @@ import {
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
   ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
   ValidateAddressResult, GetStableBalanceResult, GetAssetsParams, SplitAddressParams, SplitAddressResult,
-  HardFork
+  HardFork, GetTransactionExecutorResult
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -131,12 +131,16 @@ export class RPC extends BaseRPC {
     return this.post<boolean>(RPCMethod.SubmitTransaction, { data: hexData })
   }
 
-  getTransactions(txHashes: string[]) {
-    return this.post<TransactionResponse[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
+  getTransationExecutor(hash: string) {
+    return this.post<GetTransactionExecutorResult>(RPCMethod.GetTransactionExecutor, { hash })
   }
 
   getTransaction(hash: string) {
     return this.post<TransactionResponse>(RPCMethod.GetTransaction, { hash })
+  }
+
+  getTransactions(txHashes: string[]) {
+    return this.post<TransactionResponse[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
   }
 
   isTxExecutedInBlock(params: IsTxExecutedInBlockParams) {

@@ -431,6 +431,12 @@ export interface HardFork {
   version_requirement: string | null
 }
 
+export interface GetTransactionExecutorResult {
+  block_topoheight: number
+  block_timestamp: number
+  block_hash: string
+}
+
 export enum RPCMethod {
   GetVersion = "get_version",
   GetHeight = "get_height",

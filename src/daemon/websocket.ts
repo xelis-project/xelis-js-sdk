@@ -12,8 +12,8 @@ import {
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
   ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
   ValidateAddressResult, TransactionExecuted, GetStableBalanceResult, GetAssetsParams,
-  SplitAddressParams, SplitAddressResult,
-  HardFork
+  SplitAddressParams, SplitAddressResult, HardFork,
+  GetTransactionExecutorResult
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -189,6 +189,10 @@ export class DaemonMethods {
 
   submitTransaction(hexData: string) {
     return this.dataCall<boolean>(RPCMethod.SubmitTransaction, { data: hexData })
+  }
+
+  getTransactionExecutor(hash: string) {
+    return this.dataCall<GetTransactionExecutorResult>(RPCMethod.GetTransactionExecutor, { hash })
   }
 
   getTransaction(hash: string) {

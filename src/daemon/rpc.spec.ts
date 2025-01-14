@@ -209,6 +209,13 @@ describe('DaemonRPC', () => {
     expect(res)
   })
 
+  test('getTransactionExecutor', async () => {
+    const [err, res] = await to(daemonRPC.getTransationExecutor("bf2875e4257b0efdfbbbc7bea8ec07434313ecc12bf1aa25197624d60b80b7b5"))
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res)
+  })
+
   test('getTips', async () => {
     const [err, res] = await to(daemonRPC.getTips())
     expect(err).toBeNull()
