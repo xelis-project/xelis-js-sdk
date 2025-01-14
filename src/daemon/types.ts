@@ -1,18 +1,21 @@
 export interface GetInfoResult {
+  height: number
+  topoheight: number
+  stableheight: number
+  pruned_topoheight?: number
+  top_block_hash: string
+  circulating_supply: number
+  burned_supply: number
+  maximum_supply: number
+  difficulty: string
+  block_time_target: number // in seconds
   average_block_time: number
   block_reward: number
-  block_time_target: number // in seconds
-  circulating_supply: number
-  difficulty: string
-  height: number
-  maximum_supply: number
+  dev_reward: number
+  miner_reward: number
   mempool_size: number
-  network: string
-  pruned_topoheight?: number
-  stableheight: number
-  top_block_hash: string
-  topoheight: number
   version: string
+  network: string
 }
 
 export interface Block {
