@@ -12,8 +12,8 @@ import {
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
   ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
   ValidateAddressResult, TransactionExecuted, GetStableBalanceResult, GetAssetsParams,
-  SplitAddressParams, SplitAddressResult, HardFork,
-  GetTransactionExecutorResult
+  SplitAddressParams, SplitAddressResult, HardFork, GetTransactionExecutorResult, GetNonceAtTopoheightParams,
+  VersionedNonce
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -103,6 +103,26 @@ export class DaemonMethods {
     return this.dataCall<number>(RPCMethod.GetPrunedTopoheight)
   }
 
+  getInfo() {
+    return this.dataCall<GetInfoResult>(RPCMethod.GetInfo)
+  }
+
+  getDifficulty() {
+    return this.dataCall<GetDifficultyResult>(RPCMethod.GetDifficulty)
+  }
+
+  getTips() {
+    return this.dataCall<string[]>(RPCMethod.GetTips)
+  }
+
+  getDevFeeThresholds() {
+    return this.dataCall<DevFee[]>(RPCMethod.GetDevFeeThresholds)
+  }
+
+  getSizeOnDisk() {
+    return this.dataCall<DiskSize>(RPCMethod.GetSizeOnDisk)
+  }
+
   getStableHeight() {
     return this.dataCall<number>(RPCMethod.GetStableHeight)
   }
@@ -113,14 +133,6 @@ export class DaemonMethods {
 
   getHardForks() {
     return this.dataCall<HardFork[]>(RPCMethod.GetHardForks)
-  }
-
-  getStableBalance(params: GetBalanceParams) {
-    return this.dataCall<GetStableBalanceResult>(RPCMethod.GetStableBalance, params)
-  }
-
-  getBlockTemplate(address: string) {
-    return this.dataCall<string>(RPCMethod.GetBlockTemplate, { address })
   }
 
   getBlockAtTopoheight(params: GetBlockAtTopoheightParams) {
@@ -139,12 +151,12 @@ export class DaemonMethods {
     return this.dataCall<Block>(RPCMethod.GetTopBlock, params)
   }
 
-  submitBlock(params: SubmitBlockParams) {
-    return this.dataCall<boolean>(RPCMethod.SubmitBlock, params)
-  }
-
   getBalance(params: GetBalanceParams) {
     return this.dataCall<GetBalanceResult>(RPCMethod.GetBalance, params)
+  }
+
+  getStableBalance(params: GetBalanceParams) {
+    return this.dataCall<GetStableBalanceResult>(RPCMethod.GetStableBalance, params)
   }
 
   hasBalance(params: HasBalanceParams) {
@@ -155,16 +167,16 @@ export class DaemonMethods {
     return this.dataCall<VersionedBalance>(RPCMethod.GetBalanceAtTopoheight, params)
   }
 
-  getInfo() {
-    return this.dataCall<GetInfoResult>(RPCMethod.GetInfo)
-  }
-
   getNonce(params: GetNonceParams) {
     return this.dataCall<GetNonceResult>(RPCMethod.GetNonce, params)
   }
 
   hasNonce(params: HasNonceParams) {
     return this.dataCall<HasNonceResult>(RPCMethod.HasNonce, params)
+  }
+
+  getNonceAtTopoheight(params: GetNonceAtTopoheightParams) {
+    return this.dataCall<VersionedNonce>(RPCMethod.GetNonceAtTopoheight, params)
   }
 
   getAsset(params: GetAssetParams) {
@@ -179,12 +191,12 @@ export class DaemonMethods {
     return this.dataCall<number>(RPCMethod.CountAssets)
   }
 
-  countAccounts() {
-    return this.dataCall<number>(RPCMethod.CountAccounts)
-  }
-
   countTransactions() {
     return this.dataCall<number>(RPCMethod.CountTransactions)
+  }
+
+  countAccounts() {
+    return this.dataCall<number>(RPCMethod.CountAccounts)
   }
 
   submitTransaction(hexData: string) {
@@ -199,6 +211,14 @@ export class DaemonMethods {
     return this.dataCall<TransactionResponse>(RPCMethod.GetTransaction, { hash })
   }
 
+  getTransactions(txHashes: string[]) {
+    return this.dataCall<TransactionResponse[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
+  }
+
+  isTxExecutedInBlock(params: IsTxExecutedInBlockParams) {
+    return this.dataCall<boolean>(RPCMethod.IsTxExecutedInBlock, params)
+  }
+
   p2pStatus() {
     return this.dataCall<P2PStatusResult>(RPCMethod.P2PStatus)
   }
@@ -211,8 +231,8 @@ export class DaemonMethods {
     return this.dataCall<TransactionResponse[]>(RPCMethod.GetMempool)
   }
 
-  getTips() {
-    return this.dataCall<string[]>(RPCMethod.GetTips)
+  getMempoolCache(address: string) {
+    return this.dataCall<GetMempoolCacheResult>(RPCMethod.GetMempoolCache, { address })
   }
 
   getDAGOrder(params: TopoheightRangeParams) {
@@ -227,10 +247,6 @@ export class DaemonMethods {
     return this.dataCall<Block[]>(RPCMethod.GetBlocksRangeByHeight, params)
   }
 
-  getTransactions(txHashes: string[]) {
-    return this.dataCall<TransactionResponse[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
-  }
-
   getAccountHistory(params: GetAccountHistoryParams) {
     return this.dataCall<AccounHistory[]>(RPCMethod.GetAccountHistory, params)
   }
@@ -243,48 +259,36 @@ export class DaemonMethods {
     return this.dataCall<string[]>(RPCMethod.GetAccounts, params)
   }
 
-  isTxExecutedInBlock(params: IsTxExecutedInBlockParams) {
-    return this.dataCall<boolean>(RPCMethod.IsTxExecutedInBlock, params)
-  }
-
-  getDevFeeThresholds() {
-    return this.dataCall<DevFee[]>(RPCMethod.GetDevFeeThresholds)
-  }
-
-  getSizeOnDisk() {
-    return this.dataCall<DiskSize>(RPCMethod.GetSizeOnDisk)
+  isAccountRegistered(params: IsAccountRegisteredParams) {
+    return this.dataCall<boolean>(RPCMethod.IsAccountRegistered, params)
   }
 
   getAccountRegistrationTopoheight(address: String) {
     return this.dataCall<Number>(RPCMethod.GetAccountRegistrationTopoheight, { address })
   }
 
-  isAccountRegistered(params: IsAccountRegisteredParams) {
-    return this.dataCall<boolean>(RPCMethod.IsAccountRegistered, params)
-  }
-
-  getMempoolCacheResult(address: string) {
-    return this.dataCall<GetMempoolCacheResult>(RPCMethod.GetMempoolCache, { address })
-  }
-
-  getDifficulty() {
-    return this.dataCall<GetDifficultyResult>(RPCMethod.GetDifficulty)
-  }
-
   validateAddress(params: ValidateAddressParams) {
     return this.dataCall<ValidateAddressResult>(RPCMethod.ValidateAddress, params)
+  }
+
+  splitAddress(params: SplitAddressParams) {
+    return this.dataCall<SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
 
   extractKeyFromAddress(params: ExtractKeyFromAddressParams) {
     return this.dataCall<string | number[]>(RPCMethod.ExtractKeyFromAddress, params)
   }
 
+  getBlockTemplate(address: string) {
+    return this.dataCall<string>(RPCMethod.GetBlockTemplate, { address })
+  }
+
   getMinerWork(params: GetMinerWorkParams) {
     return this.dataCall<GetMinerWorkResult>(RPCMethod.GetMinerWork, params)
   }
 
-  splitAddress(params: SplitAddressParams) {
-    return this.dataCall<SplitAddressResult>(RPCMethod.SplitAddress, params)
+  submitBlock(params: SubmitBlockParams) {
+    return this.dataCall<boolean>(RPCMethod.SubmitBlock, params)
   }
 }
 
