@@ -424,11 +424,18 @@ export interface SplitAddressResult {
   integrated_data: string
 }
 
+export interface HardFork {
+  height: number
+  version: number
+  changelog: string
+  version_requirement?: string
+}
+
 export enum RPCMethod {
   GetVersion = "get_version",
   GetHeight = "get_height",
   GetTopoheight = "get_topoheight",
-  GetPrunedTopoheight = "get_pruned_topoheight", // TODO
+  GetPrunedTopoheight = "get_pruned_topoheight",
   GetInfo = "get_info",
   GetDifficulty = "get_difficulty",
   GetTips = "get_tips",
@@ -437,7 +444,7 @@ export enum RPCMethod {
 
   GetStableHeight = "get_stable_height",
   GetStableTopoheight = "get_stable_topoheight",
-  GetHardForks = "get_hard_forks",  // TODO
+  GetHardForks = "get_hard_forks",
 
   GetBlockAtTopoheight = "get_block_at_topoheight",
   GetBlocksAtHeight = "get_blocks_at_height",

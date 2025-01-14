@@ -8,7 +8,8 @@ import {
   GetNonceAtTopoheightParams, HasNonceParams, HasNonceResult, TransactionResponse,
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
   ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
-  ValidateAddressResult, GetStableBalanceResult, GetAssetsParams, SplitAddressParams, SplitAddressResult
+  ValidateAddressResult, GetStableBalanceResult, GetAssetsParams, SplitAddressParams, SplitAddressResult,
+  HardFork
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -36,6 +37,10 @@ export class RPC extends BaseRPC {
 
   getStableTopoheight() {
     return this.post<number>(RPCMethod.GetStableTopoheight)
+  }
+
+  getHardForks() {
+    return this.post<HardFork[]>(RPCMethod.GetHardForks)
   }
 
   getStableBalance(params: GetBalanceParams) {

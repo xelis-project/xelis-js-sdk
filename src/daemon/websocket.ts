@@ -12,7 +12,8 @@ import {
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
   ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
   ValidateAddressResult, TransactionExecuted, GetStableBalanceResult, GetAssetsParams,
-  SplitAddressParams, SplitAddressResult
+  SplitAddressParams, SplitAddressResult,
+  HardFork
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -108,6 +109,10 @@ export class DaemonMethods {
 
   getStableTopoheight() {
     return this.dataCall<number>(RPCMethod.GetStableTopoheight)
+  }
+
+  getHardForks() {
+    return this.dataCall<HardFork[]>(RPCMethod.GetHardForks)
   }
 
   getStableBalance(params: GetBalanceParams) {

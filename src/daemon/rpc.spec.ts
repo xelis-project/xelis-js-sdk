@@ -53,6 +53,13 @@ describe('DaemonRPC', () => {
     expect(res)
   })
 
+  test(`getHardForks`, async () => {
+    const [err, res] = await to(testnetDaemonRPC.getHardForks())
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res)
+  })
+
   test(`getStableTopoheight`, async () => {
     const [err, res] = await to(testnetDaemonRPC.getStableTopoheight())
     expect(err).toBeNull()
