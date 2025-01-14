@@ -428,7 +428,7 @@ export interface HardFork {
   height: number
   version: number
   changelog: string
-  version_requirement?: string
+  version_requirement: string | null
 }
 
 export enum RPCMethod {
