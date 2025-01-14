@@ -395,6 +395,16 @@ describe('DaemonRPC', () => {
     expect(res)
   })
 
+  test('makeIntegratedAddress', async () => {
+    const [err, res] = await to(daemonRPC.makeIntegratedAddress({
+      address: TESTNET_ADDR,
+      integrated_data: { "hello": "world" }
+    }))
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res)
+  })
+
   test('getMinerWork', async () => {
     const [err1, res1] = await to(daemonRPC.getBlockTemplate(TESTNET_ADDR))
     console.log(err1, res1)

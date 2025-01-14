@@ -13,7 +13,8 @@ import {
   ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
   ValidateAddressResult, TransactionExecuted, GetStableBalanceResult, GetAssetsParams,
   SplitAddressParams, SplitAddressResult, HardFork, GetTransactionExecutorResult, GetNonceAtTopoheightParams,
-  VersionedNonce, FeeRatesEstimated
+  VersionedNonce, FeeRatesEstimated,
+  MakeIntegratedAddressParams
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -281,6 +282,10 @@ export class DaemonMethods {
 
   extractKeyFromAddress(params: ExtractKeyFromAddressParams) {
     return this.dataCall<string | number[]>(RPCMethod.ExtractKeyFromAddress, params)
+  }
+
+  makeIntegratedAddress(params: MakeIntegratedAddressParams) {
+    return this.dataCall<string>(RPCMethod.MakeIntegratedAddress, params)
   }
 
   getBlockTemplate(address: string) {

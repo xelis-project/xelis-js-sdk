@@ -444,6 +444,11 @@ export interface FeeRatesEstimated {
   default: number
 }
 
+export interface MakeIntegratedAddressParams {
+  address: string
+  integrated_data: any
+}
+
 export enum RPCMethod {
   GetVersion = "get_version",
   GetHeight = "get_height",
