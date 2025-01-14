@@ -437,6 +437,13 @@ export interface GetTransactionExecutorResult {
   block_hash: string
 }
 
+export interface FeeRatesEstimated {
+  low: number
+  medium: number
+  high: number
+  default: number
+}
+
 export enum RPCMethod {
   GetVersion = "get_version",
   GetHeight = "get_height",
@@ -475,7 +482,7 @@ export enum RPCMethod {
   CountContracts = "count_contracts",
 
   SubmitTransaction = "submit_transaction",
-  GetTransactionExecutor = "get_transaction_executor", // TODO
+  GetTransactionExecutor = "get_transaction_executor",
   GetTransaction = "get_transaction",
   GetTransactions = "get_transactions",
   IsTxExecutedInBlock = "is_tx_executed_in_block",
@@ -485,7 +492,7 @@ export enum RPCMethod {
 
   GetMempool = "get_mempool",
   GetMempoolCache = "get_mempool_cache",
-  GetEstimatedFeeRates = "get_estimated_fee_rates", // TODO
+  GetEstimatedFeeRates = "get_estimated_fee_rates",
 
   GetDAGOrder = "get_dag_order",
   GetBlocksRangeByTopoheight = "get_blocks_range_by_topoheight",

@@ -13,7 +13,7 @@ import {
   ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
   ValidateAddressResult, TransactionExecuted, GetStableBalanceResult, GetAssetsParams,
   SplitAddressParams, SplitAddressResult, HardFork, GetTransactionExecutorResult, GetNonceAtTopoheightParams,
-  VersionedNonce
+  VersionedNonce, FeeRatesEstimated
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -233,6 +233,10 @@ export class DaemonMethods {
 
   getMempoolCache(address: string) {
     return this.dataCall<GetMempoolCacheResult>(RPCMethod.GetMempoolCache, { address })
+  }
+
+  getEstimatedFeeRates() {
+    return this.dataCall<FeeRatesEstimated>(RPCMethod.GetEstimatedFeeRates)
   }
 
   getDAGOrder(params: TopoheightRangeParams) {

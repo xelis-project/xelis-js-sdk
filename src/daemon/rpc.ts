@@ -9,7 +9,7 @@ import {
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
   ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
   ValidateAddressResult, GetStableBalanceResult, GetAssetsParams, SplitAddressParams, SplitAddressResult,
-  HardFork, GetTransactionExecutorResult
+  HardFork, GetTransactionExecutorResult, FeeRatesEstimated
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -161,6 +161,10 @@ export class RPC extends BaseRPC {
 
   getMempoolCache(address: String) {
     return this.post<GetMempoolCacheResult>(RPCMethod.GetMempoolCache, { address })
+  }
+
+  getEstimatedFeeRates() {
+    return this.post<FeeRatesEstimated>(RPCMethod.GetEstimatedFeeRates)
   }
 
   getDAGOrder(params?: TopoheightRangeParams) {
