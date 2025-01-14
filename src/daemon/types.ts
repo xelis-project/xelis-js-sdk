@@ -449,6 +449,11 @@ export interface MakeIntegratedAddressParams {
   integrated_data: any
 }
 
+export interface DecryptExtraDataParams {
+  shared_key: number[]
+  extra_data: number[]
+}
+
 export enum RPCMethod {
   GetVersion = "get_version",
   GetHeight = "get_height",
@@ -512,8 +517,8 @@ export enum RPCMethod {
   ValidateAddress = "validate_address",
   SplitAddress = "split_address",
   ExtractKeyFromAddress = "extract_key_from_address",
-  MakeIntegratedAddress = "make_integrated_address", // TODO
-  DecryptExtraData = "decrypt_extra_data", // TODO
+  MakeIntegratedAddress = "make_integrated_address",
+  DecryptExtraData = "decrypt_extra_data",
 
   GetMultisigAtTopoheight = "get_multisig_at_topoheight", // TODO
   GetMultisig = "get_multisig", // TODO

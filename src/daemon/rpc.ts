@@ -9,8 +9,7 @@ import {
   IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
   ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
   ValidateAddressResult, GetStableBalanceResult, GetAssetsParams, SplitAddressParams, SplitAddressResult,
-  HardFork, GetTransactionExecutorResult, FeeRatesEstimated,
-  MakeIntegratedAddressParams
+  HardFork, GetTransactionExecutorResult, FeeRatesEstimated, MakeIntegratedAddressParams, DecryptExtraDataParams
 } from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
@@ -214,6 +213,10 @@ export class RPC extends BaseRPC {
 
   makeIntegratedAddress(params: MakeIntegratedAddressParams) {
     return this.post<string>(RPCMethod.MakeIntegratedAddress, params)
+  }
+
+  decryptExtraData(params: DecryptExtraDataParams) {
+    return this.post(RPCMethod.DecryptExtraData, params)
   }
 
   getBlockTemplate(address: string) {
