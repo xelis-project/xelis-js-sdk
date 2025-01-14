@@ -115,14 +115,32 @@ export enum RPCMethod {
   HasBalance = 'has_balance',
   GetTrackedAssets = 'get_tracked_assets',
   GetAssetPrecision = 'get_asset_precision',
+  GetAssets = 'get_assets', // TODO
+  GetAsset = 'get_asset', // TODO
   GetTransaction = 'get_transaction',
   BuildTransaction = 'build_transaction',
+  BuildTransactionOffline = 'build_transaction_offline', // TODO
+  BuildUnsignedTransaction = 'build_unsigned_transaction', // TODO
+  FinalizeUnsignedTransaction = 'finalize_unsigned_transaction', // TODO
+  ClearTxCache = 'clear_tx_cache', // TODO
   ListTransactions = 'list_transactions',
   IsOnline = 'is_online',
   SetOnlineMode = 'set_online_mode',
   SetOfflineMode = 'set_offline_mode',
   SignData = 'sign_data',
-  EstimateFees = 'estimate_fees'
+  EstimateFees = 'estimate_fees',
+  EstimateExtraDataSize = 'estimate_extra_data_size', // TODO
+  NetworkInfo = 'network_info', // TODO
+  DecryptExtraData = 'decrypt_extra_data', // TODO
+  DecryptCiphertext = 'decrypt_ciphertext', // TODO
+  GetMatchingKeys = 'get_matching_keys', // TODO
+  CountMatchingEntries = 'count_matching_entries', // TODO
+  GetValueFromKey = 'get_value_from_key', // TODO
+  Store = 'store', // TODO
+  Delete = 'delete', // TODO
+  DeleteTreeEntries = 'delete_tree_entries', // TODO
+  HasKey = 'has_key', // TODO
+  QueryDB = 'query_db' // TODO
 }
 
 export enum RPCEvent {
@@ -131,6 +149,7 @@ export enum RPCEvent {
   NewTransaction = 'new_transaction',
   BalanceChanged = 'balance_changed',
   Rescan = 'rescan',
+  HistorySynced = 'history_synced',
   Online = 'online',
   Offline = 'offline'
 }
