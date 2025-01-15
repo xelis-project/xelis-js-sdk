@@ -110,6 +110,14 @@ export class RPC extends BaseRPC {
     return this.post<types.NetworkInfoResult>(RPCMethod.NetworkInfo)
   }
 
+  decryptExtraData(params: types.DecryptExtraDataParams) {
+    return this.post<types.PlaintextCiphertext>(RPCMethod.DecryptExtraData, params)
+  }
+
+  decryptCiphertext(params: types.DecryptCiphertextParams) {
+    return this.post<number>(RPCMethod.DecryptCiphertext, params)
+  }
+
   setOnlineMode(params: types.SetOnlineModeParams) {
     return this.post<boolean>(RPCMethod.SetOnlineMode, params)
   }

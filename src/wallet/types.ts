@@ -114,11 +114,35 @@ export interface EstimateExtraDataSizeParams {
 }
 
 export interface EstimateExtraDataSizeResult {
-	size: number
+  size: number
 }
 
 export interface NetworkInfoResult extends daemonTypes.GetInfoResult {
   connected_to: string
+}
+
+export enum TxRole {
+  Sender = "sender",
+  Receiver = "receiver"
+}
+
+export interface DecryptExtraDataParams {
+  extra_data: number[]
+  role: TxRole
+}
+
+export interface CompressedCiphertext {
+  commitment: number[]
+  handle: number[]
+}
+
+export interface PlaintextCiphertext {
+  shared_key: string
+  data: any
+}
+
+export interface DecryptCiphertextParams {
+  ciphertext: CompressedCiphertext
 }
 
 export enum RPCMethod {
@@ -147,10 +171,10 @@ export enum RPCMethod {
   SetOfflineMode = 'set_offline_mode',
   SignData = 'sign_data',
   EstimateFees = 'estimate_fees',
-  EstimateExtraDataSize = 'estimate_extra_data_size', // TODO
-  NetworkInfo = 'network_info', // TODO
-  DecryptExtraData = 'decrypt_extra_data', // TODO
-  DecryptCiphertext = 'decrypt_ciphertext', // TODO
+  EstimateExtraDataSize = 'estimate_extra_data_size',
+  NetworkInfo = 'network_info',
+  DecryptExtraData = 'decrypt_extra_data',
+  DecryptCiphertext = 'decrypt_ciphertext',
   GetMatchingKeys = 'get_matching_keys', // TODO
   CountMatchingEntries = 'count_matching_entries', // TODO
   GetValueFromKey = 'get_value_from_key', // TODO

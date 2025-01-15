@@ -131,6 +131,14 @@ export class WalletMethods {
     return this.dataCall<types.NetworkInfoResult>(RPCMethod.NetworkInfo)
   }
 
+  decryptExtraData(params: types.DecryptExtraDataParams) {
+    return this.dataCall<types.PlaintextCiphertext>(RPCMethod.DecryptExtraData, params)
+  }
+
+  decryptCiphertext(params: types.DecryptCiphertextParams) {
+    return this.dataCall<number>(RPCMethod.DecryptCiphertext, params)
+  }
+
   setOnlineMode(params: types.SetOnlineModeParams) {
     return this.dataCall<boolean>(RPCMethod.SetOfflineMode, params)
   }
