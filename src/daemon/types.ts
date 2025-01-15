@@ -485,6 +485,91 @@ export interface HasMultisigParams {
   topoheight?: number
 }
 
+export interface GetContractOutputsParams {
+  transaction: string
+}
+
+export interface GetContractModuleParams {
+  contract: string
+}
+
+export interface GetContractDataPrams {
+  contract: string
+  key: any
+}
+
+export interface GetContractDataAtTopoheightParams {
+  contract: string
+  key: any
+  topoheight: number
+}
+
+export interface GetContractBalanceParams {
+  contract: string
+  asset: string
+}
+
+export interface GetContractBalanceAtTopoheightParams {
+  contract: string
+  asset: string
+  topoheight: number
+}
+
+export interface Chunk {
+  instructions: number[]
+}
+
+export interface Module {
+  constants: any
+  chunks: Chunk[]
+  entry_chunk_ids: number[]
+  structs: any[]
+  enums: any[]
+}
+
+export interface GetContractModuleResult {
+  previous_topoheight: number | null
+  data: Module | null
+}
+
+export interface GetContractDataResult {
+  previous_topoheight: number | null
+  data: any | null
+}
+
+export interface GetContractBalanceAtTopoheightResult {
+  data: number
+  previous_topoheight: number | null
+}
+
+export interface GetContractBalanceResult {
+  topoheight: number
+  amount: number
+  previous_topoheight: number | null
+}
+
+export interface ContractOutputRefundGas {
+  amount: number
+}
+
+export interface ContractOutputTransfer {
+  amount: number
+  asset: string
+  destination: string
+}
+
+export interface ContractOutputExitCode {
+  exit_code: number
+}
+
+export interface ContractOutputRefundDeposits { }
+
+export type ContractOutput =
+  | ContractOutputRefundGas
+  | ContractOutputTransfer
+  | ContractOutputExitCode
+  | ContractOutputRefundDeposits
+
 export enum RPCMethod {
   GetVersion = "get_version",
   GetHeight = "get_height",
@@ -556,12 +641,12 @@ export enum RPCMethod {
   HasMultisig = "has_multisig",
   HasMultisigAtTopoheight = "has_multisig_at_topoheight",
 
-  GetContractOutputs = "get_contract_outputs", // TODO
-  GetContractModule = "get_contract_module", // TODO
-  GetContractData = "get_contract_data", // TODO
-  GetContractDataAtTopoheight = "get_contract_data_at_topoheight", // TODO
-  GetContractBalance = "get_contract_balance", // TODO
-  GetContractBalanceAtTopoheight = "get_contract_balance_at_topoheight", // TODO
+  GetContractOutputs = "get_contract_outputs",
+  GetContractModule = "get_contract_module",
+  GetContractData = "get_contract_data",
+  GetContractDataAtTopoheight = "get_contract_data_at_topoheight",
+  GetContractBalance = "get_contract_balance",
+  GetContractBalanceAtTopoheight = "get_contract_balance_at_topoheight",
 
   GetBlockTemplate = "get_block_template",
   GetMinerWork = "get_miner_work",

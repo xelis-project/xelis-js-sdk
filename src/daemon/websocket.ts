@@ -15,7 +15,9 @@ import {
   SplitAddressParams, SplitAddressResult, HardFork, GetTransactionExecutorResult, GetNonceAtTopoheightParams,
   VersionedNonce, FeeRatesEstimated, MakeIntegratedAddressParams, DecryptExtraDataParams,
   HasMultisigAtTopoheightParams, GetMultisigParams, HasMultisigParams, GetMutilsigAtTopoheightParams, GetMutilsigAtTopoheightResult,
-  GetMultisigResult
+  GetMultisigResult, GetContractOutputsParams, ContractOutput, GetContractModuleParams, GetContractModuleResult,
+  GetContractDataAtTopoheightParams, GetContractBalanceParams, GetContractBalanceResult,
+  GetContractBalanceAtTopoheightParams, GetContractBalanceAtTopoheightResult
 } from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
@@ -201,6 +203,10 @@ export class DaemonMethods {
     return this.dataCall<number>(RPCMethod.CountAccounts)
   }
 
+  countContracts() {
+    return this.dataCall<number>(RPCMethod.CountContracts)
+  }
+
   submitTransaction(hexData: string) {
     return this.dataCall<boolean>(RPCMethod.SubmitTransaction, { data: hexData })
   }
@@ -307,6 +313,30 @@ export class DaemonMethods {
 
   hasMultisigAtTopoheight(params: HasMultisigAtTopoheightParams) {
     return this.dataCall<boolean>(RPCMethod.HasMultisigAtTopoheight, params)
+  }
+
+  getContractOutputs(params: GetContractOutputsParams) {
+    return this.dataCall<ContractOutput[]>(RPCMethod.GetContractOutputs, params)
+  }
+
+  getContractModule(params: GetContractModuleParams) {
+    return this.dataCall<GetContractModuleResult>(RPCMethod.GetContractModule, params)
+  }
+
+  getContractData(params: GetContractModuleParams) {
+    return this.dataCall(RPCMethod.GetContractData, params)
+  }
+
+  getContractDataAtTopoheight(params: GetContractDataAtTopoheightParams) {
+    return this.dataCall(RPCMethod.GetContractDataAtTopoheight, params)
+  }
+
+  getContractBalance(params: GetContractBalanceParams) {
+    return this.dataCall<GetContractBalanceResult>(RPCMethod.GetContractBalance, params)
+  }
+
+  getContractBalanceAtTopoheight(params: GetContractBalanceAtTopoheightParams) {
+    return this.dataCall<GetContractBalanceAtTopoheightResult>(RPCMethod.GetContractBalanceAtTopoheight, params)
   }
 
   getBlockTemplate(address: string) {
