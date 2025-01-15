@@ -87,6 +87,14 @@ export class WalletMethods {
     return this.dataCall<number>(RPCMethod.GetAssetPrecision, params)
   }
 
+  getAssets() {
+    return this.dataCall<{ [key: string]: types.Asset }>(RPCMethod.GetAssets)
+  }
+
+  getAsset(params: daemonTypes.GetAssetParams) {
+    return this.dataCall<types.Asset>(RPCMethod.GetAsset, params)
+  }
+
   getTransaction(hash: string) {
     return this.dataCall<types.TransactionEntry>(RPCMethod.GetTransaction, { hash })
   }

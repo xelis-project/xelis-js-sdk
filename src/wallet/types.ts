@@ -103,6 +103,12 @@ export interface RescanResult {
   start_topoheight: number
 }
 
+export interface Asset {
+  decimals: number
+  name: string
+  max_supply: number | null
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetNetwork = 'get_network',

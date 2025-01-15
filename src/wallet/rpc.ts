@@ -66,6 +66,14 @@ export class RPC extends BaseRPC {
     return this.post<number>(RPCMethod.GetAssetPrecision, params)
   }
 
+  getAssets() {
+    return this.post<{ [key: string]: types.Asset }>(RPCMethod.GetAssets)
+  }
+
+  getAsset(params: daemonTypes.GetAssetParams) {
+    return this.post<types.Asset>(RPCMethod.GetAsset, params)
+  }
+
   getTransaction(hash: string) {
     return this.post<types.TransactionEntry>(RPCMethod.GetTransaction, { hash })
   }
