@@ -123,6 +123,10 @@ export class WalletMethods {
     return this.dataCall<number>(RPCMethod.EstimateFees, params)
   }
 
+  estimateExtraDataSize(params: types.EstimateExtraDataSizeParams) {
+    return this.dataCall<types.EstimateExtraDataSizeResult>(RPCMethod.EstimateExtraDataSize, params)
+  }
+
   setOnlineMode(params: types.SetOnlineModeParams) {
     return this.dataCall<boolean>(RPCMethod.SetOfflineMode, params)
   }

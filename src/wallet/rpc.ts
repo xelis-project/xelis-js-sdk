@@ -102,6 +102,10 @@ export class RPC extends BaseRPC {
     return this.post<number>(RPCMethod.EstimateFees, params)
   }
 
+  estimateExtraDataSize(params: types.EstimateExtraDataSizeParams) {
+    return this.post<types.EstimateExtraDataSizeResult>(RPCMethod.EstimateExtraDataSize, params)
+  }
+
   setOnlineMode(params: types.SetOnlineModeParams) {
     return this.post<boolean>(RPCMethod.SetOnlineMode, params)
   }

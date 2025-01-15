@@ -109,6 +109,14 @@ export interface Asset {
   max_supply: number | null
 }
 
+export interface EstimateExtraDataSizeParams {
+  destinations: string[]
+}
+
+export interface EstimateExtraDataSizeResult {
+	size: number
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetNetwork = 'get_network',
