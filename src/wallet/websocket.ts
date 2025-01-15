@@ -103,6 +103,10 @@ export class WalletMethods {
     return this.dataCall<types.BuildTransactionResult>(RPCMethod.BuildTransaction, params)
   }
 
+  clearTxCache() {
+    return this.dataCall<boolean>(RPCMethod.ClearTxCache)
+  }
+
   listTransactions(params?: types.ListTransactionParams) {
     return this.dataCall<types.TransactionEntry[]>(RPCMethod.GetTransaction, params)
   }

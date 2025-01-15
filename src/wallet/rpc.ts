@@ -82,6 +82,10 @@ export class RPC extends BaseRPC {
     return this.post<types.BuildTransactionResult>(RPCMethod.BuildTransaction, params)
   }
 
+  clearTxCache() {
+    return this.post<boolean>(RPCMethod.ClearTxCache)
+  }
+
   listTransactions(params?: types.ListTransactionParams) {
     return this.post<types.TransactionEntry[]>(RPCMethod.ListTransactions, params)
   }

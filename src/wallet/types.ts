@@ -121,14 +121,14 @@ export enum RPCMethod {
   HasBalance = 'has_balance',
   GetTrackedAssets = 'get_tracked_assets',
   GetAssetPrecision = 'get_asset_precision',
-  GetAssets = 'get_assets', // TODO
-  GetAsset = 'get_asset', // TODO
+  GetAssets = 'get_assets',
+  GetAsset = 'get_asset',
   GetTransaction = 'get_transaction',
   BuildTransaction = 'build_transaction',
   BuildTransactionOffline = 'build_transaction_offline', // TODO
   BuildUnsignedTransaction = 'build_unsigned_transaction', // TODO
   FinalizeUnsignedTransaction = 'finalize_unsigned_transaction', // TODO
-  ClearTxCache = 'clear_tx_cache', // TODO
+  ClearTxCache = 'clear_tx_cache',
   ListTransactions = 'list_transactions',
   IsOnline = 'is_online',
   SetOnlineMode = 'set_online_mode',
