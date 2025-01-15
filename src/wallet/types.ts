@@ -1,4 +1,4 @@
-import { Transaction } from '../daemon/types'
+import * as daemonTypes from '../daemon/types'
 
 export interface GetAddressParams {
   integrated_data?: string
@@ -17,7 +17,7 @@ export interface BuildTransactionParams {
   tx_as_hex: boolean
 }
 
-export interface BuildTransactionResult extends Transaction {
+export interface BuildTransactionResult extends daemonTypes.Transaction {
   txt_as_hex?: string
 }
 
@@ -115,6 +115,10 @@ export interface EstimateExtraDataSizeParams {
 
 export interface EstimateExtraDataSizeResult {
 	size: number
+}
+
+export interface NetworkInfoResult extends daemonTypes.GetInfoResult {
+  connected_to: string
 }
 
 export enum RPCMethod {
