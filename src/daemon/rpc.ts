@@ -1,20 +1,5 @@
-import {
-  Block, TopoheightRangeParams, GetInfoResult, HeightRangeParams,
-  GetBalanceResult, P2PStatusResult, RPCMethod, GetBalanceParams,
-  GetBalanceAtTopoheightParams, GetAccountsParams, GetBlockAtTopoheightParams, GetBlockByHashParams,
-  GetBlocksAtHeightParams, GetTopBlockParams, GetNonceResult, GetNonceParams, GetAccountHistoryParams,
-  AccounHistory, DevFee, DiskSize, HasBalanceParams, HasBalanceResult, AssetData, IsTxExecutedInBlockParams,
-  GetAssetParams, GetPeersResult, GetBlockTemplateResult, VersionedBalance, VersionedNonce,
-  GetNonceAtTopoheightParams, HasNonceParams, HasNonceResult, TransactionResponse,
-  IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
-  ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
-  ValidateAddressResult, GetStableBalanceResult, GetAssetsParams, SplitAddressParams, SplitAddressResult,
-  HardFork, GetTransactionExecutorResult, FeeRatesEstimated, MakeIntegratedAddressParams, DecryptExtraDataParams,
-  GetMutilsigAtTopoheightParams, GetMutilsigAtTopoheightResult, GetMultisigParams, GetMultisigResult,
-  HasMultisigParams, HasMultisigAtTopoheightParams, GetContractOutputsParams, GetContractModuleParams,
-  GetContractModuleResult, GetContractDataAtTopoheightParams, GetContractBalanceParams, GetContractBalanceAtTopoheightParams,
-  GetContractBalanceAtTopoheightResult, GetContractBalanceResult, ContractOutput
-} from './types'
+import { RPCMethod } from './types'
+import * as types from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
 
@@ -36,11 +21,11 @@ export class RPC extends BaseRPC {
   }
 
   getInfo() {
-    return this.post<GetInfoResult>(RPCMethod.GetInfo)
+    return this.post<types.GetInfoResult>(RPCMethod.GetInfo)
   }
 
   getDifficulty() {
-    return this.post<GetDifficultyResult>(RPCMethod.GetDifficulty)
+    return this.post<types.GetDifficultyResult>(RPCMethod.GetDifficulty)
   }
 
   getTips() {
@@ -48,11 +33,11 @@ export class RPC extends BaseRPC {
   }
 
   getDevFeeThresholds() {
-    return this.post<DevFee[]>(RPCMethod.GetDevFeeThresholds)
+    return this.post<types.DevFee[]>(RPCMethod.GetDevFeeThresholds)
   }
 
   getSizeOnDisk() {
-    return this.post<DiskSize>(RPCMethod.GetSizeOnDisk)
+    return this.post<types.DiskSize>(RPCMethod.GetSizeOnDisk)
   }
 
   getStableHeight() {
@@ -64,58 +49,58 @@ export class RPC extends BaseRPC {
   }
 
   getHardForks() {
-    return this.post<HardFork[]>(RPCMethod.GetHardForks)
+    return this.post<types.HardFork[]>(RPCMethod.GetHardForks)
   }
 
-  getBlockAtTopoheight(params: GetBlockAtTopoheightParams) {
-    return this.post<Block>(RPCMethod.GetBlockAtTopoheight, params)
+  getBlockAtTopoheight(params: types.GetBlockAtTopoheightParams) {
+    return this.post<types.Block>(RPCMethod.GetBlockAtTopoheight, params)
   }
 
-  getBlocksAtHeight(params: GetBlocksAtHeightParams) {
-    return this.post<Block[]>(RPCMethod.GetBlocksAtHeight, params)
+  getBlocksAtHeight(params: types.GetBlocksAtHeightParams) {
+    return this.post<types.Block[]>(RPCMethod.GetBlocksAtHeight, params)
   }
 
-  getBlockByHash(params: GetBlockByHashParams) {
-    return this.post<Block>(RPCMethod.GetBlockByHash, params)
+  getBlockByHash(params: types.GetBlockByHashParams) {
+    return this.post<types.Block>(RPCMethod.GetBlockByHash, params)
   }
 
-  getTopBlock(params?: GetTopBlockParams) {
-    return this.post<Block>(RPCMethod.GetTopBlock, params)
+  getTopBlock(params?: types.GetTopBlockParams) {
+    return this.post<types.Block>(RPCMethod.GetTopBlock, params)
   }
 
-  getBalance(params: GetBalanceParams) {
-    return this.post<GetBalanceResult>(RPCMethod.GetBalance, params)
+  getBalance(params: types.GetBalanceParams) {
+    return this.post<types.GetBalanceResult>(RPCMethod.GetBalance, params)
   }
 
-  getStableBalance(params: GetBalanceParams) {
-    return this.post<GetStableBalanceResult>(RPCMethod.GetStableBalance, params)
+  getStableBalance(params: types.GetBalanceParams) {
+    return this.post<types.GetStableBalanceResult>(RPCMethod.GetStableBalance, params)
   }
 
-  hasBalance(params: HasBalanceParams) {
-    return this.post<HasBalanceResult>(RPCMethod.HasBalance, params)
+  hasBalance(params: types.HasBalanceParams) {
+    return this.post<types.HasBalanceResult>(RPCMethod.HasBalance, params)
   }
 
-  getBalanceAtTopoheight(params: GetBalanceAtTopoheightParams) {
-    return this.post<VersionedBalance>(RPCMethod.GetBalanceAtTopoheight, params)
+  getBalanceAtTopoheight(params: types.GetBalanceAtTopoheightParams) {
+    return this.post<types.VersionedBalance>(RPCMethod.GetBalanceAtTopoheight, params)
   }
 
-  getNonce(params: GetNonceParams) {
-    return this.post<GetNonceResult>(RPCMethod.GetNonce, params)
+  getNonce(params: types.GetNonceParams) {
+    return this.post<types.GetNonceResult>(RPCMethod.GetNonce, params)
   }
 
-  hasNonce(params: HasNonceParams) {
-    return this.post<HasNonceResult>(RPCMethod.HasNonce, params)
+  hasNonce(params: types.HasNonceParams) {
+    return this.post<types.HasNonceResult>(RPCMethod.HasNonce, params)
   }
 
-  getNonceAtTopoheight(params: GetNonceAtTopoheightParams) {
-    return this.post<VersionedNonce>(RPCMethod.GetNonceAtTopoheight, params)
+  getNonceAtTopoheight(params: types.GetNonceAtTopoheightParams) {
+    return this.post<types.VersionedNonce>(RPCMethod.GetNonceAtTopoheight, params)
   }
 
-  getAsset(params: GetAssetParams) {
-    return this.post<AssetData>(RPCMethod.GetAsset, params)
+  getAsset(params: types.GetAssetParams) {
+    return this.post<types.AssetData>(RPCMethod.GetAsset, params)
   }
 
-  getAssets(params: GetAssetsParams) {
+  getAssets(params: types.GetAssetsParams) {
     return this.post<string[]>(RPCMethod.GetAssets, params)
   }
 
@@ -140,66 +125,66 @@ export class RPC extends BaseRPC {
   }
 
   getTransationExecutor(hash: string) {
-    return this.post<GetTransactionExecutorResult>(RPCMethod.GetTransactionExecutor, { hash })
+    return this.post<types.GetTransactionExecutorResult>(RPCMethod.GetTransactionExecutor, { hash })
   }
 
   getTransaction(hash: string) {
-    return this.post<TransactionResponse>(RPCMethod.GetTransaction, { hash })
+    return this.post<types.TransactionResponse>(RPCMethod.GetTransaction, { hash })
   }
 
   getTransactions(txHashes: string[]) {
-    return this.post<TransactionResponse[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
+    return this.post<types.TransactionResponse[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
   }
 
-  isTxExecutedInBlock(params: IsTxExecutedInBlockParams) {
+  isTxExecutedInBlock(params: types.IsTxExecutedInBlockParams) {
     return this.post<boolean>(RPCMethod.IsTxExecutedInBlock, params)
   }
 
   p2pStatus() {
-    return this.post<P2PStatusResult>(RPCMethod.P2PStatus)
+    return this.post<types.P2PStatusResult>(RPCMethod.P2PStatus)
   }
 
   getPeers() {
-    return this.post<GetPeersResult>(RPCMethod.GetPeers)
+    return this.post<types.GetPeersResult>(RPCMethod.GetPeers)
   }
 
   getMemPool() {
-    return this.post<TransactionResponse[]>(RPCMethod.GetMempool)
+    return this.post<types.TransactionResponse[]>(RPCMethod.GetMempool)
   }
 
   getMempoolCache(address: String) {
-    return this.post<GetMempoolCacheResult>(RPCMethod.GetMempoolCache, { address })
+    return this.post<types.GetMempoolCacheResult>(RPCMethod.GetMempoolCache, { address })
   }
 
   getEstimatedFeeRates() {
-    return this.post<FeeRatesEstimated>(RPCMethod.GetEstimatedFeeRates)
+    return this.post<types.FeeRatesEstimated>(RPCMethod.GetEstimatedFeeRates)
   }
 
-  getDAGOrder(params?: TopoheightRangeParams) {
+  getDAGOrder(params?: types.TopoheightRangeParams) {
     return this.post<string[]>(RPCMethod.GetDAGOrder, params)
   }
 
-  getBlocksRangeByTopoheight(params: TopoheightRangeParams) {
-    return this.post<Block[]>(RPCMethod.GetBlocksRangeByTopoheight, params)
+  getBlocksRangeByTopoheight(params: types.TopoheightRangeParams) {
+    return this.post<types.Block[]>(RPCMethod.GetBlocksRangeByTopoheight, params)
   }
 
-  getBlocksRangeByHeight(params: HeightRangeParams) {
-    return this.post<Block[]>(RPCMethod.GetBlocksRangeByHeight, params)
+  getBlocksRangeByHeight(params: types.HeightRangeParams) {
+    return this.post<types.Block[]>(RPCMethod.GetBlocksRangeByHeight, params)
   }
 
-  getAccountHistory(params: GetAccountHistoryParams) {
-    return this.post<AccounHistory[]>(RPCMethod.GetAccountHistory, params)
+  getAccountHistory(params: types.GetAccountHistoryParams) {
+    return this.post<types.AccounHistory[]>(RPCMethod.GetAccountHistory, params)
   }
 
   getAccountAssets(address: string) {
     return this.post<string[]>(RPCMethod.GetAccountAssets, { address })
   }
 
-  getAccounts(params: GetAccountsParams) {
+  getAccounts(params: types.GetAccountsParams) {
     return this.post<string[]>(RPCMethod.GetAccounts, params)
   }
 
-  isAccountRegistered(params: IsAccountRegisteredParams) {
+  isAccountRegistered(params: types.IsAccountRegisteredParams) {
     return this.post<boolean>(RPCMethod.IsAccountRegistered, params)
   }
 
@@ -207,75 +192,75 @@ export class RPC extends BaseRPC {
     return this.post<Number>(RPCMethod.GetAccountRegistrationTopoheight, { address })
   }
 
-  validateAddress(params: ValidateAddressParams) {
-    return this.post<ValidateAddressResult>(RPCMethod.ValidateAddress, params)
+  validateAddress(params: types.ValidateAddressParams) {
+    return this.post<types.ValidateAddressResult>(RPCMethod.ValidateAddress, params)
   }
 
-  splitAddress(params: SplitAddressParams) {
-    return this.post<SplitAddressResult>(RPCMethod.SplitAddress, params)
+  splitAddress(params: types.SplitAddressParams) {
+    return this.post<types.SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
 
-  extractKeyFromAddress(params: ExtractKeyFromAddressParams) {
+  extractKeyFromAddress(params: types.ExtractKeyFromAddressParams) {
     return this.post<string | number[]>(RPCMethod.ExtractKeyFromAddress, params)
   }
 
-  makeIntegratedAddress(params: MakeIntegratedAddressParams) {
+  makeIntegratedAddress(params: types.MakeIntegratedAddressParams) {
     return this.post<string>(RPCMethod.MakeIntegratedAddress, params)
   }
 
-  decryptExtraData(params: DecryptExtraDataParams) {
+  decryptExtraData(params: types.DecryptExtraDataParams) {
     return this.post(RPCMethod.DecryptExtraData, params)
   }
 
-  getMultisigAtTopoheight(params: GetMutilsigAtTopoheightParams) {
-    return this.post<GetMutilsigAtTopoheightResult>(RPCMethod.GetMultisigAtTopoheight, params)
+  getMultisigAtTopoheight(params: types.GetMutilsigAtTopoheightParams) {
+    return this.post<types.GetMutilsigAtTopoheightResult>(RPCMethod.GetMultisigAtTopoheight, params)
   }
 
-  getMultisig(params: GetMultisigParams) {
-    return this.post<GetMultisigResult>(RPCMethod.GetMultisig, params)
+  getMultisig(params: types.GetMultisigParams) {
+    return this.post<types.GetMultisigResult>(RPCMethod.GetMultisig, params)
   }
 
-  hasMultisig(params: HasMultisigParams) {
+  hasMultisig(params: types.HasMultisigParams) {
     return this.post<boolean>(RPCMethod.HasMultisig, params)
   }
 
-  hasMultisigAtTopoheight(params: HasMultisigAtTopoheightParams) {
+  hasMultisigAtTopoheight(params: types.HasMultisigAtTopoheightParams) {
     return this.post<boolean>(RPCMethod.HasMultisigAtTopoheight, params)
   }
 
-  getContractOutputs(params: GetContractOutputsParams) {
-    return this.post<ContractOutput[]>(RPCMethod.GetContractOutputs, params)
+  getContractOutputs(params: types.GetContractOutputsParams) {
+    return this.post<types.ContractOutput[]>(RPCMethod.GetContractOutputs, params)
   }
 
-  getContractModule(params: GetContractModuleParams) {
-    return this.post<GetContractModuleResult>(RPCMethod.GetContractModule, params)
+  getContractModule(params: types.GetContractModuleParams) {
+    return this.post<types.GetContractModuleResult>(RPCMethod.GetContractModule, params)
   }
 
-  getContractData(params: GetContractModuleParams) {
+  getContractData(params: types.GetContractModuleParams) {
     return this.post(RPCMethod.GetContractData, params)
   }
 
-  getContractDataAtTopoheight(params: GetContractDataAtTopoheightParams) {
+  getContractDataAtTopoheight(params: types.GetContractDataAtTopoheightParams) {
     return this.post(RPCMethod.GetContractDataAtTopoheight, params)
   }
 
-  getContractBalance(params: GetContractBalanceParams) {
-    return this.post<GetContractBalanceResult>(RPCMethod.GetContractBalance, params)
+  getContractBalance(params: types.GetContractBalanceParams) {
+    return this.post<types.GetContractBalanceResult>(RPCMethod.GetContractBalance, params)
   }
 
-  getContractBalanceAtTopoheight(params: GetContractBalanceAtTopoheightParams) {
-    return this.post<GetContractBalanceAtTopoheightResult>(RPCMethod.GetContractBalanceAtTopoheight, params)
+  getContractBalanceAtTopoheight(params: types.GetContractBalanceAtTopoheightParams) {
+    return this.post<types.GetContractBalanceAtTopoheightResult>(RPCMethod.GetContractBalanceAtTopoheight, params)
   }
 
   getBlockTemplate(address: string) {
-    return this.post<GetBlockTemplateResult>(RPCMethod.GetBlockTemplate, { address })
+    return this.post<types.GetBlockTemplateResult>(RPCMethod.GetBlockTemplate, { address })
   }
 
-  getMinerWork(params: GetMinerWorkParams) {
-    return this.post<GetMinerWorkResult>(RPCMethod.GetMinerWork, params)
+  getMinerWork(params: types.GetMinerWorkParams) {
+    return this.post<types.GetMinerWorkResult>(RPCMethod.GetMinerWork, params)
   }
 
-  submitBlock(params: SubmitBlockParams) {
+  submitBlock(params: types.SubmitBlockParams) {
     return this.post<boolean>(RPCMethod.SubmitBlock, params)
   }
 }

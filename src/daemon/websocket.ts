@@ -1,24 +1,6 @@
 import { MessageEvent } from 'ws'
-
-import {
-  Block, GetInfoResult, RPCEvent, RPCMethod, GetPeersResult,
-  RPCEventResult, TopoheightRangeParams, P2PStatusResult,
-  GetBalanceAtTopoheightParams, GetBalanceResult, HeightRangeParams, BlockOrdered,
-  GetBalanceParams, GetAccountsParams, GetBlockAtTopoheightParams, GetBlockByHashParams,
-  GetBlocksAtHeightParams, GetTopBlockParams, GetNonceParams, GetNonceResult, GetAccountHistoryParams,
-  AccounHistory, Peer, PeerPeerListUpdated, PeerPeerDisconnected, DevFee, DiskSize, AssetWithData, AssetData,
-  GetAssetParams, HasBalanceParams, HasBalanceResult, IsTxExecutedInBlockParams, BlockOrphaned, VersionedBalance,
-  StableHeightChanged, HasNonceResult, HasNonceParams, TransactionResponse,
-  IsAccountRegisteredParams, GetMempoolCacheResult, GetDifficultyResult, ValidateAddressParams,
-  ExtractKeyFromAddressParams, SubmitBlockParams, GetMinerWorkParams, GetMinerWorkResult,
-  ValidateAddressResult, TransactionExecuted, GetStableBalanceResult, GetAssetsParams,
-  SplitAddressParams, SplitAddressResult, HardFork, GetTransactionExecutorResult, GetNonceAtTopoheightParams,
-  VersionedNonce, FeeRatesEstimated, MakeIntegratedAddressParams, DecryptExtraDataParams,
-  HasMultisigAtTopoheightParams, GetMultisigParams, HasMultisigParams, GetMutilsigAtTopoheightParams, GetMutilsigAtTopoheightResult,
-  GetMultisigResult, GetContractOutputsParams, ContractOutput, GetContractModuleParams, GetContractModuleResult,
-  GetContractDataAtTopoheightParams, GetContractBalanceParams, GetContractBalanceResult,
-  GetContractBalanceAtTopoheightParams, GetContractBalanceAtTopoheightResult
-} from './types'
+import { RPCMethod, RPCEvent } from './types'
+import * as types from './types'
 
 import { WS as BaseWS } from '../lib/websocket'
 
@@ -39,55 +21,55 @@ export class DaemonMethods {
     return this.ws.dataCall(this.prefix + method, params)
   }
 
-  onNewBlock(onData: (msgEvent: MessageEvent, data?: Block & RPCEventResult, err?: Error) => void) {
+  onNewBlock(onData: (msgEvent: MessageEvent, data?: types.Block & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.NewBlock, onData)
   }
 
-  onTransactionAddedInMempool(onData: (msgEvent: MessageEvent, data?: TransactionResponse & RPCEventResult, err?: Error) => void) {
+  onTransactionAddedInMempool(onData: (msgEvent: MessageEvent, data?: types.TransactionResponse & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.TransactionAddedInMempool, onData)
   }
 
-  onTransactionExecuted(onData: (msgEvent: MessageEvent, data?: TransactionExecuted & RPCEventResult, err?: Error) => void) {
+  onTransactionExecuted(onData: (msgEvent: MessageEvent, data?: types.TransactionExecuted & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.TransactionExecuted, onData)
   }
 
-  onBlockOrdered(onData: (msgEvent: MessageEvent, data?: BlockOrdered & RPCEventResult, err?: Error) => void) {
+  onBlockOrdered(onData: (msgEvent: MessageEvent, data?: types.BlockOrdered & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.BlockOrdered, onData)
   }
 
-  onPeerConnected(onData: (msgEvent: MessageEvent, data?: Peer & RPCEventResult, err?: Error) => void) {
+  onPeerConnected(onData: (msgEvent: MessageEvent, data?: types.Peer & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.PeerConnected, onData)
   }
 
-  onPeerDisconnected(onData: (msgEvent: MessageEvent, data?: number & RPCEventResult, err?: Error) => void) {
+  onPeerDisconnected(onData: (msgEvent: MessageEvent, data?: number & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.PeerDisconnected, onData)
   }
 
-  onPeerPeerListUpdated(onData: (msgEvent: MessageEvent, data?: PeerPeerListUpdated & RPCEventResult, err?: Error) => void) {
+  onPeerPeerListUpdated(onData: (msgEvent: MessageEvent, data?: types.PeerPeerListUpdated & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.PeerPeerListUpdated, onData)
   }
 
-  onPeerPeerDisconnected(onData: (msgEvent: MessageEvent, data?: PeerPeerDisconnected & RPCEventResult, err?: Error) => void) {
+  onPeerPeerDisconnected(onData: (msgEvent: MessageEvent, data?: types.PeerPeerDisconnected & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.PeerPeerDisconnected, onData)
   }
 
-  onPeerStateUpdated(onData: (msgEvent: MessageEvent, data?: Peer & RPCEventResult, err?: Error) => void) {
+  onPeerStateUpdated(onData: (msgEvent: MessageEvent, data?: types.Peer & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.PeerStateUpdated, onData)
   }
 
-  onNewAsset(onData: (msgEvent: MessageEvent, data?: AssetWithData & RPCEventResult, err?: Error) => void) {
+  onNewAsset(onData: (msgEvent: MessageEvent, data?: types.AssetWithData & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.NewAsset, onData)
   }
 
-  onBlockOrphaned(onData: (msgEvent: MessageEvent, data?: BlockOrphaned & RPCEventResult, err?: Error) => void) {
+  onBlockOrphaned(onData: (msgEvent: MessageEvent, data?: types.BlockOrphaned & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.BlockOrphaned, onData)
   }
 
-  onTransactionOrphaned(onData: (msgEvent: MessageEvent, data?: TransactionResponse & RPCEventResult, err?: Error) => void) {
+  onTransactionOrphaned(onData: (msgEvent: MessageEvent, data?: types.TransactionResponse & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.TransactionOrphaned, onData)
   }
 
-  onStableHeightChanged(onData: (msgEvent: MessageEvent, data?: StableHeightChanged & RPCEventResult, err?: Error) => void) {
+  onStableHeightChanged(onData: (msgEvent: MessageEvent, data?: types.StableHeightChanged & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.StableHeightChanged, onData)
   }
 
@@ -108,11 +90,11 @@ export class DaemonMethods {
   }
 
   getInfo() {
-    return this.dataCall<GetInfoResult>(RPCMethod.GetInfo)
+    return this.dataCall<types.GetInfoResult>(RPCMethod.GetInfo)
   }
 
   getDifficulty() {
-    return this.dataCall<GetDifficultyResult>(RPCMethod.GetDifficulty)
+    return this.dataCall<types.GetDifficultyResult>(RPCMethod.GetDifficulty)
   }
 
   getTips() {
@@ -120,11 +102,11 @@ export class DaemonMethods {
   }
 
   getDevFeeThresholds() {
-    return this.dataCall<DevFee[]>(RPCMethod.GetDevFeeThresholds)
+    return this.dataCall<types.DevFee[]>(RPCMethod.GetDevFeeThresholds)
   }
 
   getSizeOnDisk() {
-    return this.dataCall<DiskSize>(RPCMethod.GetSizeOnDisk)
+    return this.dataCall<types.DiskSize>(RPCMethod.GetSizeOnDisk)
   }
 
   getStableHeight() {
@@ -136,58 +118,58 @@ export class DaemonMethods {
   }
 
   getHardForks() {
-    return this.dataCall<HardFork[]>(RPCMethod.GetHardForks)
+    return this.dataCall<types.HardFork[]>(RPCMethod.GetHardForks)
   }
 
-  getBlockAtTopoheight(params: GetBlockAtTopoheightParams) {
-    return this.dataCall<Block>(RPCMethod.GetBlockAtTopoheight, params)
+  getBlockAtTopoheight(params: types.GetBlockAtTopoheightParams) {
+    return this.dataCall<types.Block>(RPCMethod.GetBlockAtTopoheight, params)
   }
 
-  getBlocksAtHeight(params: GetBlocksAtHeightParams) {
-    return this.dataCall<Block[]>(RPCMethod.GetBlocksAtHeight, params)
+  getBlocksAtHeight(params: types.GetBlocksAtHeightParams) {
+    return this.dataCall<types.Block[]>(RPCMethod.GetBlocksAtHeight, params)
   }
 
-  getBlockByHash(params: GetBlockByHashParams) {
-    return this.dataCall<Block>(RPCMethod.GetBlockByHash, params)
+  getBlockByHash(params: types.GetBlockByHashParams) {
+    return this.dataCall<types.Block>(RPCMethod.GetBlockByHash, params)
   }
 
-  getTopBlock(params: GetTopBlockParams) {
-    return this.dataCall<Block>(RPCMethod.GetTopBlock, params)
+  getTopBlock(params: types.GetTopBlockParams) {
+    return this.dataCall<types.Block>(RPCMethod.GetTopBlock, params)
   }
 
-  getBalance(params: GetBalanceParams) {
-    return this.dataCall<GetBalanceResult>(RPCMethod.GetBalance, params)
+  getBalance(params: types.GetBalanceParams) {
+    return this.dataCall<types.GetBalanceResult>(RPCMethod.GetBalance, params)
   }
 
-  getStableBalance(params: GetBalanceParams) {
-    return this.dataCall<GetStableBalanceResult>(RPCMethod.GetStableBalance, params)
+  getStableBalance(params: types.GetBalanceParams) {
+    return this.dataCall<types.GetStableBalanceResult>(RPCMethod.GetStableBalance, params)
   }
 
-  hasBalance(params: HasBalanceParams) {
-    return this.dataCall<HasBalanceResult>(RPCMethod.HasBalance, params)
+  hasBalance(params: types.HasBalanceParams) {
+    return this.dataCall<types.HasBalanceResult>(RPCMethod.HasBalance, params)
   }
 
-  getBalanceAtTopoheight(params: GetBalanceAtTopoheightParams) {
-    return this.dataCall<VersionedBalance>(RPCMethod.GetBalanceAtTopoheight, params)
+  getBalanceAtTopoheight(params: types.GetBalanceAtTopoheightParams) {
+    return this.dataCall<types.VersionedBalance>(RPCMethod.GetBalanceAtTopoheight, params)
   }
 
-  getNonce(params: GetNonceParams) {
-    return this.dataCall<GetNonceResult>(RPCMethod.GetNonce, params)
+  getNonce(params: types.GetNonceParams) {
+    return this.dataCall<types.GetNonceResult>(RPCMethod.GetNonce, params)
   }
 
-  hasNonce(params: HasNonceParams) {
-    return this.dataCall<HasNonceResult>(RPCMethod.HasNonce, params)
+  hasNonce(params: types.HasNonceParams) {
+    return this.dataCall<types.HasNonceResult>(RPCMethod.HasNonce, params)
   }
 
-  getNonceAtTopoheight(params: GetNonceAtTopoheightParams) {
-    return this.dataCall<VersionedNonce>(RPCMethod.GetNonceAtTopoheight, params)
+  getNonceAtTopoheight(params: types.GetNonceAtTopoheightParams) {
+    return this.dataCall<types.VersionedNonce>(RPCMethod.GetNonceAtTopoheight, params)
   }
 
-  getAsset(params: GetAssetParams) {
-    return this.dataCall<AssetData>(RPCMethod.GetAsset, params)
+  getAsset(params: types.GetAssetParams) {
+    return this.dataCall<types.AssetData>(RPCMethod.GetAsset, params)
   }
 
-  getAssets(params?: GetAssetsParams) {
+  getAssets(params?: types.GetAssetsParams) {
     return this.dataCall<string[]>(RPCMethod.GetAssets, params)
   }
 
@@ -212,66 +194,66 @@ export class DaemonMethods {
   }
 
   getTransactionExecutor(hash: string) {
-    return this.dataCall<GetTransactionExecutorResult>(RPCMethod.GetTransactionExecutor, { hash })
+    return this.dataCall<types.GetTransactionExecutorResult>(RPCMethod.GetTransactionExecutor, { hash })
   }
 
   getTransaction(hash: string) {
-    return this.dataCall<TransactionResponse>(RPCMethod.GetTransaction, { hash })
+    return this.dataCall<types.TransactionResponse>(RPCMethod.GetTransaction, { hash })
   }
 
   getTransactions(txHashes: string[]) {
-    return this.dataCall<TransactionResponse[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
+    return this.dataCall<types.TransactionResponse[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
   }
 
-  isTxExecutedInBlock(params: IsTxExecutedInBlockParams) {
+  isTxExecutedInBlock(params: types.IsTxExecutedInBlockParams) {
     return this.dataCall<boolean>(RPCMethod.IsTxExecutedInBlock, params)
   }
 
   p2pStatus() {
-    return this.dataCall<P2PStatusResult>(RPCMethod.P2PStatus)
+    return this.dataCall<types.P2PStatusResult>(RPCMethod.P2PStatus)
   }
 
   getPeers() {
-    return this.dataCall<GetPeersResult>(RPCMethod.GetPeers)
+    return this.dataCall<types.GetPeersResult>(RPCMethod.GetPeers)
   }
 
   getMemPool() {
-    return this.dataCall<TransactionResponse[]>(RPCMethod.GetMempool)
+    return this.dataCall<types.TransactionResponse[]>(RPCMethod.GetMempool)
   }
 
   getMempoolCache(address: string) {
-    return this.dataCall<GetMempoolCacheResult>(RPCMethod.GetMempoolCache, { address })
+    return this.dataCall<types.GetMempoolCacheResult>(RPCMethod.GetMempoolCache, { address })
   }
 
   getEstimatedFeeRates() {
-    return this.dataCall<FeeRatesEstimated>(RPCMethod.GetEstimatedFeeRates)
+    return this.dataCall<types.FeeRatesEstimated>(RPCMethod.GetEstimatedFeeRates)
   }
 
-  getDAGOrder(params: TopoheightRangeParams) {
+  getDAGOrder(params: types.TopoheightRangeParams) {
     return this.dataCall<string[]>(RPCMethod.GetDAGOrder, params)
   }
 
-  getBlocksRangeByTopoheight(params: TopoheightRangeParams) {
-    return this.dataCall<Block[]>(RPCMethod.GetBlocksRangeByTopoheight, params)
+  getBlocksRangeByTopoheight(params: types.TopoheightRangeParams) {
+    return this.dataCall<types.Block[]>(RPCMethod.GetBlocksRangeByTopoheight, params)
   }
 
-  getBlocksRangeByHeight(params: HeightRangeParams) {
-    return this.dataCall<Block[]>(RPCMethod.GetBlocksRangeByHeight, params)
+  getBlocksRangeByHeight(params: types.HeightRangeParams) {
+    return this.dataCall<types.Block[]>(RPCMethod.GetBlocksRangeByHeight, params)
   }
 
-  getAccountHistory(params: GetAccountHistoryParams) {
-    return this.dataCall<AccounHistory[]>(RPCMethod.GetAccountHistory, params)
+  getAccountHistory(params: types.GetAccountHistoryParams) {
+    return this.dataCall<types.AccounHistory[]>(RPCMethod.GetAccountHistory, params)
   }
 
   getAccountAssets(address: string) {
     return this.dataCall<string[]>(RPCMethod.GetAccountAssets, { address })
   }
 
-  getAccounts(params: GetAccountsParams) {
+  getAccounts(params: types.GetAccountsParams) {
     return this.dataCall<string[]>(RPCMethod.GetAccounts, params)
   }
 
-  isAccountRegistered(params: IsAccountRegisteredParams) {
+  isAccountRegistered(params: types.IsAccountRegisteredParams) {
     return this.dataCall<boolean>(RPCMethod.IsAccountRegistered, params)
   }
 
@@ -279,75 +261,75 @@ export class DaemonMethods {
     return this.dataCall<Number>(RPCMethod.GetAccountRegistrationTopoheight, { address })
   }
 
-  validateAddress(params: ValidateAddressParams) {
-    return this.dataCall<ValidateAddressResult>(RPCMethod.ValidateAddress, params)
+  validateAddress(params: types.ValidateAddressParams) {
+    return this.dataCall<types.ValidateAddressResult>(RPCMethod.ValidateAddress, params)
   }
 
-  splitAddress(params: SplitAddressParams) {
-    return this.dataCall<SplitAddressResult>(RPCMethod.SplitAddress, params)
+  splitAddress(params: types.SplitAddressParams) {
+    return this.dataCall<types.SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
 
-  extractKeyFromAddress(params: ExtractKeyFromAddressParams) {
+  extractKeyFromAddress(params: types.ExtractKeyFromAddressParams) {
     return this.dataCall<string | number[]>(RPCMethod.ExtractKeyFromAddress, params)
   }
 
-  makeIntegratedAddress(params: MakeIntegratedAddressParams) {
+  makeIntegratedAddress(params: types.MakeIntegratedAddressParams) {
     return this.dataCall<string>(RPCMethod.MakeIntegratedAddress, params)
   }
 
-  decryptExtraData(params: DecryptExtraDataParams) {
+  decryptExtraData(params: types.DecryptExtraDataParams) {
     return this.dataCall(RPCMethod.DecryptExtraData, params)
   }
 
-  getMultisigAtTopoheight(params: GetMutilsigAtTopoheightParams) {
-    return this.dataCall<GetMutilsigAtTopoheightResult>(RPCMethod.GetMultisigAtTopoheight, params)
+  getMultisigAtTopoheight(params: types.GetMutilsigAtTopoheightParams) {
+    return this.dataCall<types.GetMutilsigAtTopoheightResult>(RPCMethod.GetMultisigAtTopoheight, params)
   }
 
-  getMultisig(params: GetMultisigParams) {
-    return this.dataCall<GetMultisigResult>(RPCMethod.GetMultisig, params)
+  getMultisig(params: types.GetMultisigParams) {
+    return this.dataCall<types.GetMultisigResult>(RPCMethod.GetMultisig, params)
   }
 
-  hasMultisig(params: HasMultisigParams) {
+  hasMultisig(params: types.HasMultisigParams) {
     return this.dataCall<boolean>(RPCMethod.HasMultisig, params)
   }
 
-  hasMultisigAtTopoheight(params: HasMultisigAtTopoheightParams) {
+  hasMultisigAtTopoheight(params: types.HasMultisigAtTopoheightParams) {
     return this.dataCall<boolean>(RPCMethod.HasMultisigAtTopoheight, params)
   }
 
-  getContractOutputs(params: GetContractOutputsParams) {
-    return this.dataCall<ContractOutput[]>(RPCMethod.GetContractOutputs, params)
+  getContractOutputs(params: types.GetContractOutputsParams) {
+    return this.dataCall<types.ContractOutput[]>(RPCMethod.GetContractOutputs, params)
   }
 
-  getContractModule(params: GetContractModuleParams) {
-    return this.dataCall<GetContractModuleResult>(RPCMethod.GetContractModule, params)
+  getContractModule(params: types.GetContractModuleParams) {
+    return this.dataCall<types.GetContractModuleResult>(RPCMethod.GetContractModule, params)
   }
 
-  getContractData(params: GetContractModuleParams) {
+  getContractData(params: types.GetContractModuleParams) {
     return this.dataCall(RPCMethod.GetContractData, params)
   }
 
-  getContractDataAtTopoheight(params: GetContractDataAtTopoheightParams) {
+  getContractDataAtTopoheight(params: types.GetContractDataAtTopoheightParams) {
     return this.dataCall(RPCMethod.GetContractDataAtTopoheight, params)
   }
 
-  getContractBalance(params: GetContractBalanceParams) {
-    return this.dataCall<GetContractBalanceResult>(RPCMethod.GetContractBalance, params)
+  getContractBalance(params: types.GetContractBalanceParams) {
+    return this.dataCall<types.GetContractBalanceResult>(RPCMethod.GetContractBalance, params)
   }
 
-  getContractBalanceAtTopoheight(params: GetContractBalanceAtTopoheightParams) {
-    return this.dataCall<GetContractBalanceAtTopoheightResult>(RPCMethod.GetContractBalanceAtTopoheight, params)
+  getContractBalanceAtTopoheight(params: types.GetContractBalanceAtTopoheightParams) {
+    return this.dataCall<types.GetContractBalanceAtTopoheightResult>(RPCMethod.GetContractBalanceAtTopoheight, params)
   }
 
   getBlockTemplate(address: string) {
     return this.dataCall<string>(RPCMethod.GetBlockTemplate, { address })
   }
 
-  getMinerWork(params: GetMinerWorkParams) {
-    return this.dataCall<GetMinerWorkResult>(RPCMethod.GetMinerWork, params)
+  getMinerWork(params: types.GetMinerWorkParams) {
+    return this.dataCall<types.GetMinerWorkResult>(RPCMethod.GetMinerWork, params)
   }
 
-  submitBlock(params: SubmitBlockParams) {
+  submitBlock(params: types.SubmitBlockParams) {
     return this.dataCall<boolean>(RPCMethod.SubmitBlock, params)
   }
 }
