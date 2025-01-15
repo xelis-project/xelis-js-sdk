@@ -1,13 +1,10 @@
 import { WS as BaseWS } from '../lib/websocket'
 import { MessageEvent } from 'ws'
 
-import { AssetWithData, GetAssetParams, RPCEventResult, SplitAddressParams, SplitAddressResult } from '../daemon/types'
-
-import {
-  BuildTransactionParams, BuildTransactionResult, GetAddressParams,
-  ListTransactionParams, RPCMethod, Signature, RescanParams, SetOnlineModeParams, EstimateFeesParams,
-  RPCEvent, TransactionEntry, BalanceChangedResult, NewTopoheightResult, RescanResult
-} from './types'
+import { RPCEventResult } from '../daemon/types'
+import * as daemonTypes from '../daemon/types'
+import { RPCMethod, RPCEvent } from './types'
+import * as types from './types'
 
 export class WalletMethods {
   ws: BaseWS
@@ -22,23 +19,23 @@ export class WalletMethods {
     return this.ws.dataCall(this.prefix + method, params)
   }
 
-  onNewTopoheight(onData: (msgEvent: MessageEvent, data?: NewTopoheightResult & RPCEventResult, err?: Error) => void) {
+  onNewTopoheight(onData: (msgEvent: MessageEvent, data?: types.NewTopoheightResult & RPCEventResult, err?: Error) => void) {
     return this.ws.listenEvent(RPCEvent.NewTopoheight, onData)
   }
 
-  onNewAsset(onData: (msgEvent: MessageEvent, data?: AssetWithData & RPCEventResult, err?: Error) => void) {
+  onNewAsset(onData: (msgEvent: MessageEvent, data?: daemonTypes.AssetWithData & RPCEventResult, err?: Error) => void) {
     return this.ws.listenEvent(RPCEvent.NewAsset, onData)
   }
 
-  onNewTransaction(onData: (msgEvent: MessageEvent, data?: TransactionEntry & RPCEventResult, err?: Error) => void) {
+  onNewTransaction(onData: (msgEvent: MessageEvent, data?: types.TransactionEntry & RPCEventResult, err?: Error) => void) {
     return this.ws.listenEvent(RPCEvent.NewTransaction, onData)
   }
 
-  onBalanceChanged(onData: (msgEvent: MessageEvent, data?: BalanceChangedResult & RPCEventResult, err?: Error) => void) {
+  onBalanceChanged(onData: (msgEvent: MessageEvent, data?: types.BalanceChangedResult & RPCEventResult, err?: Error) => void) {
     return this.ws.listenEvent(RPCEvent.BalanceChanged, onData)
   }
 
-  onRescan(onData: (msgEvent: MessageEvent, data?: RescanResult & RPCEventResult, err?: Error) => void) {
+  onRescan(onData: (msgEvent: MessageEvent, data?: types.RescanResult & RPCEventResult, err?: Error) => void) {
     return this.ws.listenEvent(RPCEvent.Rescan, onData)
   }
 
@@ -66,15 +63,15 @@ export class WalletMethods {
     return this.dataCall<number>(RPCMethod.GetTopoheight)
   }
 
-  getAddress(params: GetAddressParams = {}) {
+  getAddress(params: types.GetAddressParams = {}) {
     return this.dataCall<string>(RPCMethod.GetAddress, params)
   }
 
-  splitAddress(params: SplitAddressParams) {
-    return this.dataCall<SplitAddressResult>(RPCMethod.SplitAddress, params)
+  splitAddress(params: daemonTypes.SplitAddressParams) {
+    return this.dataCall<daemonTypes.SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
 
-  rescan(params: RescanParams) {
+  rescan(params: types.RescanParams) {
     return this.dataCall<boolean>(RPCMethod.Rescan, params)
   }
 
@@ -86,20 +83,20 @@ export class WalletMethods {
     return this.dataCall<string[]>(RPCMethod.GetTrackedAssets)
   }
 
-  getAssetPrecision(params: GetAssetParams) {
+  getAssetPrecision(params: daemonTypes.GetAssetParams) {
     return this.dataCall<number>(RPCMethod.GetAssetPrecision, params)
   }
 
   getTransaction(hash: string) {
-    return this.dataCall<TransactionEntry>(RPCMethod.GetTransaction, { hash })
+    return this.dataCall<types.TransactionEntry>(RPCMethod.GetTransaction, { hash })
   }
 
-  buildTransaction(params: BuildTransactionParams) {
-    return this.dataCall<BuildTransactionResult>(RPCMethod.BuildTransaction, params)
+  buildTransaction(params: types.BuildTransactionParams) {
+    return this.dataCall<types.BuildTransactionResult>(RPCMethod.BuildTransaction, params)
   }
 
-  listTransactions(params?: ListTransactionParams) {
-    return this.dataCall<TransactionEntry[]>(RPCMethod.GetTransaction, params)
+  listTransactions(params?: types.ListTransactionParams) {
+    return this.dataCall<types.TransactionEntry[]>(RPCMethod.GetTransaction, params)
   }
 
   isOnline() {
@@ -107,14 +104,14 @@ export class WalletMethods {
   }
 
   signData(data: any) {
-    return this.dataCall<Signature>(RPCMethod.SignData, data)
+    return this.dataCall<types.Signature>(RPCMethod.SignData, data)
   }
 
-  estimateFees(params: EstimateFeesParams) {
+  estimateFees(params: types.EstimateFeesParams) {
     return this.dataCall<number>(RPCMethod.EstimateFees, params)
   }
 
-  setOnlineMode(params: SetOnlineModeParams) {
+  setOnlineMode(params: types.SetOnlineModeParams) {
     return this.dataCall<boolean>(RPCMethod.SetOfflineMode, params)
   }
 

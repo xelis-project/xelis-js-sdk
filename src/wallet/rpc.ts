@@ -1,11 +1,8 @@
 import { Base64 } from 'js-base64'
 
-import { GetAssetParams, HasBalanceResult, SplitAddressParams, SplitAddressResult } from '../daemon/types'
-
-import {
-  RPCMethod, GetAddressParams, BuildTransactionParams, BuildTransactionResult, ListTransactionParams,
-  Signature, TransactionEntry, RescanParams, SetOnlineModeParams, EstimateFeesParams
-} from './types'
+import * as daemonTypes from '../daemon/types'
+import { RPCMethod } from './types'
+import * as types from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
 import { RPCResponse } from '../lib/types'
@@ -41,15 +38,15 @@ export class RPC extends BaseRPC {
     return this.post<number>(RPCMethod.GetTopoheight)
   }
 
-  getAddress(params: GetAddressParams = {}) {
+  getAddress(params: types.GetAddressParams = {}) {
     return this.post<string>(RPCMethod.GetAddress, params)
   }
 
-  splitAddress(params: SplitAddressParams) {
-    return this.post<SplitAddressResult>(RPCMethod.SplitAddress, params)
+  splitAddress(params: daemonTypes.SplitAddressParams) {
+    return this.post<daemonTypes.SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
 
-  rescan(params: RescanParams) {
+  rescan(params: types.RescanParams) {
     return this.post<boolean>(RPCMethod.Rescan, params)
   }
 
@@ -58,27 +55,27 @@ export class RPC extends BaseRPC {
   }
 
   hasBalance(asset?: string) {
-    return this.post<HasBalanceResult>(RPCMethod.HasBalance, { asset })
+    return this.post<daemonTypes.HasBalanceResult>(RPCMethod.HasBalance, { asset })
   }
 
   getTrackedAssets() {
     return this.post<string[]>(RPCMethod.GetTrackedAssets)
   }
 
-  getAssetPrecision(params: GetAssetParams) {
+  getAssetPrecision(params: daemonTypes.GetAssetParams) {
     return this.post<number>(RPCMethod.GetAssetPrecision, params)
   }
 
   getTransaction(hash: string) {
-    return this.post<TransactionEntry>(RPCMethod.GetTransaction, { hash })
+    return this.post<types.TransactionEntry>(RPCMethod.GetTransaction, { hash })
   }
 
-  buildTransaction(params: BuildTransactionParams) {
-    return this.post<BuildTransactionResult>(RPCMethod.BuildTransaction, params)
+  buildTransaction(params: types.BuildTransactionParams) {
+    return this.post<types.BuildTransactionResult>(RPCMethod.BuildTransaction, params)
   }
 
-  listTransactions(params?: ListTransactionParams) {
-    return this.post<TransactionEntry[]>(RPCMethod.ListTransactions, params)
+  listTransactions(params?: types.ListTransactionParams) {
+    return this.post<types.TransactionEntry[]>(RPCMethod.ListTransactions, params)
   }
 
   isOnline() {
@@ -86,14 +83,14 @@ export class RPC extends BaseRPC {
   }
 
   signData(data: any) {
-    return this.post<Signature>(RPCMethod.SignData, data)
+    return this.post<types.Signature>(RPCMethod.SignData, data)
   }
 
-  estimateFees(params: EstimateFeesParams) {
+  estimateFees(params: types.EstimateFeesParams) {
     return this.post<number>(RPCMethod.EstimateFees, params)
   }
 
-  setOnlineMode(params: SetOnlineModeParams) {
+  setOnlineMode(params: types.SetOnlineModeParams) {
     return this.post<boolean>(RPCMethod.SetOnlineMode, params)
   }
 
