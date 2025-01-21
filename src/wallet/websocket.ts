@@ -77,11 +77,13 @@ export class WalletMethods {
     return this.dataCall<boolean>(RPCMethod.Rescan, params)
   }
 
-  getBalance(asset?: string) {
+  getBalance(asset: string) {
     return this.dataCall<number>(RPCMethod.GetBalance, { asset })
   }
 
-  // TODO: hasBalance
+  hasBalance(asset: string) {
+    return this.dataCall<daemonTypes.HasBalanceResult>(RPCMethod.HasBalance, { asset })
+  }
 
   getTrackedAssets() {
     return this.dataCall<string[]>(RPCMethod.GetTrackedAssets)
