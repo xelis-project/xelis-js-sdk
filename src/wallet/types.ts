@@ -94,13 +94,6 @@ export interface TransferIn {
   extra_data?: PlaintextExtraData | null
 }
 
-export interface TransactionResponse extends daemonTypes.Transaction {
-  blocks: string[]
-  executed_in_block: string
-  in_mempool: boolean
-  first_seen?: number // in seconds
-}
-
 export interface Incoming {
   from: string
   transfers: TransferIn[]

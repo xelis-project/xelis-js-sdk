@@ -578,6 +578,13 @@ export type ContractOutput =
   | ContractOutputExitCode
   | ContractOutputRefundDeposits
 
+export interface TransactionResponse extends Transaction {
+  blocks: string[]
+  executed_in_block: string
+  in_mempool: boolean
+  first_seen?: number // in seconds
+}
+
 export enum RPCMethod {
   GetVersion = "get_version",
   GetHeight = "get_height",
