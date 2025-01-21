@@ -39,6 +39,8 @@ export class WalletMethods {
     return this.ws.listenEvent(RPCEvent.Rescan, onData)
   }
 
+  // TODO: HistorySynced
+
   onOnline(onData: (msgEvent: MessageEvent, data?: RPCEventResult, err?: Error) => void) {
     return this.ws.listenEvent(RPCEvent.Online, onData)
   }
@@ -79,6 +81,8 @@ export class WalletMethods {
     return this.dataCall<number>(RPCMethod.GetBalance, { asset })
   }
 
+  // TODO: hasBalance
+
   getTrackedAssets() {
     return this.dataCall<string[]>(RPCMethod.GetTrackedAssets)
   }
@@ -103,6 +107,10 @@ export class WalletMethods {
     return this.dataCall<types.BuildTransactionResult>(RPCMethod.BuildTransaction, params)
   }
 
+  // TODO: buildTransactionOffline
+  // TODO: buildUnsignedTransaction
+  // TODO: finalizeUnsignedTransaction
+
   clearTxCache() {
     return this.dataCall<boolean>(RPCMethod.ClearTxCache)
   }
@@ -113,6 +121,14 @@ export class WalletMethods {
 
   isOnline() {
     return this.dataCall<boolean>(RPCMethod.IsOnline)
+  }
+
+  setOnlineMode(params: types.SetOnlineModeParams) {
+    return this.dataCall<boolean>(RPCMethod.SetOfflineMode, params)
+  }
+
+  setOfflineMode() {
+    return this.dataCall<boolean>(RPCMethod.SetOfflineMode)
   }
 
   signData(data: any) {
@@ -139,13 +155,14 @@ export class WalletMethods {
     return this.dataCall<number>(RPCMethod.DecryptCiphertext, params)
   }
 
-  setOnlineMode(params: types.SetOnlineModeParams) {
-    return this.dataCall<boolean>(RPCMethod.SetOfflineMode, params)
-  }
-
-  setOfflineMode() {
-    return this.dataCall<boolean>(RPCMethod.SetOfflineMode)
-  }
+  // TODO: getMatchingKeys
+  // TODO: countMatchingEntries
+  // TODO: getValueFromKey
+  // TODO: store
+  // TODO: delete
+  // TODO: deleteTreeEntries
+  // TODO: hasKey
+  // TODO: queryDB
 }
 
 export class WS extends BaseWS {
