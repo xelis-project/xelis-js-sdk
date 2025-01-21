@@ -585,6 +585,11 @@ export interface TransactionResponse extends Transaction {
   first_seen?: number // in seconds
 }
 
+export interface StableTopoHeightChanged {
+  previous_stable_topoheight: number
+  new_stable_topoheight: number
+}
+
 export enum RPCMethod {
   GetVersion = "get_version",
   GetHeight = "get_height",

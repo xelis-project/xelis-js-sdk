@@ -37,7 +37,9 @@ export class DaemonMethods {
     return this.listenEvent(RPCEvent.StableHeightChanged, onData)
   }
 
-  // TODO: StableTopoHeightChanged
+  onStableTopoHeightChanged(onData: (msgEvent: MessageEvent, data?: types.StableTopoHeightChanged & types.RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.StableTopoHeightChanged, onData);
+  }
 
   onTransactionOrphaned(onData: (msgEvent: MessageEvent, data?: types.TransactionResponse & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.TransactionOrphaned, onData)
