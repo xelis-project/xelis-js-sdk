@@ -20,35 +20,35 @@ export class WalletMethods {
   }
 
   onNewTopoheight(onData: (msgEvent: MessageEvent, data?: types.NewTopoheightResult & RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(RPCEvent.NewTopoheight, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.NewTopoheight, onData)
   }
 
   onNewAsset(onData: (msgEvent: MessageEvent, data?: daemonTypes.AssetWithData & RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(RPCEvent.NewAsset, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.NewAsset, onData)
   }
 
   onNewTransaction(onData: (msgEvent: MessageEvent, data?: types.TransactionEntry & RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(RPCEvent.NewTransaction, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.NewTransaction, onData)
   }
 
   onBalanceChanged(onData: (msgEvent: MessageEvent, data?: types.BalanceChangedResult & RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(RPCEvent.BalanceChanged, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.BalanceChanged, onData)
   }
 
   onRescan(onData: (msgEvent: MessageEvent, data?: types.RescanResult & RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(RPCEvent.Rescan, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.Rescan, onData)
   }
 
   onHistorySynced(onData: (msgEvent: MessageEvent, data?: types.HistorySyncedResult & RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(RPCEvent.HistorySynced, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.HistorySynced, onData)
   }
 
   onOnline(onData: (msgEvent: MessageEvent, data?: RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(RPCEvent.Online, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.Online, onData)
   }
 
   onOffline(onData: (msgEvent: MessageEvent, data?: RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(RPCEvent.Offline, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.Offline, onData)
   }
 
   getVersion() {

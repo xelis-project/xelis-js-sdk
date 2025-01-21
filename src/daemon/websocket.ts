@@ -2,7 +2,7 @@ import { MessageEvent } from 'ws'
 import { RPCMethod, RPCEvent } from './types'
 import * as types from './types'
 
-import { WS as BaseWS } from '../lib/websocket'
+import { WS as BaseWS, EventKey } from '../lib/websocket'
 
 export class DaemonMethods {
   ws: BaseWS
@@ -13,77 +13,72 @@ export class DaemonMethods {
     this.prefix = prefix
   }
 
-  async listenEvent<T>(event: string, onData: (msgEvent: MessageEvent, data?: T, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + event, onData)
-  }
-
   dataCall<T>(method: string, params?: any): Promise<T> {
     return this.ws.dataCall(this.prefix + method, params)
   }
 
   onNewBlock(onData: (msgEvent: MessageEvent, data?: types.Block & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.NewBlock, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.NewBlock, onData)
   }
 
   onBlockOrdered(onData: (msgEvent: MessageEvent, data?: types.BlockOrdered & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.BlockOrdered, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.BlockOrdered, onData)
   }
 
   onBlockOrphaned(onData: (msgEvent: MessageEvent, data?: types.BlockOrphaned & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.BlockOrphaned, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.BlockOrphaned, onData)
   }
 
   onStableHeightChanged(onData: (msgEvent: MessageEvent, data?: types.StableHeightChanged & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.StableHeightChanged, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.StableHeightChanged, onData)
   }
 
   onStableTopoHeightChanged(onData: (msgEvent: MessageEvent, data?: types.StableTopoHeightChanged & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.StableTopoHeightChanged, onData);
+    return this.ws.listenEvent(this.prefix + RPCEvent.StableTopoHeightChanged, onData);
   }
 
   onTransactionOrphaned(onData: (msgEvent: MessageEvent, data?: types.TransactionResponse & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.TransactionOrphaned, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.TransactionOrphaned, onData)
   }
 
   onTransactionAddedInMempool(onData: (msgEvent: MessageEvent, data?: types.TransactionResponse & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.TransactionAddedInMempool, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.TransactionAddedInMempool, onData)
   }
 
   onTransactionExecuted(onData: (msgEvent: MessageEvent, data?: types.TransactionExecuted & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.TransactionExecuted, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.TransactionExecuted, onData)
   }
 
-  // TODO: pass params
-  onInvokeContract(onData: (msgEvent: MessageEvent, data?: types.InvokeContract & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.InvokeContract, onData)
+  onInvokeContract(contract: string, onData: (msgEvent: MessageEvent, data?: types.InvokeContract & types.RPCEventResult, err?: Error) => void) {
+    return this.ws.listenEvent({ [this.prefix + RPCEvent.InvokeContract]: { contract } }, onData)
   }
 
   onDeployContract(onData: (msgEvent: MessageEvent, data?: types.NewContract & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.DeployContract, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.DeployContract, onData)
   }
 
   onNewAsset(onData: (msgEvent: MessageEvent, data?: types.AssetWithData & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.NewAsset, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.NewAsset, onData)
   }
 
   onPeerConnected(onData: (msgEvent: MessageEvent, data?: types.Peer & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.PeerConnected, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.PeerConnected, onData)
   }
 
   onPeerDisconnected(onData: (msgEvent: MessageEvent, data?: number & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.PeerDisconnected, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.PeerDisconnected, onData)
   }
 
   onPeerStateUpdated(onData: (msgEvent: MessageEvent, data?: types.Peer & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.PeerStateUpdated, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.PeerStateUpdated, onData)
   }
 
   onPeerPeerListUpdated(onData: (msgEvent: MessageEvent, data?: types.PeerPeerListUpdated & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.PeerPeerListUpdated, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.PeerPeerListUpdated, onData)
   }
 
   onPeerPeerDisconnected(onData: (msgEvent: MessageEvent, data?: types.PeerPeerDisconnected & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.PeerPeerDisconnected, onData)
+    return this.ws.listenEvent(this.prefix + RPCEvent.PeerPeerDisconnected, onData)
   }
 
   getVersion() {
