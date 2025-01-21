@@ -157,14 +157,37 @@ export class WalletMethods {
     return this.dataCall<number>(RPCMethod.DecryptCiphertext, params)
   }
 
-  // TODO: getMatchingKeys
-  // TODO: countMatchingEntries
-  // TODO: getValueFromKey
-  // TODO: store
-  // TODO: delete
-  // TODO: deleteTreeEntries
-  // TODO: hasKey
-  // TODO: queryDB
+  getMatchingKeys(params: types.GetMatchingKeysParams) {
+    return this.dataCall<any>(RPCMethod.GetMatchingKeys, params)
+  }
+
+  countMatchingEntries(params: types.CountMatchingKeysParams) {
+    return this.dataCall<number>(RPCMethod.CountMatchingEntries, params)
+  }
+
+  getValueFromKey(params: types.GetValueFromKeyParams) {
+    return this.dataCall<any>(RPCMethod.GetValueFromKey, params)
+  }
+
+  store(params: types.StoreParams) {
+    return this.dataCall<boolean>(RPCMethod.Store, params)
+  }
+
+  delete(params: types.DeleteParams) {
+    return this.dataCall<boolean>(RPCMethod.Delete, params)
+  }
+
+  deleteTreeEntries(tree: string) {
+    return this.dataCall<boolean>(RPCMethod.DeleteTreeEntries, { tree })
+  }
+
+  hasKey(params: types.HasKeyParams) {
+    return this.dataCall<boolean>(RPCMethod.HasKey, params)
+  }
+
+  queryDB(params: types.QueryDBParams) {
+    return this.dataCall<types.QueryResult>(RPCMethod.QueryDB, params)
+  }
 }
 
 export class WS extends BaseWS {

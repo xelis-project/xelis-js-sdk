@@ -130,14 +130,37 @@ export class RPC extends BaseRPC {
     return this.post<number>(RPCMethod.DecryptCiphertext, params)
   }
 
-  // TODO: getMatchingKeys
-  // TODO: countMatchingEntries
-  // TODO: getValueFromKey
-  // TODO: store
-  // TODO: delete
-  // TODO: deleteTreeEntries
-  // TODO: hasKey
-  // TODO: queryDB
+  getMatchingKeys(params: types.GetMatchingKeysParams) {
+    return this.post<any>(RPCMethod.GetMatchingKeys, params)
+  }
+
+  countMatchingEntries(params: types.CountMatchingKeysParams) {
+    return this.post<number>(RPCMethod.CountMatchingEntries, params)
+  }
+
+  getValueFromKey(params: types.GetValueFromKeyParams) {
+    return this.post<any>(RPCMethod.GetValueFromKey, params)
+  }
+
+  store(params: types.StoreParams) {
+    return this.post<boolean>(RPCMethod.Store, params)
+  }
+
+  delete(params: types.DeleteParams) {
+    return this.post<boolean>(RPCMethod.Delete, params)
+  }
+
+  deleteTreeEntries(tree: string) {
+    return this.post<boolean>(RPCMethod.DeleteTreeEntries, { tree })
+  }
+
+  hasKey(params: types.HasKeyParams) {
+    return this.post<boolean>(RPCMethod.HasKey, params)
+  }
+
+  queryDB(params: types.QueryDBParams) {
+    return this.post<types.QueryResult>(RPCMethod.QueryDB, params)
+  }
 }
 
 export default RPC

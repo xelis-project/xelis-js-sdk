@@ -187,6 +187,109 @@ export interface DecryptCiphertextParams {
   ciphertext: CompressedCiphertext
 }
 
+export interface GetMatchingKeysParams {
+  tree: string
+  query?: Query
+}
+
+export interface CountMatchingKeysParams {
+  tree: string
+  key?: Query
+  value?: Query
+}
+
+export interface GetValueFromKeyParams {
+  tree: string
+  key: any
+}
+
+export interface StoreParams {
+  tree: string
+  key: any
+  value: any
+}
+
+export interface DeleteParams {
+  tree: string
+  key: any
+}
+
+export interface HasKeyParams {
+  tree: string
+  key: any
+}
+
+export interface QueryDBParams {
+  tree: string
+  key?: Query
+  value?: Query
+  return_on_first: boolean
+}
+
+export interface QueryResult {
+  entries: { [key: string]: any }
+  next?: number
+}
+
+export enum ValueType {
+  Bool = 0,
+  String = 1,
+  U8 = 2,
+  U16 = 3,
+  U32 = 4,
+  U64 = 5,
+  U128 = 6,
+  Hash = 7,
+  Blob = 8
+}
+
+export enum ElementType {
+  Value = 0,
+  Array = 1,
+  Fields = 2
+}
+
+export interface QueryAtKey {
+  key: any
+  query?: Query
+}
+
+export interface QueryNumber {
+  greater?: number
+  greater_or_equal?: number
+  lesser?: number
+  lesser_or_equal?: number
+}
+
+export interface QueryPosition {
+  position: number
+  query?: Query
+}
+
+export interface QueryElement {
+  has_key?: QueryAtKey
+  at_key?: QueryAtKey
+  len?: QueryNumber
+  contains_element?: any
+  at_position?: QueryPosition
+  element_type?: ElementType
+}
+
+export interface QueryValue extends QueryNumber {
+  equal?: any
+  starts_with?: any
+  ends_width?: any
+  contains_value?: any
+  is_of_type?: ValueType
+  matches?: string
+}
+
+export interface Query extends QueryValue, QueryElement {
+  not?: Query
+  and?: Query[]
+  or?: Query[]
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetNetwork = 'get_network',
