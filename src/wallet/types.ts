@@ -231,6 +231,10 @@ export interface FinalizeUnsignedTransactionParams {
   tx_as_hex: boolean
 }
 
+export interface HistorySyncedResult {
+  topoheight: number
+}
+
 export interface GetMatchingKeysParams {
   tree: string
   query?: Query

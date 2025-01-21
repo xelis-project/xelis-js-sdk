@@ -39,7 +39,9 @@ export class WalletMethods {
     return this.ws.listenEvent(RPCEvent.Rescan, onData)
   }
 
-  // TODO: HistorySynced
+  onHistorySynced(onData: (msgEvent: MessageEvent, data?: types.HistorySyncedResult & RPCEventResult, err?: Error) => void) {
+    return this.ws.listenEvent(RPCEvent.HistorySynced, onData)
+  }
 
   onOnline(onData: (msgEvent: MessageEvent, data?: RPCEventResult, err?: Error) => void) {
     return this.ws.listenEvent(RPCEvent.Online, onData)
