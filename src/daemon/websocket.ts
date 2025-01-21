@@ -58,7 +58,9 @@ export class DaemonMethods {
     return this.listenEvent(RPCEvent.InvokeContract, onData)
   }
 
-  // TODO: DeployContract
+  onDeployContract(onData: (msgEvent: MessageEvent, data?: types.NewContract & types.RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.DeployContract, onData)
+  }
 
   onNewAsset(onData: (msgEvent: MessageEvent, data?: types.AssetWithData & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.NewAsset, onData)

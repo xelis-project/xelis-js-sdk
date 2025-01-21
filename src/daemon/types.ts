@@ -600,6 +600,12 @@ export interface InvokeContract {
   contract_outputs: ContractOutput[]
 }
 
+export interface NewContract {
+  contract: string
+  block_hash: string
+  topoheight: number
+}
+
 export enum RPCMethod {
   GetVersion = "get_version",
   GetHeight = "get_height",
