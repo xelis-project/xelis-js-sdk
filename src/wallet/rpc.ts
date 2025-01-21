@@ -79,12 +79,24 @@ export class RPC extends BaseRPC {
   }
 
   buildTransaction(params: types.BuildTransactionParams) {
-    return this.post<types.BuildTransactionResult>(RPCMethod.BuildTransaction, params)
+    return this.post<types.TransactionResponse>(RPCMethod.BuildTransaction, params)
   }
 
-  // TODO: buildTransactionOffline
-  // TODO: buildUnsignedTransaction
-  // TODO: finalizeUnsignedTransaction
+  buildTransactionOffline(params: types.BuildTransactionOfflineParams) {
+    return this.post<types.TransactionResponse>(RPCMethod.BuildTransactionOffline, params)
+  }
+
+  buildUnsignedTransaction(params: types.BuildTransactionParams) {
+    return this.post<types.UnsignedTransactionResponse>(RPCMethod.BuildUnsignedTransaction, params)
+  }
+
+  signUnsignedTransaction(params: types.SignUnsignedTransactionParams) {
+    return this.post<types.SignatureId>(RPCMethod.SignUnsignedTransaction, params)
+  }
+
+  finalizeUnsignedTransaction(params: types.FinalizeUnsignedTransactionParams) {
+    return this.post<types.TransactionResponse>(RPCMethod.FinalizeUnsignedTransaction, params)
+  }
 
   clearTxCache() {
     return this.post<boolean>(RPCMethod.ClearTxCache)

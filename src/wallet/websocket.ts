@@ -106,12 +106,24 @@ export class WalletMethods {
   }
 
   buildTransaction(params: types.BuildTransactionParams) {
-    return this.dataCall<types.BuildTransactionResult>(RPCMethod.BuildTransaction, params)
+    return this.dataCall<types.TransactionResponse>(RPCMethod.BuildTransaction, params)
   }
 
-  // TODO: buildTransactionOffline
-  // TODO: buildUnsignedTransaction
-  // TODO: finalizeUnsignedTransaction
+  buildTransactionOffline(params: types.BuildTransactionOfflineParams) {
+    return this.dataCall<types.TransactionResponse>(RPCMethod.BuildTransactionOffline, params)
+  }
+
+  buildUnsignedTransaction(params: types.BuildTransactionParams) {
+    return this.dataCall<types.UnsignedTransactionResponse>(RPCMethod.BuildUnsignedTransaction, params)
+  }
+
+  signUnsignedTransaction(params: types.SignUnsignedTransactionParams) {
+    return this.dataCall<types.SignatureId>(RPCMethod.SignUnsignedTransaction, params)
+  }
+
+  finalizeUnsignedTransaction(params: types.FinalizeUnsignedTransactionParams) {
+    return this.dataCall<types.TransactionResponse>(RPCMethod.FinalizeUnsignedTransaction, params)
+  }
 
   clearTxCache() {
     return this.dataCall<boolean>(RPCMethod.ClearTxCache)

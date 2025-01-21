@@ -53,8 +53,40 @@ export interface BuildTransactionParams {
   signers?: SignerId[]
 }
 
-export interface BuildTransactionResult extends daemonTypes.Transaction {
+export interface BuildTransactionOfflineParams extends BuildTransactionParams {
+  nonce: number
+  reference: daemonTypes.Reference
+}
+
+export interface TransactionResponse extends daemonTypes.Transaction {
   txt_as_hex?: string
+}
+
+export interface SignatureId {
+  id: number
+  signature: string
+}
+
+export interface MultiSig {
+  signatures: { [id: number]: SignatureId }
+}
+
+export interface UnsignedTransaction {
+  version: number
+  source: string
+  data: daemonTypes.TransactionData
+  fee: number
+  nonce: number
+  source_commitments: daemonTypes.SourceCommitment[]
+  reference: daemonTypes.Reference
+  range_proof: number[]
+  multisig?: MultiSig
+}
+
+export interface UnsignedTransactionResponse extends UnsignedTransaction {
+  hash: string
+  threshold: number
+  tx_as_hex?: string
 }
 
 export interface ListTransactionParams {
@@ -187,6 +219,18 @@ export interface DecryptCiphertextParams {
   ciphertext: CompressedCiphertext
 }
 
+export interface SignUnsignedTransactionParams {
+  hash: string
+  signer_id: number
+}
+
+export interface FinalizeUnsignedTransactionParams {
+  unsigned: string
+  signatures: SignatureId[]
+  broadcast: boolean
+  tx_as_hex: boolean
+}
+
 export interface GetMatchingKeysParams {
   tree: string
   query?: Query
@@ -306,9 +350,10 @@ export enum RPCMethod {
   GetAsset = 'get_asset',
   GetTransaction = 'get_transaction',
   BuildTransaction = 'build_transaction',
-  BuildTransactionOffline = 'build_transaction_offline', // TODO
-  BuildUnsignedTransaction = 'build_unsigned_transaction', // TODO
-  FinalizeUnsignedTransaction = 'finalize_unsigned_transaction', // TODO
+  BuildTransactionOffline = 'build_transaction_offline',
+  BuildUnsignedTransaction = 'build_unsigned_transaction',
+  SignUnsignedTransaction = 'sign_unsigned_transaction',
+  FinalizeUnsignedTransaction = 'finalize_unsigned_transaction',
   ClearTxCache = 'clear_tx_cache',
   ListTransactions = 'list_transactions',
   IsOnline = 'is_online',
@@ -320,14 +365,14 @@ export enum RPCMethod {
   NetworkInfo = 'network_info',
   DecryptExtraData = 'decrypt_extra_data',
   DecryptCiphertext = 'decrypt_ciphertext',
-  GetMatchingKeys = 'get_matching_keys', // TODO
-  CountMatchingEntries = 'count_matching_entries', // TODO
-  GetValueFromKey = 'get_value_from_key', // TODO
-  Store = 'store', // TODO
-  Delete = 'delete', // TODO
-  DeleteTreeEntries = 'delete_tree_entries', // TODO
-  HasKey = 'has_key', // TODO
-  QueryDB = 'query_db' // TODO
+  GetMatchingKeys = 'get_matching_keys',
+  CountMatchingEntries = 'count_matching_entries',
+  GetValueFromKey = 'get_value_from_key',
+  Store = 'store',
+  Delete = 'delete',
+  DeleteTreeEntries = 'delete_tree_entries',
+  HasKey = 'has_key',
+  QueryDB = 'query_db'
 }
 
 export enum RPCEvent {
