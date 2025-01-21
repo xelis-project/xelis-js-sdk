@@ -82,6 +82,10 @@ export class RPC extends BaseRPC {
     return this.post<types.BuildTransactionResult>(RPCMethod.BuildTransaction, params)
   }
 
+  // TODO: buildTransactionOffline
+  // TODO: buildUnsignedTransaction
+  // TODO: finalizeUnsignedTransaction
+
   clearTxCache() {
     return this.post<boolean>(RPCMethod.ClearTxCache)
   }
@@ -92,6 +96,14 @@ export class RPC extends BaseRPC {
 
   isOnline() {
     return this.post<boolean>(RPCMethod.IsOnline)
+  }
+
+  setOnlineMode(params: types.SetOnlineModeParams) {
+    return this.post<boolean>(RPCMethod.SetOnlineMode, params)
+  }
+
+  setOfflineMode() {
+    return this.post<boolean>(RPCMethod.SetOfflineMode)
   }
 
   signData(data: any) {
@@ -118,13 +130,14 @@ export class RPC extends BaseRPC {
     return this.post<number>(RPCMethod.DecryptCiphertext, params)
   }
 
-  setOnlineMode(params: types.SetOnlineModeParams) {
-    return this.post<boolean>(RPCMethod.SetOnlineMode, params)
-  }
-
-  setOfflineMode() {
-    return this.post<boolean>(RPCMethod.SetOfflineMode)
-  }
+  // TODO: getMatchingKeys
+  // TODO: countMatchingEntries
+  // TODO: getValueFromKey
+  // TODO: store
+  // TODO: delete
+  // TODO: deleteTreeEntries
+  // TODO: hasKey
+  // TODO: queryDB
 }
 
 export default RPC
