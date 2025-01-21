@@ -12,6 +12,9 @@ interface EventData {
   unsubscribeTimeoutId?: any
 }
 
+export type EventWithParams = { [event: string]: {} }
+export type EventKey = string | EventWithParams
+
 export class WS {
   endpoint: string
   socket?: WebSocket
@@ -24,12 +27,12 @@ export class WS {
   connectionTries = 0
   methodIdIncrement = 0
 
-  private events: Record<string, EventData>
+  private events: Map<EventKey, EventData>
 
   constructor(options?: ClientOptions | ClientRequestArgs) {
     this.endpoint = ""
     this.timeout = 15000 // default to 15s
-    this.events = {}
+    this.events = new Map()
     this.unsubscribeSuspense = 1000
     this.maxConnectionTries = 3
     this.reconnectOnConnectionLoss = true
@@ -42,7 +45,7 @@ export class WS {
       this.socket.close()
     }
 
-    this.events = {}
+    this.events = new Map()
     this.connectionTries = 0
     return new Promise((resolve, reject) => {
       this.socket = new WebSocket(endpoint, this.options)
@@ -90,16 +93,19 @@ export class WS {
     this.socket.close()
   }
 
-  private clearEvent(event: string) {
-    this.events[event].listeners.forEach(listener => {
-      this.socket && this.socket.removeEventListener(`message`, listener)
-    })
+  private clearEvent(event: EventKey) {
+    const eventData = this.events.get(event)
+    if (eventData) {
+      eventData.listeners.forEach(listener => {
+        this.socket && this.socket.removeEventListener(`message`, listener)
+      })
 
-    Reflect.deleteProperty(this.events, event)
+      this.events.delete(event)
+    }
   }
 
-  async closeAllListens(event: string) {
-    if (this.events[event]) {
+  async closeAllListens(event: EventKey) {
+    if (this.events.has(event)) {
       const [err, _] = await to(this.call<boolean>(`unsubscribe`, { notify: event }))
       if (err) return Promise.reject(err)
       this.clearEvent(event)
@@ -108,14 +114,14 @@ export class WS {
     return Promise.resolve()
   }
 
-  async listenEvent<T>(event: string, onData: (msgEvent: MessageEvent, data?: T, err?: Error) => void) {
+  async listenEvent<T>(event: EventKey, onData: (msgEvent: MessageEvent, data?: T, err?: Error) => void) {
     const onMessage = (msgEvent: MessageEvent) => {
-      if (this.events[event]) {
-        const { id } = this.events[event]
+      const eventData = this.events.get(event)
+      if (eventData) {
         if (typeof msgEvent.data === `string`) {
           try {
             const data = parseData(msgEvent.data) as RPCResponse<any>
-            if (data.id === id) {
+            if (data.id === eventData.id) {
               if (data.error) {
                 onData(msgEvent, undefined, new Error(data.error.message))
               } else {
@@ -129,31 +135,30 @@ export class WS {
       }
     }
 
-    if (this.events[event]) {
-      const { unsubscribeTimeoutId } = this.events[event]
-      if (unsubscribeTimeoutId) {
+    let eventData = this.events.get(event)
+    if (eventData) {
+      if (eventData.unsubscribeTimeoutId) {
         // clear timeout to unsubscribe 
         // because we got a new registered event and want to cancel the pending unsubscribe grace period
-        clearTimeout(unsubscribeTimeoutId)
+        clearTimeout(eventData.unsubscribeTimeoutId)
       }
 
-      this.events[event].listeners.push(onMessage)
+      eventData.listeners.push(onMessage)
     } else {
       // important if multiple listenEvent are called without await at least we store listener before getting id
-      this.events[event] = { listeners: [onMessage] }
       const [err, res] = await to(this.call<boolean>(`subscribe`, { notify: event }))
       if (err) {
         this.clearEvent(event)
         return Promise.reject(err)
       }
 
-      this.events[event].id = res.id
+      this.events.set(event, { listeners: [onMessage], id: res.id })
     }
 
     this.socket && this.socket.addEventListener(`message`, onMessage)
 
     const closeListen = () => {
-      const eventData = this.events[event]
+      const eventData = this.events.get(event)
       if (eventData) {
         const listeners = eventData.listeners
         for (let i = 0; i < listeners.length; i++) {
@@ -167,13 +172,13 @@ export class WS {
         if (listeners.length === 0) {
           if (this.socket && this.socket.readyState === WebSocket.OPEN) {
             // we use a grace period to unsubscribe (mostly because of react useEffect and avoid unecessary subscribe)
-            this.events[event].unsubscribeTimeoutId = setTimeout(async () => {
+            eventData.unsubscribeTimeoutId = setTimeout(async () => {
               this.call<boolean>(`unsubscribe`, { notify: event })
-              Reflect.deleteProperty(this.events, event)
+              this.events.delete(event)
             }, this.unsubscribeSuspense)
           } else {
             // socket is closed so we don't send unsubscribe and no grace period delete right away
-            Reflect.deleteProperty(this.events, event)
+            this.events.delete(event)
           }
         }
       }
