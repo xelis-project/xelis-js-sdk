@@ -25,6 +25,24 @@ export class DaemonMethods {
     return this.listenEvent(RPCEvent.NewBlock, onData)
   }
 
+  onBlockOrdered(onData: (msgEvent: MessageEvent, data?: types.BlockOrdered & types.RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.BlockOrdered, onData)
+  }
+
+  onBlockOrphaned(onData: (msgEvent: MessageEvent, data?: types.BlockOrphaned & types.RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.BlockOrphaned, onData)
+  }
+
+  onStableHeightChanged(onData: (msgEvent: MessageEvent, data?: types.StableHeightChanged & types.RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.StableHeightChanged, onData)
+  }
+
+  // TODO: StableTopoHeightChanged
+
+  onTransactionOrphaned(onData: (msgEvent: MessageEvent, data?: types.TransactionResponse & types.RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.TransactionOrphaned, onData)
+  }
+
   onTransactionAddedInMempool(onData: (msgEvent: MessageEvent, data?: types.TransactionResponse & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.TransactionAddedInMempool, onData)
   }
@@ -33,8 +51,12 @@ export class DaemonMethods {
     return this.listenEvent(RPCEvent.TransactionExecuted, onData)
   }
 
-  onBlockOrdered(onData: (msgEvent: MessageEvent, data?: types.BlockOrdered & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.BlockOrdered, onData)
+  // TODO: InvokeContract
+
+  // TODO: DeployContract
+
+  onNewAsset(onData: (msgEvent: MessageEvent, data?: types.AssetWithData & types.RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.NewAsset, onData)
   }
 
   onPeerConnected(onData: (msgEvent: MessageEvent, data?: types.Peer & types.RPCEventResult, err?: Error) => void) {
@@ -45,32 +67,16 @@ export class DaemonMethods {
     return this.listenEvent(RPCEvent.PeerDisconnected, onData)
   }
 
+  onPeerStateUpdated(onData: (msgEvent: MessageEvent, data?: types.Peer & types.RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.PeerStateUpdated, onData)
+  }
+
   onPeerPeerListUpdated(onData: (msgEvent: MessageEvent, data?: types.PeerPeerListUpdated & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.PeerPeerListUpdated, onData)
   }
 
   onPeerPeerDisconnected(onData: (msgEvent: MessageEvent, data?: types.PeerPeerDisconnected & types.RPCEventResult, err?: Error) => void) {
     return this.listenEvent(RPCEvent.PeerPeerDisconnected, onData)
-  }
-
-  onPeerStateUpdated(onData: (msgEvent: MessageEvent, data?: types.Peer & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.PeerStateUpdated, onData)
-  }
-
-  onNewAsset(onData: (msgEvent: MessageEvent, data?: types.AssetWithData & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.NewAsset, onData)
-  }
-
-  onBlockOrphaned(onData: (msgEvent: MessageEvent, data?: types.BlockOrphaned & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.BlockOrphaned, onData)
-  }
-
-  onTransactionOrphaned(onData: (msgEvent: MessageEvent, data?: types.TransactionResponse & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.TransactionOrphaned, onData)
-  }
-
-  onStableHeightChanged(onData: (msgEvent: MessageEvent, data?: types.StableHeightChanged & types.RPCEventResult, err?: Error) => void) {
-    return this.listenEvent(RPCEvent.StableHeightChanged, onData)
   }
 
   getVersion() {
