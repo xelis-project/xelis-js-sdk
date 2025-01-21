@@ -9,12 +9,48 @@ export interface FeeBuilder {
   value?: number
 }
 
+export interface MultiSigBuilder {
+  participants: string[]
+  threshold: number
+}
+
+export interface ContractDepositBuilder {
+  amount: number
+  private: boolean
+}
+
+export interface InvokeContractBuilder {
+  contract: string
+  max_gas: number
+  chunk_id: number
+  parameters: any[]
+  deposits: { [key: string]: ContractDepositBuilder }
+}
+
+export interface TransferBuilder {
+  destination: string
+  asset: string
+  amount: number
+  extra_data?: any
+}
+
+export interface SignerId {
+  id: number
+  private_key: number[]
+}
+
 export interface BuildTransactionParams {
-  transfers: TransferOut[]
-  burn?: TxBurn
-  broadcast: boolean
+  transfers?: TransferBuilder[]
+  burn?: daemonTypes.Burn
+  multi_sig?: MultiSigBuilder
+  invoke_contract?: InvokeContractBuilder
+  deploy_contract?: string
   fee?: FeeBuilder
+  nonce?: number
+  tx_version?: number
+  broadcast: boolean
   tx_as_hex: boolean
+  signers?: SignerId[]
 }
 
 export interface BuildTransactionResult extends daemonTypes.Transaction {
@@ -36,34 +72,41 @@ export interface Signature {
   e: number[]
 }
 
-export interface TxCoinbase {
+export interface Coinbase {
   reward: number
 }
 
-export interface TxBurn {
-  asset: string
+export interface PlaintextExtraData {
+  shared_key: string
+  data: any
+}
+
+export interface TransferOut {
   amount: number
+  asset: string
+  destination: string
+  extra_data: PlaintextExtraData | null
 }
 
 export interface TransferIn {
   asset: string
   amount: number
-  extra_data?: any
+  extra_data?: PlaintextExtraData | null
 }
 
-export interface TxIncoming {
+export interface TransactionResponse extends daemonTypes.Transaction {
+  blocks: string[]
+  executed_in_block: string
+  in_mempool: boolean
+  first_seen?: number // in seconds
+}
+
+export interface Incoming {
   from: string
   transfers: TransferIn[]
 }
 
-export interface TransferOut {
-  destination: string
-  asset: string
-  amount: number
-  extra_data?: any
-}
-
-export interface TxOutgoing {
+export interface Outgoing {
   transfers: TransferOut
   fees: number
   nonce: number
@@ -72,7 +115,10 @@ export interface TxOutgoing {
 export interface TransactionEntry {
   hash: string
   topoheight: number
-  entry: TxCoinbase | TxBurn | TxIncoming | TxOutgoing
+  outgoing: Outgoing | null
+  incoming: Incoming | null
+  burn: daemonTypes.Burn | null
+  coinbase: Coinbase | null
 }
 
 export interface RescanParams {
@@ -86,8 +132,11 @@ export interface SetOnlineModeParams {
 }
 
 export interface EstimateFeesParams {
-  transfers: TransferOut[]
-  burn?: TxBurn
+  transfers?: TransferBuilder[]
+  burn?: daemonTypes.Burn
+  multi_sig?: MultiSigBuilder
+  invoke_contract?: InvokeContractBuilder
+  deploy_contract?: string
 }
 
 export interface BalanceChangedResult {

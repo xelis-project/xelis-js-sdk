@@ -191,15 +191,30 @@ export interface Burn {
   amount: number
 }
 
+export interface MultiSigPayload {
+  participants: string[]
+  threshold: number
+}
+
+export interface ContractDeposit {
+  public: number
+  // TODO: private
+}
+
+export interface InvokeContractPayload {
+  contract: string
+  deposits: { [key: string]: ContractDeposit }
+  chunk_id: number
+  max_gas: number
+  parameters: number[][]
+}
+
 export interface TransactionData {
-  transfers: Transfer[]
-  burn: Burn
-  /*call_contract: {
-    contract: string
-    // assets
-    // params
-  }
-  deploy_contract: string*/
+  transfers: Transfer[] | null
+  burn: Burn | null
+  multi_sig: MultiSigPayload | null
+  invoke_contract: InvokeContractPayload | null
+  deploy_contract: Module | null
 }
 
 export interface SourceCommitment {
@@ -222,16 +237,9 @@ export interface Transaction {
   nonce: number
   source_commitments: SourceCommitment[]
   range_proof: number[]
-  signature: string
   reference: Reference
+  signature: string
   size: number
-}
-
-export interface TransactionResponse extends Transaction {
-  blocks: string[]
-  executed_in_block: string
-  in_mempool: boolean
-  first_seen?: number // in seconds
 }
 
 export interface TransactionExecuted {
