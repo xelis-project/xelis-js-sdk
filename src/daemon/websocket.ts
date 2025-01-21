@@ -53,7 +53,10 @@ export class DaemonMethods {
     return this.listenEvent(RPCEvent.TransactionExecuted, onData)
   }
 
-  // TODO: InvokeContract
+  // TODO: pass params
+  onInvokeContract(onData: (msgEvent: MessageEvent, data?: types.InvokeContract & types.RPCEventResult, err?: Error) => void) {
+    return this.listenEvent(RPCEvent.InvokeContract, onData)
+  }
 
   // TODO: DeployContract
 

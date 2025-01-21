@@ -590,6 +590,16 @@ export interface StableTopoHeightChanged {
   new_stable_topoheight: number
 }
 
+export interface InvokeContractParams {
+  contract: string
+}
+export interface InvokeContract {
+  block_hash: string
+  tx_hash: string
+  topoheight: number
+  contract_outputs: ContractOutput[]
+}
+
 export enum RPCMethod {
   GetVersion = "get_version",
   GetHeight = "get_height",
