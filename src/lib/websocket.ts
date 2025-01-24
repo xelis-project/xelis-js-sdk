@@ -4,7 +4,7 @@ import { ClientRequestArgs } from 'http'
 import { to } from 'await-to-js'
 
 import { RPCRequest, RPCResponse } from './types'
-import { parseData } from './parse_data'
+import { parseJSON } from './parse_json'
 
 interface EventData {
   id?: number
@@ -120,7 +120,7 @@ export class WS {
       if (eventData) {
         if (typeof msgEvent.data === `string`) {
           try {
-            const data = parseData(msgEvent.data) as RPCResponse<any>
+            const data = parseJSON(msgEvent.data) as RPCResponse<any>
             if (data.id === eventData.id) {
               if (data.error) {
                 onData(msgEvent, undefined, new Error(data.error.message))
@@ -205,7 +205,7 @@ export class WS {
       let timeoutId: any = null
       const onMessage = (msgEvent: MessageEvent) => {
         if (typeof msgEvent.data === `string`) {
-          const data = parseData(msgEvent.data) as RPCResponse<T>
+          const data = parseJSON(msgEvent.data) as RPCResponse<T>
           if (data.id === requestMethod.id) {
             clearTimeout(timeoutId)
             this.socket && this.socket.removeEventListener(`message`, onMessage)
