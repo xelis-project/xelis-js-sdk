@@ -120,7 +120,7 @@ export class RPC extends BaseRPC {
   }
 
   signData(data: Element) {
-    return this.post<types.Signature>(RPCMethod.SignData, data.toObject())
+    return this.post<string>(RPCMethod.SignData, data.toObject())
   }
 
   estimateFees(params: types.EstimateFeesParams) {

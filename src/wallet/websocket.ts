@@ -149,7 +149,7 @@ export class WalletMethods {
   }
 
   signData(data: Element) {
-    return this.dataCall<types.Signature>(RPCMethod.SignData, data.toObject())
+    return this.dataCall<string>(RPCMethod.SignData, data.toObject())
   }
 
   estimateFees(params: types.EstimateFeesParams) {
