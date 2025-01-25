@@ -17,7 +17,7 @@ export class RPC extends BaseRPC {
     this.auth = `Basic ${authValue}`
   }
 
-  async post<T>(method: string, params?: any): Promise<RPCResponse<T>> {
+  async post<T>(method: string, params?: any): Promise<T> {
     const headers = new Headers()
     headers.set(`Authorization`, this.auth)
     return super.post(method, params, headers)
