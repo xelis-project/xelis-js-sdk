@@ -5,6 +5,7 @@ import { RPCEventResult } from '../daemon/types'
 import * as daemonTypes from '../daemon/types'
 import { RPCMethod, RPCEvent } from './types'
 import * as types from './types'
+import { Element } from '../data/element'
 
 export class WalletMethods {
   ws: BaseWS
@@ -147,8 +148,8 @@ export class WalletMethods {
     return this.dataCall<boolean>(RPCMethod.SetOfflineMode)
   }
 
-  signData(data: any) {
-    return this.dataCall<types.Signature>(RPCMethod.SignData, data)
+  signData(data: Element) {
+    return this.dataCall<types.Signature>(RPCMethod.SignData, data.toObject())
   }
 
   estimateFees(params: types.EstimateFeesParams) {

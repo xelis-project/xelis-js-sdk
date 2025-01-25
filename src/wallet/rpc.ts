@@ -6,6 +6,7 @@ import * as types from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
 import { RPCResponse } from '../lib/types'
+import { Element } from '../data/element'
 
 export class RPC extends BaseRPC {
   auth: string
@@ -118,8 +119,8 @@ export class RPC extends BaseRPC {
     return this.post<boolean>(RPCMethod.SetOfflineMode)
   }
 
-  signData(data: any) {
-    return this.post<types.Signature>(RPCMethod.SignData, data)
+  signData(data: Element) {
+    return this.post<types.Signature>(RPCMethod.SignData, data.toObject())
   }
 
   estimateFees(params: types.EstimateFeesParams) {
