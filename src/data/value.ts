@@ -74,8 +74,8 @@ export class Value {
 
 export class ValueReader {
   data: number[]
-  constructor(data: number[]) {
-    this.data = data
+  constructor(data: Uint8Array) {
+    this.data = Array.from(data)
   }
 
   read(): Element {

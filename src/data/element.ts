@@ -63,21 +63,21 @@ export class Element {
     return eType
   }
 
-  static fromBytes(data: number[]) {
+  static fromBytes(data: Uint8Array) {
     let reader = new ValueReader(data)
     return reader.read()
   }
 
-  toBytes(): number[] {
+  toBytes(): Uint8Array {
     let writer = new ValueWriter()
     writer.write(this)
-    return writer.data
+    return new Uint8Array(writer.data)
   }
 
   toObject(): {} {
     let vType = this.validate()
 
-    switch(vType) {
+    switch (vType) {
       case ElementType.Value:
         return this.value!.data
       case ElementType.Array:

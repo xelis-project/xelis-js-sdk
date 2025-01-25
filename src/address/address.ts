@@ -25,7 +25,7 @@ class Address {
         break
       case 1:
         this.isIntegrated = true
-        let reader = new ValueReader(data)
+        let reader = new ValueReader(new Uint8Array(data))
         this.extraData = reader.read()
         break
       default:
