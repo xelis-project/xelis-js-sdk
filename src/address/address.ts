@@ -1,4 +1,6 @@
 import { decode, convertBits, encode } from "./bech32"
+import { Element } from "../data/element"
+import { Value, ValueReader } from "../data/value"
 
 var PrefixAddress = "xel"
 var TestnetPrefixAddress = "xet"
@@ -10,18 +12,21 @@ class Address {
   publicKey: number[]
   isMainnet: boolean
   isIntegrated: boolean
-  extraData: any
+  extraData?: Element
 
   constructor(data: number[], hrp: string) {
     this.isMainnet = hrp === PrefixAddress
-    this.publicKey = data
+    this.publicKey = data.splice(0, 32)
+    let addrType = data.splice(0, 1)[0]
 
-    switch (data[32]) {
+    switch (addrType) {
       case 0:
         this.isIntegrated = false
         break
       case 1:
         this.isIntegrated = true
+        let reader = new ValueReader(data)
+        this.extraData = reader.read()
         break
       default:
         throw "invalid address type"

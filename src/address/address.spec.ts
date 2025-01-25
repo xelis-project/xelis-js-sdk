@@ -10,3 +10,16 @@ test(`AddrFromString`, () => {
 
   }
 })
+
+test(`InvalidAddr`, () => {
+  let isValid = Address.isValid(`xel:ys4peuzztwl67rzhsdu0yxfzwcfmgt85uu53hycpeeary7n8qvysqmxznt1`)
+  if (isValid) throw ""
+
+  let isValid2 = Address.isValid(MAINNET_ADDR)
+  if (!isValid2) throw ""
+})
+
+test(`IntegratedAddr`, () => {
+  let addr = Address.fromString(`xet:6eadzwf5xdacts6fs4y3csmnsmy4mcxewqt3xyygwfx0hm0tm32szqsrqyzkjar9d4esyqgpq4ehwmmjvsqqypgpq45x2mrvduqqzpthdaexceqpq4mk7unywvqsgqqpq4yx2mrvduqqzp2hdaexceqqqyzxvun0d5qqzp2cg4xyj5ct5udlg`)
+  console.log(addr)
+})
