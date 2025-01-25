@@ -1,5 +1,6 @@
 import { Element } from './element'
 import { Value, ValueType } from './value'
+import losslessJSON from 'lossless-json'
 
 test(`TestElementValue`, () => {
   let value = new Value(ValueType.String, "Hello world")
@@ -7,6 +8,8 @@ test(`TestElementValue`, () => {
 
   let data = element.toBytes()
   let newElement = Element.fromBytes(data)
+  let obj = element.toObject()
+  let jsonObj = JSON.stringify(obj)
 })
 
 test(`TestValueNew`, () => {
@@ -57,10 +60,15 @@ test(`TestElementArray`, async () => {
 
   let bytes = element.toBytes()
   let newElement = Element.fromBytes(bytes)
+  let obj = element.toObject()
+  let jsonObj = losslessJSON.stringify(obj)
+  // let jsonObj = JSON.stringify(obj)
 })
 
 test(`TestElementFields`, () => {
   let fields = new Map<Value, Element>()
   fields.set(Value.new("hello"), Element.v("world"))
   let element = Element.fields(fields)
+  let obj = element.toObject()
+  let jsonObj = JSON.stringify(obj)
 })

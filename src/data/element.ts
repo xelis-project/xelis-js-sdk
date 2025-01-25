@@ -73,4 +73,25 @@ export class Element {
     writer.write(this)
     return writer.data
   }
+
+  toObject(): {} {
+    let vType = this.validate()
+
+    switch(vType) {
+      case ElementType.Value:
+        return this.value!.data
+      case ElementType.Array:
+        let arr = [] as any[]
+        this.array!.forEach((item) => {
+          arr.push(item.toObject())
+        })
+        return arr
+      case ElementType.Fields:
+        let obj = {} as any
+        this.fields!.forEach((item, key) => {
+          obj[key.data] = item.toObject()
+        })
+        return obj
+    }
+  }
 }
