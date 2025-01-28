@@ -706,4 +706,5 @@ export enum RPCEvent {
   PeerStateUpdated = 'peer_state_updated',
   PeerPeerListUpdated = 'peer_peer_list_updated',
   PeerPeerDisconnected = 'peer_peer_disconnected',
+  NewBlockTemplate = 'new_block_template'
 }

@@ -81,6 +81,10 @@ export class DaemonMethods {
     return this.ws.listenEvent(this.prefix + RPCEvent.PeerPeerDisconnected, onData)
   }
 
+  onNewBlockTemplate(onData: (msgEvent: MessageEvent, data?: types.GetBlockTemplateResult & types.RPCEventResult, err?: Error) => void) {
+    return this.ws.listenEvent(this.prefix + RPCEvent.NewBlockTemplate, onData)
+  }
+
   getVersion() {
     return this.dataCall<string>(RPCMethod.GetVersion)
   }
