@@ -5,22 +5,14 @@ import { RPCMethod } from './types'
 import * as types from './types'
 
 import { RPC as BaseRPC } from '../lib/rpc'
-import { RPCResponse } from '../lib/types'
 import { Element } from '../data/element'
 
 export class RPC extends BaseRPC {
-  auth: string
-
   constructor(endpoint: string, username: string, password: string) {
     super(endpoint)
-    const authValue = Base64.encode(`${username}:${password}`)
-    this.auth = `Basic ${authValue}`
-  }
 
-  async request<T>(method: string, params?: any): Promise<T> {
-    const headers = new Headers()
-    headers.set(`Authorization`, this.auth)
-    return super.request(method, params, headers)
+    const authValue = Base64.encode(`${username}:${password}`)
+    this.headers.set("Authorization", `Basic ${authValue}`)
   }
 
   getVersion() {

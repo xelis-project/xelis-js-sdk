@@ -4,12 +4,16 @@ import { RPCResponse } from './types'
 export class RPC {
   endpoint: string
   timeout: number
+  headers: Headers
+
   constructor(endpoint: string) {
     this.endpoint = endpoint
     this.timeout = 3000
+    this.headers = new Headers()
+    this.headers.set(`Content-Type`, `application/json`)
   }
 
-  async request<T>(method: string, params?: any, headers?: Headers): Promise<T> {
+  async request<T>(method: string, params?: any): Promise<T> {
     try {
       const controller = new AbortController()
       const body = JSON.stringify({ id: 1, jsonrpc: '2.0', method: method, params })
@@ -18,10 +22,8 @@ export class RPC {
         controller.abort()
       }, this.timeout)
 
-      headers = headers || new Headers()
-      headers.set(`Content-Type`, `application/json`)
       const res = await fetch(this.endpoint, {
-        headers,
+        headers: this.headers,
         method: `POST`,
         body,
         signal: controller.signal
