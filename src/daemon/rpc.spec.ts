@@ -411,7 +411,7 @@ describe('DaemonRPC', () => {
     expect(err1).toBeNull()
 
     const [err2, res2] = await to(daemonRPC.getMinerWork({
-      template: res1?.result.template!
+      template: res1?.template!
     }))
     expect(err2).toBeNull()
     console.log(res2)
