@@ -9,7 +9,7 @@ export class RPC {
     this.timeout = 3000
   }
 
-  async post<T>(method: string, params?: any, headers?: Headers): Promise<T> {
+  async request<T>(method: string, params?: any, headers?: Headers): Promise<T> {
     try {
       const controller = new AbortController()
       const body = JSON.stringify({ id: 1, jsonrpc: '2.0', method: method, params })

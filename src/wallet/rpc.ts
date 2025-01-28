@@ -17,162 +17,162 @@ export class RPC extends BaseRPC {
     this.auth = `Basic ${authValue}`
   }
 
-  async post<T>(method: string, params?: any): Promise<T> {
+  async request<T>(method: string, params?: any): Promise<T> {
     const headers = new Headers()
     headers.set(`Authorization`, this.auth)
-    return super.post(method, params, headers)
+    return super.request(method, params, headers)
   }
 
   getVersion() {
-    return this.post<string>(RPCMethod.GetVersion)
+    return this.request<string>(RPCMethod.GetVersion)
   }
 
   getNetwork() {
-    return this.post<string>(RPCMethod.GetNetwork)
+    return this.request<string>(RPCMethod.GetNetwork)
   }
 
   getNonce() {
-    return this.post<number>(RPCMethod.GetNonce)
+    return this.request<number>(RPCMethod.GetNonce)
   }
 
   getTopoheight() {
-    return this.post<number>(RPCMethod.GetTopoheight)
+    return this.request<number>(RPCMethod.GetTopoheight)
   }
 
   getAddress(params: types.GetAddressParams = {}) {
-    return this.post<string>(RPCMethod.GetAddress, params)
+    return this.request<string>(RPCMethod.GetAddress, params)
   }
 
   splitAddress(params: daemonTypes.SplitAddressParams) {
-    return this.post<daemonTypes.SplitAddressResult>(RPCMethod.SplitAddress, params)
+    return this.request<daemonTypes.SplitAddressResult>(RPCMethod.SplitAddress, params)
   }
 
   rescan(params: types.RescanParams) {
-    return this.post<boolean>(RPCMethod.Rescan, params)
+    return this.request<boolean>(RPCMethod.Rescan, params)
   }
 
   getBalance(asset?: string) {
-    return this.post<number>(RPCMethod.GetBalance, { asset })
+    return this.request<number>(RPCMethod.GetBalance, { asset })
   }
 
   hasBalance(asset?: string) {
-    return this.post<daemonTypes.HasBalanceResult>(RPCMethod.HasBalance, { asset })
+    return this.request<daemonTypes.HasBalanceResult>(RPCMethod.HasBalance, { asset })
   }
 
   getTrackedAssets() {
-    return this.post<string[]>(RPCMethod.GetTrackedAssets)
+    return this.request<string[]>(RPCMethod.GetTrackedAssets)
   }
 
   getAssetPrecision(params: daemonTypes.GetAssetParams) {
-    return this.post<number>(RPCMethod.GetAssetPrecision, params)
+    return this.request<number>(RPCMethod.GetAssetPrecision, params)
   }
 
   getAssets() {
-    return this.post<{ [key: string]: types.Asset }>(RPCMethod.GetAssets)
+    return this.request<{ [key: string]: types.Asset }>(RPCMethod.GetAssets)
   }
 
   getAsset(params: daemonTypes.GetAssetParams) {
-    return this.post<types.Asset>(RPCMethod.GetAsset, params)
+    return this.request<types.Asset>(RPCMethod.GetAsset, params)
   }
 
   getTransaction(hash: string) {
-    return this.post<types.TransactionEntry>(RPCMethod.GetTransaction, { hash })
+    return this.request<types.TransactionEntry>(RPCMethod.GetTransaction, { hash })
   }
 
   buildTransaction(params: types.BuildTransactionParams) {
-    return this.post<types.TransactionResponse>(RPCMethod.BuildTransaction, params)
+    return this.request<types.TransactionResponse>(RPCMethod.BuildTransaction, params)
   }
 
   buildTransactionOffline(params: types.BuildTransactionOfflineParams) {
-    return this.post<types.TransactionResponse>(RPCMethod.BuildTransactionOffline, params)
+    return this.request<types.TransactionResponse>(RPCMethod.BuildTransactionOffline, params)
   }
 
   buildUnsignedTransaction(params: types.BuildTransactionParams) {
-    return this.post<types.UnsignedTransactionResponse>(RPCMethod.BuildUnsignedTransaction, params)
+    return this.request<types.UnsignedTransactionResponse>(RPCMethod.BuildUnsignedTransaction, params)
   }
 
   signUnsignedTransaction(params: types.SignUnsignedTransactionParams) {
-    return this.post<types.SignatureId>(RPCMethod.SignUnsignedTransaction, params)
+    return this.request<types.SignatureId>(RPCMethod.SignUnsignedTransaction, params)
   }
 
   finalizeUnsignedTransaction(params: types.FinalizeUnsignedTransactionParams) {
-    return this.post<types.TransactionResponse>(RPCMethod.FinalizeUnsignedTransaction, params)
+    return this.request<types.TransactionResponse>(RPCMethod.FinalizeUnsignedTransaction, params)
   }
 
   clearTxCache() {
-    return this.post<boolean>(RPCMethod.ClearTxCache)
+    return this.request<boolean>(RPCMethod.ClearTxCache)
   }
 
   listTransactions(params?: types.ListTransactionParams) {
-    return this.post<types.TransactionEntry[]>(RPCMethod.ListTransactions, params)
+    return this.request<types.TransactionEntry[]>(RPCMethod.ListTransactions, params)
   }
 
   isOnline() {
-    return this.post<boolean>(RPCMethod.IsOnline)
+    return this.request<boolean>(RPCMethod.IsOnline)
   }
 
   setOnlineMode(params: types.SetOnlineModeParams) {
-    return this.post<boolean>(RPCMethod.SetOnlineMode, params)
+    return this.request<boolean>(RPCMethod.SetOnlineMode, params)
   }
 
   setOfflineMode() {
-    return this.post<boolean>(RPCMethod.SetOfflineMode)
+    return this.request<boolean>(RPCMethod.SetOfflineMode)
   }
 
   signData(data: Element) {
-    return this.post<string>(RPCMethod.SignData, data.toObject())
+    return this.request<string>(RPCMethod.SignData, data.toObject())
   }
 
   estimateFees(params: types.EstimateFeesParams) {
-    return this.post<number>(RPCMethod.EstimateFees, params)
+    return this.request<number>(RPCMethod.EstimateFees, params)
   }
 
   estimateExtraDataSize(params: types.EstimateExtraDataSizeParams) {
-    return this.post<types.EstimateExtraDataSizeResult>(RPCMethod.EstimateExtraDataSize, params)
+    return this.request<types.EstimateExtraDataSizeResult>(RPCMethod.EstimateExtraDataSize, params)
   }
 
   networkInfo() {
-    return this.post<types.NetworkInfoResult>(RPCMethod.NetworkInfo)
+    return this.request<types.NetworkInfoResult>(RPCMethod.NetworkInfo)
   }
 
   decryptExtraData(params: types.DecryptExtraDataParams) {
-    return this.post<types.PlaintextCiphertext>(RPCMethod.DecryptExtraData, params)
+    return this.request<types.PlaintextCiphertext>(RPCMethod.DecryptExtraData, params)
   }
 
   decryptCiphertext(params: types.DecryptCiphertextParams) {
-    return this.post<number>(RPCMethod.DecryptCiphertext, params)
+    return this.request<number>(RPCMethod.DecryptCiphertext, params)
   }
 
   getMatchingKeys(params: types.GetMatchingKeysParams) {
-    return this.post<any>(RPCMethod.GetMatchingKeys, params)
+    return this.request<any>(RPCMethod.GetMatchingKeys, params)
   }
 
   countMatchingEntries(params: types.CountMatchingKeysParams) {
-    return this.post<number>(RPCMethod.CountMatchingEntries, params)
+    return this.request<number>(RPCMethod.CountMatchingEntries, params)
   }
 
   getValueFromKey(params: types.GetValueFromKeyParams) {
-    return this.post<any>(RPCMethod.GetValueFromKey, params)
+    return this.request<any>(RPCMethod.GetValueFromKey, params)
   }
 
   store(params: types.StoreParams) {
-    return this.post<boolean>(RPCMethod.Store, params)
+    return this.request<boolean>(RPCMethod.Store, params)
   }
 
   delete(params: types.DeleteParams) {
-    return this.post<boolean>(RPCMethod.Delete, params)
+    return this.request<boolean>(RPCMethod.Delete, params)
   }
 
   deleteTreeEntries(tree: string) {
-    return this.post<boolean>(RPCMethod.DeleteTreeEntries, { tree })
+    return this.request<boolean>(RPCMethod.DeleteTreeEntries, { tree })
   }
 
   hasKey(params: types.HasKeyParams) {
-    return this.post<boolean>(RPCMethod.HasKey, params)
+    return this.request<boolean>(RPCMethod.HasKey, params)
   }
 
   queryDB(params: types.QueryDBParams) {
-    return this.post<types.QueryResult>(RPCMethod.QueryDB, params)
+    return this.request<types.QueryResult>(RPCMethod.QueryDB, params)
   }
 }
 
