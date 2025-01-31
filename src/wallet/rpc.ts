@@ -4,10 +4,10 @@ import * as daemonTypes from '../daemon/types'
 import { RPCMethod } from './types'
 import * as types from './types'
 
-import { RPC as BaseRPC } from '../lib/rpc'
+import { HttpRPC } from '../rpc/http'
 import { Element } from '../data/element'
 
-export class RPC extends BaseRPC {
+export class RPC extends HttpRPC {
   constructor(endpoint: string, username: string, password: string) {
     super(endpoint)
 

@@ -15,7 +15,7 @@ interface EventData {
 export type EventWithParams = { [event: string]: {} }
 export type EventKey = string | EventWithParams
 
-export class WS {
+export class WSRPC {
   endpoint: string
   socket?: WebSocket
   timeout: number

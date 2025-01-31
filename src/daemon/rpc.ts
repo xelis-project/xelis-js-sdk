@@ -1,9 +1,9 @@
 import { RPCMethod } from './types'
 import * as types from './types'
 
-import { RPC as BaseRPC } from '../lib/rpc'
+import { HttpRPC } from '../rpc/http'
 
-export class RPC extends BaseRPC {
+export class RPC extends HttpRPC {
   getVersion() {
     return this.request<string>(RPCMethod.GetVersion)
   }

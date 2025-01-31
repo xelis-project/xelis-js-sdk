@@ -1,7 +1,7 @@
 import { parseJSON } from './parse_json/parse_json'
 import { RPCRequest, RPCResponse } from './types'
 
-export class RPC {
+export class HttpRPC {
   endpoint: string
   timeout: number
   headers: Headers

@@ -1,4 +1,4 @@
-import { WS as BaseWS } from '../lib/websocket'
+import { WS as BaseWS } from '../rpc/websocket'
 import { ApplicationData } from '../wallet/types'
 import { DaemonMethods } from '../daemon/websocket'
 import { WalletMethods } from '../wallet/websocket'

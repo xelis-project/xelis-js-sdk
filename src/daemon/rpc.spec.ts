@@ -3,7 +3,7 @@ import { to } from 'await-to-js'
 import { LOCAL_NODE_RPC, MAINNET_NODE_RPC, TESTNET_NODE_RPC, XELIS_ASSET } from '../config'
 import DaemonRPC from './rpc'
 import { RPCMethod } from './types'
-import { RPCRequest } from '../lib/types'
+import { RPCRequest } from '../rpc/types'
 
 const TESTNET_ADDR = `xet:rsdm79np9eqar7cg5jy9sdhwas74l4ml5enaasmae8jtjcvpr3vqqnlpysy`
 const MAINNET_ADDR = `xel:fpkjnmq4j04g05r3gy2gw9jmcqzn96slpukrmkepgyfanstqusrqqne5udz`

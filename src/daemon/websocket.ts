@@ -2,13 +2,13 @@ import { MessageEvent } from 'ws'
 import { RPCMethod, RPCEvent } from './types'
 import * as types from './types'
 
-import { WS as BaseWS, EventKey } from '../lib/websocket'
+import { WSRPC } from '../rpc/websocket'
 
 export class DaemonMethods {
-  ws: BaseWS
+  ws: WSRPC
   prefix: string
 
-  constructor(ws: BaseWS, prefix: string = "") {
+  constructor(ws: WSRPC, prefix: string = "") {
     this.ws = ws
     this.prefix = prefix
   }
@@ -346,7 +346,7 @@ export class DaemonMethods {
   }
 }
 
-export class WS extends BaseWS {
+export class WS extends WSRPC {
   methods: DaemonMethods
   constructor() {
     super()

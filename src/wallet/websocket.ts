@@ -1,4 +1,4 @@
-import { WS as BaseWS } from '../lib/websocket'
+import { WSRPC } from '../rpc/websocket'
 import { MessageEvent } from 'ws'
 
 import { RPCEventResult } from '../daemon/types'
@@ -8,10 +8,10 @@ import * as types from './types'
 import { Element } from '../data/element'
 
 export class WalletMethods {
-  ws: BaseWS
+  ws: WSRPC
   prefix: string
 
-  constructor(ws: BaseWS, prefix: string = "") {
+  constructor(ws: WSRPC, prefix: string = "") {
     this.ws = ws
     this.prefix = prefix
   }
@@ -205,7 +205,7 @@ export class WalletMethods {
   }
 }
 
-export class WS extends BaseWS {
+export class WS extends WSRPC {
   methods: WalletMethods
 
   constructor(username: string, password: string) {
