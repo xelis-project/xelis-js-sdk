@@ -1,7 +1,9 @@
-import bigData from './test_data'
+import fs from 'fs'
 import { parseJSON } from './parse_json'
 
 test(`parseJsonPerf`, () => {
+  // load data using fs instead of import or fix-esm will hang
+  const bigData = fs.readFileSync(`./src/lib/parse_json/test_data.txt`, `utf-8`)
   console.time()
   let data = parseJSON(bigData)
   console.timeEnd()
