@@ -2,6 +2,8 @@ import { to } from 'await-to-js'
 
 import { LOCAL_NODE_RPC, MAINNET_NODE_RPC, TESTNET_NODE_RPC, XELIS_ASSET } from '../config'
 import DaemonRPC from './rpc'
+import { RPCMethod } from './types'
+import { RPCRequest } from '../lib/types'
 
 const TESTNET_ADDR = `xet:rsdm79np9eqar7cg5jy9sdhwas74l4ml5enaasmae8jtjcvpr3vqqnlpysy`
 const MAINNET_ADDR = `xel:fpkjnmq4j04g05r3gy2gw9jmcqzn96slpukrmkepgyfanstqusrqqne5udz`
@@ -425,5 +427,16 @@ describe('DaemonRPC', () => {
 
     console.log(res1)
     expect(res1)
+  })
+
+  test('batchRequest', async () => {
+    const requests = [
+      { method: RPCMethod.GetTopoheight },
+      { method: RPCMethod.GetInfo }
+    ] as RPCRequest[]
+
+    const [err, res] = await to(daemonRPC.batchRequest(requests))
+    console.log(err, res)
+    expect(err).toBeNull()
   })
 })
