@@ -1,4 +1,5 @@
 import { to } from 'await-to-js'
+import { Element } from '../data/element'
 
 import { LOCAL_WALLET_RPC, XELIS_ASSET } from '../config'
 import WalletRPC from './rpc'
@@ -127,5 +128,15 @@ describe('WalletRPC', () => {
     expect(err).toBeNull()
     console.log(res)
     expect(res)
+  })
+
+  test('signData', async () => {
+    let data = Element.v("hello world")
+
+    const [err, publicKey] = await to(walletRPC.getAddress())
+    expect(err).toBeNull()
+
+    const [err2, sig] = await to(walletRPC.signData(data))
+    expect(err2).toBeNull()
   })
 })
