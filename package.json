@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",
+    "@types/json-bigint": "^1.0.4",
     "@types/react": "^18.2.23",
     "@types/ws": "^8.5.4",
     "fix-esm-import-path": "^1.5.0",
@@ -39,7 +40,7 @@
     "await-to-js": "^3.0.0",
     "isomorphic-ws": "^5.0.0",
     "js-base64": "^3.7.6",
-    "lossless-json": "^4.0.1",
+    "json-bigint": "^1.0.0",
     "react": "^18.2.0",
     "ws": "^8.12.1"
   }

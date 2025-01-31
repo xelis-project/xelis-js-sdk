@@ -1,4 +1,4 @@
-import { parseJSON } from './parse_json'
+import { parseJSON } from './parse_json/parse_json'
 import { RPCResponse } from './types'
 
 export class RPC {
