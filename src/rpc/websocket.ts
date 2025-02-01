@@ -224,7 +224,6 @@ export class WSRPC {
       const onMessage = (msgEvent: MessageEvent) => {
         if (typeof msgEvent.data === `string`) {
           const data = parseJSON(msgEvent.data)
-          console.log(data)
           let valid = false
           if (Array.isArray(data) && data.length > 0 && data[0].id === id) {
             //@ts-ignore
