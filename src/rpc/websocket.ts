@@ -14,6 +14,7 @@ interface EventData {
 
 export type EventWithParams = { [event: string]: {} }
 export type EventKey = string | EventWithParams
+export type IdRefObj = { id?: number }
 
 export class WSRPC {
   endpoint: string
@@ -106,7 +107,7 @@ export class WSRPC {
 
   async closeAllListens(event: EventKey) {
     if (this.events.has(event)) {
-      const [err, _] = await to(this.call<boolean>(`unsubscribe`, { notify: event }))
+      const [err, _] = await to(this.dataCall<boolean>(`unsubscribe`, { notify: event }))
       if (err) return Promise.reject(err)
       this.clearEvent(event)
     }
@@ -117,20 +118,18 @@ export class WSRPC {
   async listenEvent<T>(event: EventKey, onData: (msgEvent: MessageEvent, data?: T, err?: Error) => void) {
     const onMessage = (msgEvent: MessageEvent) => {
       const eventData = this.events.get(event)
-      if (eventData) {
-        if (typeof msgEvent.data === `string`) {
-          try {
-            const data = parseJSON(msgEvent.data) as RPCResponse<any>
-            if (data.id === eventData.id) {
-              if (data.error) {
-                onData(msgEvent, undefined, new Error(data.error.message))
-              } else {
-                onData(msgEvent, data.result, undefined)
-              }
+      if (eventData && typeof msgEvent.data === `string`) {
+        try {
+          const data = parseJSON(msgEvent.data) as RPCResponse<any>
+          if (data.id === eventData.id) {
+            if (data.error) {
+              onData(msgEvent, undefined, new Error(data.error.message))
+            } else {
+              onData(msgEvent, data.result, undefined)
             }
-          } catch {
-            // can't parse json -- do nothing
           }
+        } catch {
+          // can't parse json -- do nothing
         }
       }
     }
@@ -146,13 +145,14 @@ export class WSRPC {
       eventData.listeners.push(onMessage)
     } else {
       // important if multiple listenEvent are called without await at least we store listener before getting id
-      const [err, res] = await to(this.call<boolean>(`subscribe`, { notify: event }))
+      let idRefObject = {} as IdRefObj
+      const [err, _] = await to(this.dataCall<boolean>(`subscribe`, { notify: event }, idRefObject))
       if (err) {
         this.clearEvent(event)
         return Promise.reject(err)
       }
 
-      this.events.set(event, { listeners: [onMessage], id: res.id })
+      this.events.set(event, { listeners: [onMessage], id: idRefObject.id })
     }
 
     this.socket && this.socket.addEventListener(`message`, onMessage)
@@ -173,7 +173,7 @@ export class WSRPC {
           if (this.socket && this.socket.readyState === WebSocket.OPEN) {
             // we use a grace period to unsubscribe (mostly because of react useEffect and avoid unecessary subscribe)
             eventData.unsubscribeTimeoutId = setTimeout(async () => {
-              this.call<boolean>(`unsubscribe`, { notify: event })
+              this.dataCall<boolean>(`unsubscribe`, { notify: event })
               this.events.delete(event)
             }, this.unsubscribeSuspense)
           } else {
@@ -190,33 +190,63 @@ export class WSRPC {
     return Promise.resolve(closeListen)
   }
 
-  call<T>(method: string, params?: any, overwriteData?: string): Promise<RPCResponse<T>> {
+  batchCall(requests: RPCRequest[]): Promise<any[]> {
+    return new Promise(async (resolve, reject) => {
+      let id = this.methodIdIncrement++
+      requests.forEach((request) => {
+        request.id = id
+        request.jsonrpc = "2.0"
+      })
+
+      const data = JSON.stringify(requests)
+      const [err, res] = await to(this.rawCall<RPCResponse<any>[]>(id, data))
+      if (err) return reject(err)
+
+      let items = [] as any[]
+      res.forEach((v) => {
+        if (v.error) {
+          items.push(new Error(v.error.message))
+        } else {
+          items.push(v.result)
+        }
+      })
+
+      return resolve(items)
+    })
+  }
+
+  rawCall<T>(id: number, body: string): Promise<T> {
     return new Promise((resolve, reject) => {
       if (!this.socket) return reject(new Error(`Socket is not initialized.`))
       if (this.socket.readyState !== WebSocket.OPEN) return reject(new Error(`Can't send msg. Socket is not opened.`))
 
-      let requestMethod = this.createRequestMethod(method, params)
-      // for XSWD we want to send the application data without request method wrapping
-      if (overwriteData) {
-        requestMethod.id = null
-        requestMethod.data = overwriteData
-      }
-
       let timeoutId: any = null
       const onMessage = (msgEvent: MessageEvent) => {
         if (typeof msgEvent.data === `string`) {
-          const data = parseJSON(msgEvent.data) as RPCResponse<T>
-          if (data.id === requestMethod.id) {
+          const data = parseJSON(msgEvent.data)
+          console.log(data)
+          let valid = false
+          if (Array.isArray(data) && data.length > 0 && data[0].id === id) {
+            //@ts-ignore
+            resolve(data)
+            valid = true
+          } else if (data.id === id) {
+            resolve(data)
+            valid = true
+          } else if (data.id === null && id === 0) {
+            // special case with xswd sending first call will return null id
+            resolve(data)
+            valid = true
+          }
+
+          if (valid) {
             clearTimeout(timeoutId)
             this.socket && this.socket.removeEventListener(`message`, onMessage)
-            if (data.error) return reject(new Error(data.error.message))
-            else resolve(data)
           }
         }
       }
 
-      // make sure you listen before sending data
-      this.socket && this.socket.addEventListener(`message`, onMessage) // we don't use { once: true } option because of timeout feature
+      this.socket.addEventListener(`message`, onMessage)
 
       if (this.timeout > 0) {
         timeoutId = setTimeout(() => {
@@ -225,25 +255,27 @@ export class WSRPC {
         }, this.timeout)
       }
 
-      if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-        this.socket.send(requestMethod.data)
+      if (this.socket.readyState === WebSocket.OPEN) {
+        this.socket.send(body)
       }
     })
   }
 
-  dataCall<T>(method: string, params?: any): Promise<T> {
+  dataCall<T>(method: string, params?: any, idRefObj?: IdRefObj): Promise<T> {
     return new Promise(async (resolve, reject) => {
-      const [err, res] = await to(this.call<T>(method, params))
+      const id = this.methodIdIncrement++
+      if (idRefObj) idRefObj.id = id
+      const request = { id, jsonrpc: `2.0`, method } as RPCRequest
+      if (params) request.params = params
+      const data = JSON.stringify(request)
+
+      const [err, res] = await to(this.rawCall<RPCResponse<T>>(id, data))
       if (err) return reject(err)
+      if (res.error) {
+        return reject(res.error.message)
+      }
+
       return resolve(res.result)
     })
-  }
-
-  createRequestMethod(method: string, params?: any): { data: string, id: number | null } {
-    const id = this.methodIdIncrement++
-    const request = { id: id, jsonrpc: `2.0`, method } as RPCRequest
-    if (params) request.params = params
-    const data = JSON.stringify(request)
-    return { data, id }
   }
 }

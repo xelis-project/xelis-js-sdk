@@ -1,13 +1,14 @@
 import { to } from 'await-to-js'
 
-import { TESTNET_NODE_RPC } from '../config'
-import { RPCEvent } from './types'
+import { LOCAL_NODE_WS } from '../config'
+import { RPCEvent, RPCMethod } from './types'
 import DaemonWS from './websocket'
+import { RPCRequest } from '../rpc/types'
 
 describe('DaemonWS', () => {
   test('getInfo', async () => {
     const daemonWS = new DaemonWS()
-    const [err] = await to(daemonWS.connect(TESTNET_NODE_RPC))
+    const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
     expect(err).toBeNull()
     const [err2, res] = await to(daemonWS.methods.getInfo())
     expect(err2).toBeNull()
@@ -20,11 +21,11 @@ describe('DaemonWS', () => {
 
   test('reconnect', async () => {
     const daemonWS = new DaemonWS()
-    const [err] = await to(daemonWS.connect(TESTNET_NODE_RPC))
+    const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
     expect(err).toBeNull()
 
     console.log('Reconnecting to testnet...')
-    await daemonWS.connect(TESTNET_NODE_RPC)
+    await daemonWS.connect(LOCAL_NODE_WS)
     daemonWS.close()
     expect(true)
   })
@@ -33,7 +34,7 @@ describe('DaemonWS', () => {
   test('listen_NewBlock', () => {
     return new Promise(async (resolve, reject) => {
       const daemonWS = new DaemonWS()
-      const [err] = await to(daemonWS.connect(TESTNET_NODE_RPC))
+      const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
       expect(err).toBeNull()
 
       const doneTest = (err?: any) => {
@@ -53,7 +54,7 @@ describe('DaemonWS', () => {
   test('multi_listen', () => {
     return new Promise(async (resolve, reject) => {
       const daemonWS = new DaemonWS()
-      const [err] = await to(daemonWS.connect(TESTNET_NODE_RPC))
+      const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
       expect(err).toBeNull()
 
       let count = 3
@@ -81,12 +82,28 @@ describe('DaemonWS', () => {
 
   test('check_invalid_event', async () => {
     const daemonWS = new DaemonWS()
-    const [err] = await to(daemonWS.connect(TESTNET_NODE_RPC))
+    const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
     expect(err).toBeNull()
 
     //@ts-ignore
     const [err2, _] = await to(daemonWS.listenEvent(`asdasd`, async (result, msgEvent) => { }))
     expect(err2).toBeDefined()
     daemonWS.close()
+  })
+
+  test(`batchRequest`, async () => {
+    const daemonWS = new DaemonWS()
+    const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
+    expect(err).toBeNull()
+
+    const requests = [
+      { method: RPCMethod.GetTopoheight },
+      { method: RPCMethod.GetInfo },
+      { method: "invalid" }
+    ] as RPCRequest[]
+
+    const [err1, res] = await to(daemonWS.batchCall(requests))
+    console.log(err1, res)
+    expect(err1).toBeNull()
   })
 })

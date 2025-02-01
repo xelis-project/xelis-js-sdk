@@ -1,9 +1,9 @@
-import { WS as BaseWS } from '../rpc/websocket'
+import { WSRPC } from '../rpc/websocket'
 import { ApplicationData } from '../wallet/types'
 import { DaemonMethods } from '../daemon/websocket'
 import { WalletMethods } from '../wallet/websocket'
 
-export class WS extends BaseWS {
+export class WS extends WSRPC {
   daemon: DaemonMethods
   wallet: WalletMethods
 
@@ -16,7 +16,7 @@ export class WS extends BaseWS {
 
   authorize(app: ApplicationData) {
     const data = JSON.stringify(app)
-    return this.call("", {}, data)
+    return this.rawCall(0, data)
   }
 }
 
