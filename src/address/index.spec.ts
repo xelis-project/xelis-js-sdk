@@ -1,4 +1,4 @@
-import Address from './address'
+import Address from './'
 
 var MAINNET_ADDR = "xel:ys4peuzztwl67rzhsdu0yxfzwcfmgt85uu53hycpeeary7n8qvysqmxznt0"
 
