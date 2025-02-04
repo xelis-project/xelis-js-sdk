@@ -16,17 +16,17 @@ class Address {
 
   constructor(data: number[], hrp: string) {
     this.isMainnet = hrp === PrefixAddress
-    this.publicKey = data.splice(0, 32)
-    let addrType = data.splice(0, 1)[0]
+    this.publicKey = Array.from(data)
 
-    switch (addrType) {
-      case 0:
-        this.isIntegrated = false
-        break
+    switch (data[32]) {
       case 1:
         this.isIntegrated = true
-        let reader = new ValueReader(new Uint8Array(data))
+        let extraData = new Uint8Array(this.publicKey.slice(33))
+        let reader = new ValueReader(extraData)
         this.extraData = reader.read()
+        break
+      case 0:
+        this.isIntegrated = false
         break
       default:
         throw "invalid address type"
