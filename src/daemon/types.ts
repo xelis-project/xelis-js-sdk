@@ -124,8 +124,10 @@ export interface RPCEventResult {
   event: string
 }
 
-export type PeerPeers = {
-  [addr: string]: `In` | `Out` | `Both`
+export interface TimedDirection {
+  in?: { received_at: number }
+  out?: { sent_at: number }
+  both?: { received_at: number, sent_at: number }
 }
 
 export interface Peer {
@@ -139,7 +141,7 @@ export interface Peer {
   height: number
   last_ping: number // in seconds
   pruned_topoheight?: number
-  peers: PeerPeers
+  peers: { [addr: string]: TimedDirection }
   cumulative_difficulty: string
   connected_on: number // in seconds
 }
@@ -629,6 +631,18 @@ export interface NewContract {
   topoheight: number
 }
 
+export interface GetP2pBlockPropagationParams {
+  hash: string
+  outgoing: boolean
+  incoming: boolean
+}
+
+export interface P2pBlockPropagationResult {
+  peers: { [id: number]: TimedDirection }
+  first_seen?: number
+  processing_at?: number
+}
+
 export enum RPCMethod {
   GetVersion = "get_version",
   GetHeight = "get_height",
@@ -708,6 +722,8 @@ export enum RPCMethod {
   GetContractBalance = "get_contract_balance",
   GetContractBalanceAtTopoheight = "get_contract_balance_at_topoheight",
   GetContractAssets = "get_contract_assets",
+
+  GetP2PBlockPropagation = "get_p2p_block_propagation",
 
   GetBlockTemplate = "get_block_template",
   GetMinerWork = "get_miner_work",

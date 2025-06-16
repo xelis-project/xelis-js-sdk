@@ -341,6 +341,10 @@ export class DaemonMethods {
     return this.dataCall<string[]>(RPCMethod.GetContractAssets, params)
   }
 
+  getP2PBlockPropagation(params: types.GetP2pBlockPropagationParams) {
+    return this.dataCall<types.P2pBlockPropagationResult>(RPCMethod.GetP2PBlockPropagation, params)
+  }
+
   getBlockTemplate(address: string) {
     return this.dataCall<string>(RPCMethod.GetBlockTemplate, { address })
   }
