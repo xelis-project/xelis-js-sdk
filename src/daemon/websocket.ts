@@ -34,7 +34,7 @@ export class DaemonMethods {
   }
 
   onStableTopoHeightChanged(onData: (msgEvent: MessageEvent, data?: types.StableTopoHeightChanged & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.StableTopoHeightChanged, onData);
+    return this.ws.listenEvent(this.prefix + RPCEvent.StableTopoHeightChanged, onData)
   }
 
   onTransactionOrphaned(onData: (msgEvent: MessageEvent, data?: types.TransactionResponse & types.RPCEventResult, err?: Error) => void) {
@@ -51,6 +51,14 @@ export class DaemonMethods {
 
   onInvokeContract(contract: string, onData: (msgEvent: MessageEvent, data?: types.InvokeContract & types.RPCEventResult, err?: Error) => void) {
     return this.ws.listenEvent({ [this.prefix + RPCEvent.InvokeContract]: { contract } }, onData)
+  }
+
+  onContractTransfer(address: string, onData: (msgEvent: MessageEvent, data?: types.ContractTransfer & types.RPCEventResult, err?: Error) => void) {
+    return this.ws.listenEvent({ [this.prefix + RPCEvent.ContractTransfer]: { address } }, onData)
+  }
+
+  onContractEvent(contract: string, id: number, onData: (msgEvent: MessageEvent, data?: types.ContractEvent & types.RPCEventResult, err?: Error) => void) {
+    return this.ws.listenEvent({ [this.prefix + RPCEvent.ContractEvent]: { contract, id } }, onData)
   }
 
   onDeployContract(onData: (msgEvent: MessageEvent, data?: types.NewContract & types.RPCEventResult, err?: Error) => void) {

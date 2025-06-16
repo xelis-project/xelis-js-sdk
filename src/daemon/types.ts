@@ -643,6 +643,17 @@ export interface P2pBlockPropagationResult {
   processing_at?: number
 }
 
+export interface ContractTransfer {
+  asset: string
+  amount: number
+  block_hash: string
+  topoheight: number
+}
+
+export interface ContractEvent {
+  data: any
+}
+
 export enum RPCMethod {
   GetVersion = "get_version",
   GetHeight = "get_height",
@@ -735,17 +746,19 @@ export enum RPCEvent {
   BlockOrdered = 'block_ordered',
   BlockOrphaned = 'block_orphaned',
   StableHeightChanged = 'stable_height_changed',
-  StableTopoHeightChanged = 'stable_topo_height_changed', // TODO
+  StableTopoHeightChanged = 'stable_topo_height_changed',
   TransactionOrphaned = 'transaction_orphaned',
   TransactionAddedInMempool = 'transaction_added_in_mempool',
   TransactionExecuted = 'transaction_executed',
-  InvokeContract = 'invoke_contract', // TODO
-  DeployContract = 'deploy_contract', // TODO
+  InvokeContract = 'invoke_contract',
+  ContractTransfer = 'contract_transfer',
+  ContractEvent = 'contract_event',
+  DeployContract = 'deploy_contract',
   NewAsset = 'new_asset',
   PeerConnected = 'peer_connected',
   PeerDisconnected = 'peer_disconnected',
-  PeerStateUpdated = 'peer_state_updated',
   PeerPeerListUpdated = 'peer_peer_list_updated',
+  PeerStateUpdated = 'peer_state_updated',
   PeerPeerDisconnected = 'peer_peer_disconnected',
   NewBlockTemplate = 'new_block_template'
 }
