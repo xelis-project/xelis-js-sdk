@@ -148,8 +148,12 @@ export class RPC extends HttpRPC {
     return this.request<types.GetPeersResult>(RPCMethod.GetPeers)
   }
 
-  getMemPool() {
-    return this.request<types.GetMempoolResult>(RPCMethod.GetMempool)
+  getMemPool(params?: types.GetMempoolParams) {
+    return this.request<types.GetMempoolResult>(RPCMethod.GetMempool, params)
+  }
+
+  getMempoolSummary(params?: types.GetMempoolParams) {
+    return this.request<types.GetMempoolSummaryResult>(RPCMethod.GetMempoolSummary, params)
   }
 
   getMempoolCache(address: String) {

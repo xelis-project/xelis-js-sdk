@@ -585,9 +585,27 @@ export interface TransactionResponse extends Transaction {
   first_seen?: number // in seconds
 }
 
+export interface GetMempoolParams {
+  maximum?: number
+  skip?: number
+}
+
 export interface GetMempoolResult {
   total: number
   transactions: TransactionResponse[]
+}
+
+export interface MempoolTransactionSummary {
+  hash: string
+  source: string
+  fee: number
+  first_seen: number
+  size: number
+}
+
+export interface GetMempoolSummaryResult {
+  total: number
+  transactions: MempoolTransactionSummary
 }
 
 export interface StableTopoHeightChanged {
@@ -659,6 +677,7 @@ export enum RPCMethod {
 
   GetMempool = "get_mempool",
   GetMempoolCache = "get_mempool_cache",
+  GetMempoolSummary = "get_mempool_summary",
   GetEstimatedFeeRates = "get_estimated_fee_rates",
 
   GetDAGOrder = "get_dag_order",

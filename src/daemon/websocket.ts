@@ -229,8 +229,12 @@ export class DaemonMethods {
     return this.dataCall<types.GetPeersResult>(RPCMethod.GetPeers)
   }
 
-  getMemPool() {
-    return this.dataCall<types.TransactionResponse[]>(RPCMethod.GetMempool)
+  getMemPool(params?: types.GetMempoolParams) {
+    return this.dataCall<types.GetMempoolResult>(RPCMethod.GetMempool, params)
+  }
+
+  getMempoolSummary(params?: types.GetMempoolParams) {
+    return this.dataCall<types.GetMempoolSummaryResult>(RPCMethod.GetMempoolSummary, params)
   }
 
   getMempoolCache(address: string) {
