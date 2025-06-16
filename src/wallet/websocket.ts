@@ -108,6 +108,14 @@ export class WalletMethods {
     return this.dataCall<types.TransactionEntry>(RPCMethod.GetTransaction, { hash })
   }
 
+  searchTransaction(hash: string) {
+    return this.dataCall<types.SearchTransactionResult>(RPCMethod.SearchTransaction, { hash })
+  }
+
+  dumpTransaction(hash: string) {
+    return this.dataCall<string>(RPCMethod.DumpTransaction, { hash })
+  }
+
   buildTransaction(params: types.BuildTransactionParams) {
     return this.dataCall<types.TransactionResponse>(RPCMethod.BuildTransaction, params)
   }

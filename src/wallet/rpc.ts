@@ -71,6 +71,14 @@ export class RPC extends HttpRPC {
     return this.request<types.TransactionEntry>(RPCMethod.GetTransaction, { hash })
   }
 
+  searchTransaction(hash: string) {
+    return this.request<types.SearchTransactionResult>(RPCMethod.SearchTransaction, { hash })
+  }
+
+  dumpTransaction(hash: string) {
+    return this.request<string>(RPCMethod.DumpTransaction, { hash })
+  }
+
   buildTransaction(params: types.BuildTransactionParams) {
     return this.request<types.TransactionResponse>(RPCMethod.BuildTransaction, params)
   }

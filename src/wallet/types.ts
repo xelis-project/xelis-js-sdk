@@ -338,6 +338,12 @@ export interface Query extends QueryValue, QueryElement {
   or?: Query[]
 }
 
+export interface SearchTransactionResult {
+  transaction: TransactionEntry
+  index?: number
+  is_raw_search: boolean
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetNetwork = 'get_network',
@@ -353,11 +359,13 @@ export enum RPCMethod {
   GetAssets = 'get_assets',
   GetAsset = 'get_asset',
   GetTransaction = 'get_transaction',
+  SearchTransaction = 'search_transaction', // TODO
+  DumpTransaction = 'dump_transaction', // TODO
   BuildTransaction = 'build_transaction',
   BuildTransactionOffline = 'build_transaction_offline',
   BuildUnsignedTransaction = 'build_unsigned_transaction',
-  SignUnsignedTransaction = 'sign_unsigned_transaction',
   FinalizeUnsignedTransaction = 'finalize_unsigned_transaction',
+  SignUnsignedTransaction = 'sign_unsigned_transaction',
   ClearTxCache = 'clear_tx_cache',
   ListTransactions = 'list_transactions',
   IsOnline = 'is_online',
