@@ -662,8 +662,8 @@ export enum RPCMethod {
   GetAssets = "get_assets",
 
   CountAssets = "count_assets",
-  CountTransactions = "count_transactions",
   CountAccounts = "count_accounts",
+  CountTransactions = "count_transactions",
   CountContracts = "count_contracts",
 
   SubmitTransaction = "submit_transaction",
@@ -676,8 +676,8 @@ export enum RPCMethod {
   GetPeers = "get_peers",
 
   GetMempool = "get_mempool",
-  GetMempoolCache = "get_mempool_cache",
   GetMempoolSummary = "get_mempool_summary",
+  GetMempoolCache = "get_mempool_cache",
   GetEstimatedFeeRates = "get_estimated_fee_rates",
 
   GetDAGOrder = "get_dag_order",
@@ -707,6 +707,7 @@ export enum RPCMethod {
   GetContractDataAtTopoheight = "get_contract_data_at_topoheight",
   GetContractBalance = "get_contract_balance",
   GetContractBalanceAtTopoheight = "get_contract_balance_at_topoheight",
+  GetContractAssets = "get_contract_assets",
 
   GetBlockTemplate = "get_block_template",
   GetMinerWork = "get_miner_work",

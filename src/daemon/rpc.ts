@@ -256,6 +256,10 @@ export class RPC extends HttpRPC {
     return this.request<types.GetContractBalanceAtTopoheightResult>(RPCMethod.GetContractBalanceAtTopoheight, params)
   }
 
+  getContractAssets(params: types.GetContractBalanceParams) {
+    return this.request<string[]>(RPCMethod.GetContractAssets, params)
+  }
+
   getBlockTemplate(address: string) {
     return this.request<types.GetBlockTemplateResult>(RPCMethod.GetBlockTemplate, { address })
   }
