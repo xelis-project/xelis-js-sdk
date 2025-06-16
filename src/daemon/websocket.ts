@@ -41,7 +41,7 @@ export class DaemonMethods {
     return this.ws.listenEvent(this.prefix + RPCEvent.TransactionOrphaned, onData)
   }
 
-  onTransactionAddedInMempool(onData: (msgEvent: MessageEvent, data?: types.TransactionResponse & types.RPCEventResult, err?: Error) => void) {
+  onTransactionAddedInMempool(onData: (msgEvent: MessageEvent, data?: types.MempoolTransactionSummary & types.RPCEventResult, err?: Error) => void) {
     return this.ws.listenEvent(this.prefix + RPCEvent.TransactionAddedInMempool, onData)
   }
 

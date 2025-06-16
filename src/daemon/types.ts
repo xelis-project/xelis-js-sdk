@@ -605,7 +605,7 @@ export interface MempoolTransactionSummary {
 
 export interface GetMempoolSummaryResult {
   total: number
-  transactions: MempoolTransactionSummary
+  transactions: MempoolTransactionSummary[]
 }
 
 export interface StableTopoHeightChanged {
