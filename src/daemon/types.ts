@@ -585,6 +585,11 @@ export interface TransactionResponse extends Transaction {
   first_seen?: number // in seconds
 }
 
+export interface GetMempoolResult {
+  total: number
+  transactions: TransactionResponse[]
+}
+
 export interface StableTopoHeightChanged {
   previous_stable_topoheight: number
   new_stable_topoheight: number

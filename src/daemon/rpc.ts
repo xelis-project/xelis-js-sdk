@@ -149,7 +149,7 @@ export class RPC extends HttpRPC {
   }
 
   getMemPool() {
-    return this.request<types.TransactionResponse[]>(RPCMethod.GetMempool)
+    return this.request<types.GetMempoolResult>(RPCMethod.GetMempool)
   }
 
   getMempoolCache(address: String) {
