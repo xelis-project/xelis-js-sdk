@@ -145,6 +145,9 @@ export class WSRPC {
       eventData.listeners.push(onMessage)
     } else {
       // important if multiple listenEvent are called without await at least we store listener before getting id
+      // avoid trying to subscribe the same event multiple times
+      this.events.set(event, { listeners: [onMessage] })
+
       let idRefObject = {} as IdRefObj
       const [err, _] = await to(this.dataCall<boolean>(`subscribe`, { notify: event }, idRefObject))
       if (err) {
@@ -152,7 +155,8 @@ export class WSRPC {
         return Promise.reject(err)
       }
 
-      this.events.set(event, { listeners: [onMessage], id: idRefObject.id })
+      let eventData = this.events.get(event)
+      if (eventData) eventData.id = idRefObject.id
     }
 
     this.socket && this.socket.addEventListener(`message`, onMessage)
@@ -170,16 +174,14 @@ export class WSRPC {
 
         // no more listener so we unsubscribe from daemon websocket if socket still open
         if (listeners.length === 0) {
-          if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-            // we use a grace period to unsubscribe (mostly because of react useEffect and avoid unecessary subscribe)
-            eventData.unsubscribeTimeoutId = setTimeout(async () => {
+          // we use a grace period to unsubscribe (mostly because of react useEffect and avoid unecessary subscribe)
+          eventData.unsubscribeTimeoutId = setTimeout(async () => {
+            if (this.socket && this.socket.readyState === WebSocket.OPEN) {
               this.dataCall<boolean>(`unsubscribe`, { notify: event })
-              this.events.delete(event)
-            }, this.unsubscribeSuspense)
-          } else {
-            // socket is closed so we don't send unsubscribe and no grace period delete right away
+            }
+
             this.events.delete(event)
-          }
+          }, this.unsubscribeSuspense)
         }
       }
 
