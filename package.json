@@ -25,22 +25,26 @@
     "fix-esm": "fix-esm-import-path ./dist/esm",
     "clean": "rm -rf ./dist",
     "build": "npm run clean && npm run compile && node create_esm_pkg.js && npm run fix-esm",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "dev-relayer": "vite ./src/xswd/relayer/test"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",
     "@types/json-bigint": "^1.0.4",
+    "@types/qrcode": "^1.5.5",
     "@types/react": "^18.2.23",
     "@types/ws": "^8.5.4",
     "fix-esm-import-path": "^1.10.1",
     "ts-jest": "^29.0.5",
-    "typescript": "^4.9.5"
+    "typescript": "^4.9.5",
+    "vite": "^7.0.5"
   },
   "dependencies": {
     "await-to-js": "^3.0.0",
     "isomorphic-ws": "^5.0.0",
     "js-base64": "^3.7.6",
     "json-bigint": "^1.0.0",
+    "qrcode": "^1.5.4",
     "react": "^18.2.0",
     "ws": "^8.12.1"
   }
