@@ -23,7 +23,7 @@
     "test": "jest",
     "compile": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
     "fix-esm": "fix-esm-import-path ./dist/esm",
-    "clean": "rm -rf ./dist",
+    "clean": "rimraf ./dist",
     "build": "npm run clean && npm run compile && node create_esm_pkg.js && npm run fix-esm",
     "prepublishOnly": "npm run build",
     "dev-relayer": "vite ./src/xswd/relayer/test"
@@ -35,6 +35,7 @@
     "@types/react": "^18.2.23",
     "@types/ws": "^8.5.4",
     "fix-esm-import-path": "^1.10.1",
+    "rimraf": "^6.0.1",
     "ts-jest": "^29.0.5",
     "typescript": "^4.9.5",
     "vite": "^7.0.5"
