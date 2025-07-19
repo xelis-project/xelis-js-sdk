@@ -1,5 +1,5 @@
 {
-  "version": "0.10.10",
+  "version": "0.10.11",
   "name": "@xelis/sdk",
   "description": "Xelis software development kit for JS",
   "exports": {
@@ -27,6 +27,7 @@
     "copy-css": "copyfiles -u 1 ./src/**/*.css ./dist/cjs && copyfiles -u 1 ./src/**/*.css ./dist/esm",
     "build": "npm run clean && npm run compile && node create_esm_pkg.js && npm run fix-esm && npm run copy-css",
     "prepublishOnly": "npm run build",
+    "publish-dev": "npm publish --tag dev",
     "dev-relayer": "vite ./src/xswd/relayer/test"
   },
   "devDependencies": {
