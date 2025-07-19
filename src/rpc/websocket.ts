@@ -226,24 +226,26 @@ export class WSRPC {
       const onMessage = (msgEvent: MessageEvent) => {
         if (typeof msgEvent.data === `string`) {
           const data = parseJSON(msgEvent.data)
-          let valid = false
-          if (Array.isArray(data) && data.length > 0 && data[0].id === id) {
-            //@ts-ignore
-            resolve(data)
-            valid = true
-          } else if (data.id === id) {
-            resolve(data)
-            valid = true
-          } else if (data.id === null && id === 0) {
-            // special case with xswd sending first call will return null id
-            resolve(data)
-            valid = true
+
+          if (data.error && data.error.message) {
+            return reject(new Error(data.error.message))
           }
 
-          if (valid) {
-            clearTimeout(timeoutId)
-            this.socket && this.socket.removeEventListener(`message`, onMessage)
+          if (Array.isArray(data) && data.length > 0 && data[0].id === id) {
+            //@ts-ignore
+            return resolve(data)
           }
+          
+          if (data.id === id) {
+            return resolve(data)
+          } 
+          
+          if (data.id === null && id === 0) {
+            // special case with xswd sending first call will return null id
+            return resolve(data)
+          }
+
+          reject(new Error("invalid data"))
         }
       }
 
