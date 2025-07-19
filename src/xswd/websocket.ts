@@ -1,7 +1,7 @@
 import { WSRPC } from '../rpc/websocket'
-import { ApplicationData } from '../wallet/types'
 import { DaemonMethods } from '../daemon/websocket'
 import { WalletMethods } from '../wallet/websocket'
+import { ApplicationData } from './types'
 
 export class WS extends WSRPC {
   daemon: DaemonMethods
