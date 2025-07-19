@@ -227,25 +227,32 @@ export class WSRPC {
         if (typeof msgEvent.data === `string`) {
           const data = parseJSON(msgEvent.data)
 
-          if (data.error && data.error.message) {
-            return reject(new Error(data.error.message))
+          const evaluate_data = () => {
+            clearTimeout(timeoutId)
+            this.socket && this.socket.removeEventListener(`message`, onMessage)
+
+            if (data.error && data.error.message) {
+              reject(new Error(data.error.message))
+              return
+            }
+
+            return resolve(data)
           }
 
+          // this is for batch call we match the id with first item id
           if (Array.isArray(data) && data.length > 0 && data[0].id === id) {
-            //@ts-ignore
-            return resolve(data)
-          }
-          
-          if (data.id === id) {
-            return resolve(data)
-          } 
-          
-          if (data.id === null && id === 0) {
-            // special case with xswd sending first call will return null id
-            return resolve(data)
+            return evaluate_data()
           }
 
-          reject(new Error("invalid data"))
+          // the msg id is matching so we can evaluate the data
+          if (data.id === id) {
+            return evaluate_data()
+          }
+
+          // special XSWD case - sending first call will return null id
+          if (data.id === null && id === 0) {
+            return evaluate_data()
+          }
         }
       }
 
