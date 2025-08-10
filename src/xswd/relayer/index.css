@@ -1,11 +1,21 @@
 .xelis-xswd-relayer {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(30px);
+    opacity: 0;
+    animation: xelis-xswd-relayer-appear .25s forwards;
+    user-select: none;
+}
+
+@keyframes xelis-xswd-relayer-appear {
+    100% {
+        opacity: 1;
+    }
 }
 
 .xelis-xswd-relayer-content {
@@ -13,16 +23,51 @@
     top: 50%;
     left: 50%;
     translate: -50% -50%;
-    background-color: aquamarine;
-    filter: drop-shadow(0px 0px 25px black);
 }
 
-.xelis-xswd-relayer-error {}
+.xelis-xswd-relayer-error {
+    background-color: #02ffcf;
+    padding: 15px;
+    border-radius: 10px;
+    animation: xelis-xswd-relayer-error-appear .5s forwards;
+    opacity: 0;
+}
+
+@keyframes xelis-xswd-relayer-error-appear {
+    25% {
+        translate: -4px 0;
+        rotate: -3deg;
+    }
+
+    50% {
+        translate: 4px 0;
+        rotate: 3deg;
+    }
+
+    75% {
+        translate: -4px 0;
+        rotate: -3deg;
+    }
+
+    100% {
+        opacity: 1;
+        translate: 0 0;
+        rotate: 0;
+    }
+}
+
+
+.xelis-xswd-relayer-error-text {
+    background-color: rgba(31, 31, 31, 1);
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: rgb(255, 63, 63);
+}
 
 .xelis-xswd-relayer-loading {
-    width: 50px;
-    height: 50px;
-    color: black;
+    width: 75px;
+    height: 75px;
+    color: #02ffcf;
     animation: xelis-xswd-relayer-loading-animation .75s infinite;
 }
 
@@ -32,6 +77,87 @@
     }
 }
 
-.xelis-xswd-relayer-qrcode {}
+.xelis-xswd-relayer-qrcode {
+    background-color: rgba(2, 255, 207, 1);
+    padding: 30px 30px 50px 30px;
+    border-radius: 15px;
+    animation: xelis-xswd-relayer-qrcode-appear .25s forwards, xelis-xswd-relayer-qrcode-animation 2s infinite alternate;
+    translate: 0 -100%;
+    opacity: 0;
+    position: relative;
+}
 
-.xelis-xswd-relayer-qrcode canvas {}
+@keyframes xelis-xswd-relayer-qrcode-appear {
+    100% {
+        translate: 0 0;
+        opacity: 1;
+    }
+}
+
+@keyframes xelis-xswd-relayer-qrcode-animation {
+    0% {
+        background-color: rgba(2, 255, 207, 0.3);
+        filter: drop-shadow(0px 0px 100px rgba(2, 255, 209, 0.1));
+    }
+
+    100% {
+        background-color: rgba(2, 255, 207, 1);
+        filter: drop-shadow(0px 0px 200px rgba(2, 255, 209, 0.1));
+    }
+}
+
+.xelis-xswd-relayer-scan-logo {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    translate: -50% 0;
+    width: 25px;
+    height: 25px;
+    color: white;
+    background-color: black;
+    padding: 20px;
+    border-radius: 100%;
+}
+
+.xelis-xswd-relayer-logo-wrap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    border-radius: 15px;
+}
+
+.xelis-xswd-relayer-logo {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 25%;
+    left: 5%;
+    scale: 1.8;
+    z-index: -1;
+    animation: xelis-xswd-relayer-logo-animation 2s infinite alternate;
+}
+
+@keyframes xelis-xswd-relayer-logo-animation {
+    0% {
+        color: rgba(0, 206, 168, 0);
+    }
+
+    100% {
+        color: rgba(0, 206, 168, 0.8);
+    }
+}
+
+
+.xelis-xswd-relayer-title {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: black;
+}
+
+.xelis-xswd-relayer-qrcode canvas {
+    border-radius: 10px;
+}
