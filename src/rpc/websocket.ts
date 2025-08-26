@@ -51,9 +51,7 @@ export class WSRPC {
       this.events.set(event, eventData)
     } else {
       let idRefObject = {} as IdRefObj
-      this.dataCall<boolean>(`subscribe`, { notify: event }, idRefObject).catch((err) => {
-        listener(undefined, err)
-      })
+      this.dataCall<boolean>(`subscribe`, { notify: event }, idRefObject)
 
       const onMessage = (msgEvent: MessageEvent) => {
         const eventData = this.events.get(event)
