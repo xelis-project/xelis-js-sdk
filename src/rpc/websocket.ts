@@ -53,7 +53,14 @@ export class WSRPC {
       let idRefObject = {} as IdRefObj
       this.dataCall<boolean>(`subscribe`, { notify: event }, idRefObject)
 
+      let subscribed = false;
       const onMessage = (msgEvent: MessageEvent) => {
+        // the first message will return true if subscription is successful
+        if (!subscribed) {
+          subscribed = true;
+          return;
+        }
+
         const eventData = this.events.get(event)
         if (eventData && typeof msgEvent.data === `string`) {
           try {
