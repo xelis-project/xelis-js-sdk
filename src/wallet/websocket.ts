@@ -7,6 +7,17 @@ import { RPCMethod, RPCEvent } from './types'
 import * as types from './types'
 import { Element } from '../data/element'
 
+export interface WalletEventsData {
+  [RPCEvent.NewTopoheight]: types.NewTopoheightResult & RPCEventResult
+  [RPCEvent.NewAsset]: daemonTypes.AssetWithData & RPCEventResult,
+  [RPCEvent.NewTransaction]: types.TransactionEntry & RPCEventResult,
+  [RPCEvent.BalanceChanged]: types.BalanceChangedResult & RPCEventResult,
+  [RPCEvent.Rescan]: types.RescanResult & RPCEventResult
+  [RPCEvent.HistorySynced]: types.HistorySyncedResult & RPCEventResult
+  [RPCEvent.Online]: RPCEventResult
+  [RPCEvent.Offline]: RPCEventResult
+}
+
 export class WalletMethods {
   ws: WSRPC
   prefix: string
@@ -20,36 +31,12 @@ export class WalletMethods {
     return this.ws.dataCall(this.prefix + method, params)
   }
 
-  onNewTopoheight(onData: (msgEvent: MessageEvent, data?: types.NewTopoheightResult & RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.NewTopoheight, onData)
+  closeListener<K extends keyof WalletEventsData>(event: K, listener: (data?: WalletEventsData[K], err?: Error) => void) {
+    this.ws.closeListener(event, listener)
   }
 
-  onNewAsset(onData: (msgEvent: MessageEvent, data?: daemonTypes.AssetWithData & RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.NewAsset, onData)
-  }
-
-  onNewTransaction(onData: (msgEvent: MessageEvent, data?: types.TransactionEntry & RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.NewTransaction, onData)
-  }
-
-  onBalanceChanged(onData: (msgEvent: MessageEvent, data?: types.BalanceChangedResult & RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.BalanceChanged, onData)
-  }
-
-  onRescan(onData: (msgEvent: MessageEvent, data?: types.RescanResult & RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.Rescan, onData)
-  }
-
-  onHistorySynced(onData: (msgEvent: MessageEvent, data?: types.HistorySyncedResult & RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.HistorySynced, onData)
-  }
-
-  onOnline(onData: (msgEvent: MessageEvent, data?: RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.Online, onData)
-  }
-
-  onOffline(onData: (msgEvent: MessageEvent, data?: RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.Offline, onData)
+  listen<K extends keyof WalletEventsData>(event: K, listener: (data?: WalletEventsData[K], err?: Error) => void) {
+    this.ws.listen(this.prefix + event, listener as any)
   }
 
   getVersion() {
@@ -216,8 +203,8 @@ export class WalletMethods {
 export class WS extends WSRPC {
   methods: WalletMethods
 
-  constructor(username: string, password: string) {
-    super({ auth: `${username}:${password}` })
+  constructor(endpoint: string, username: string, password: string) {
+    super(endpoint, { auth: `${username}:${password}` })
     this.methods = new WalletMethods(this)
   }
 }

@@ -5,15 +5,15 @@ import WalletWS from './websocket'
 
 describe('WalletWS', () => {
   test('getAddress', async () => {
-    const walletWS = new WalletWS(`test`, `test`)
-    const [err] = await to(walletWS.connect(LOCAL_WALLET_WS))
-    expect(err).toBeNull()
-    const [err2, res] = await to(walletWS.methods.getAddress())
-    expect(err2).toBeNull()
+    const walletWS = new WalletWS(LOCAL_WALLET_WS, `test`, `test`)
+    walletWS.socket.addEventListener(`open`, async () => {
+      const [err2, res] = await to(walletWS.methods.getAddress())
+      expect(err2).toBeNull()
 
-    console.log(res)
-    expect(res)
+      console.log(res)
+      expect(res)
 
-    walletWS.close()
+      walletWS.socket.close()
+    })
   })
 })

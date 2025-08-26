@@ -1,8 +1,29 @@
 import { MessageEvent } from 'ws'
-import { RPCMethod, RPCEvent } from './types'
+import { RPCMethod, RPCEvent, RPCEventResult } from './types'
 import * as types from './types'
-
 import { WSRPC } from '../rpc/websocket'
+
+export interface DaemonEventsData {
+  [RPCEvent.NewBlock]: types.Block & RPCEventResult
+  [RPCEvent.BlockOrdered]: types.BlockOrdered & RPCEventResult
+  [RPCEvent.BlockOrphaned]: types.BlockOrphaned & RPCEventResult
+  [RPCEvent.StableHeightChanged]: types.StableHeightChanged & RPCEventResult
+  [RPCEvent.StableTopoHeightChanged]: types.StableTopoHeightChanged & RPCEventResult
+  [RPCEvent.TransactionOrphaned]: types.TransactionResponse & RPCEventResult
+  [RPCEvent.TransactionAddedInMempool]: types.MempoolTransactionSummary & RPCEventResult
+  [RPCEvent.TransactionExecuted]: types.TransactionExecuted & RPCEventResult
+  [RPCEvent.InvokeContract]: types.InvokeContract & RPCEventResult
+  [RPCEvent.ContractTransfer]: types.ContractTransfer & RPCEventResult
+  [RPCEvent.ContractEvent]: types.ContractEvent & RPCEventResult
+  [RPCEvent.DeployContract]: types.NewContract & RPCEventResult
+  [RPCEvent.NewAsset]: types.AssetWithData & RPCEventResult
+  [RPCEvent.PeerConnected]: types.Peer & RPCEventResult
+  [RPCEvent.PeerDisconnected]: number & RPCEventResult
+  [RPCEvent.PeerStateUpdated]: types.Peer & RPCEventResult
+  [RPCEvent.PeerPeerListUpdated]: types.PeerPeerListUpdated & RPCEventResult
+  [RPCEvent.PeerPeerDisconnected]: types.PeerPeerDisconnected & RPCEventResult
+  [RPCEvent.NewBlockTemplate]: types.GetBlockTemplateResult & RPCEventResult
+}
 
 export class DaemonMethods {
   ws: WSRPC
@@ -17,80 +38,12 @@ export class DaemonMethods {
     return this.ws.dataCall(this.prefix + method, params)
   }
 
-  onNewBlock(onData: (msgEvent: MessageEvent, data?: types.Block & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.NewBlock, onData)
+  closeListener<K extends keyof DaemonEventsData>(event: K, listener: (data?: DaemonEventsData[K], err?: Error) => void) {
+    this.ws.closeListener(event, listener)
   }
 
-  onBlockOrdered(onData: (msgEvent: MessageEvent, data?: types.BlockOrdered & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.BlockOrdered, onData)
-  }
-
-  onBlockOrphaned(onData: (msgEvent: MessageEvent, data?: types.BlockOrphaned & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.BlockOrphaned, onData)
-  }
-
-  onStableHeightChanged(onData: (msgEvent: MessageEvent, data?: types.StableHeightChanged & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.StableHeightChanged, onData)
-  }
-
-  onStableTopoHeightChanged(onData: (msgEvent: MessageEvent, data?: types.StableTopoHeightChanged & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.StableTopoHeightChanged, onData)
-  }
-
-  onTransactionOrphaned(onData: (msgEvent: MessageEvent, data?: types.TransactionResponse & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.TransactionOrphaned, onData)
-  }
-
-  onTransactionAddedInMempool(onData: (msgEvent: MessageEvent, data?: types.MempoolTransactionSummary & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.TransactionAddedInMempool, onData)
-  }
-
-  onTransactionExecuted(onData: (msgEvent: MessageEvent, data?: types.TransactionExecuted & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.TransactionExecuted, onData)
-  }
-
-  onInvokeContract(contract: string, onData: (msgEvent: MessageEvent, data?: types.InvokeContract & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent({ [this.prefix + RPCEvent.InvokeContract]: { contract } }, onData)
-  }
-
-  onContractTransfer(address: string, onData: (msgEvent: MessageEvent, data?: types.ContractTransfer & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent({ [this.prefix + RPCEvent.ContractTransfer]: { address } }, onData)
-  }
-
-  onContractEvent(contract: string, id: number, onData: (msgEvent: MessageEvent, data?: types.ContractEvent & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent({ [this.prefix + RPCEvent.ContractEvent]: { contract, id } }, onData)
-  }
-
-  onDeployContract(onData: (msgEvent: MessageEvent, data?: types.NewContract & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.DeployContract, onData)
-  }
-
-  onNewAsset(onData: (msgEvent: MessageEvent, data?: types.AssetWithData & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.NewAsset, onData)
-  }
-
-  onPeerConnected(onData: (msgEvent: MessageEvent, data?: types.Peer & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.PeerConnected, onData)
-  }
-
-  onPeerDisconnected(onData: (msgEvent: MessageEvent, data?: number & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.PeerDisconnected, onData)
-  }
-
-  onPeerStateUpdated(onData: (msgEvent: MessageEvent, data?: types.Peer & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.PeerStateUpdated, onData)
-  }
-
-  onPeerPeerListUpdated(onData: (msgEvent: MessageEvent, data?: types.PeerPeerListUpdated & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.PeerPeerListUpdated, onData)
-  }
-
-  onPeerPeerDisconnected(onData: (msgEvent: MessageEvent, data?: types.PeerPeerDisconnected & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.PeerPeerDisconnected, onData)
-  }
-
-  onNewBlockTemplate(onData: (msgEvent: MessageEvent, data?: types.GetBlockTemplateResult & types.RPCEventResult, err?: Error) => void) {
-    return this.ws.listenEvent(this.prefix + RPCEvent.NewBlockTemplate, onData)
+  listen<K extends keyof DaemonEventsData>(event: K, listener: (data?: DaemonEventsData[K], err?: Error) => void) {
+    this.ws.listen(this.prefix + event, listener)
   }
 
   getVersion() {
@@ -368,8 +321,8 @@ export class DaemonMethods {
 
 export class WS extends WSRPC {
   methods: DaemonMethods
-  constructor() {
-    super()
+  constructor(endpoint: string) {
+    super(endpoint)
     this.methods = new DaemonMethods(this)
   }
 }

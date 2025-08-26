@@ -7,9 +7,10 @@ export class WS extends WSRPC {
   daemon: DaemonMethods
   wallet: WalletMethods
 
-  constructor() {
-    super()
-    this.timeout = 0
+  constructor(endpoint: string) {
+    super(endpoint)
+
+    this.callTimeout = 0; // xswd needs user input for confirmation - timeout should not be used
     this.daemon = new DaemonMethods(this, "node.")
     this.wallet = new WalletMethods(this, "wallet.") 
   }

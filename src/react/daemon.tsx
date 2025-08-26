@@ -1,5 +1,4 @@
 import React, { DependencyList, PropsWithChildren, createContext, useContext, useEffect, useState } from 'react'
-import { to } from 'await-to-js'
 import { CloseEvent, ErrorEvent, MessageEvent, } from 'ws'
 
 import DaemonWS from '../daemon/websocket'
@@ -7,16 +6,14 @@ import { RPCEvent } from '../daemon/types'
 
 export const INITIATING = -1
 
-const daemon = new DaemonWS()
-
 const Context = createContext<NodeSocket>({
   err: undefined,
-  daemon,
+  daemon: undefined,
   readyState: INITIATING
 })
 
 interface NodeSocket {
-  daemon: DaemonWS
+  daemon?: DaemonWS
   err?: Error
   readyState: number
 }
@@ -31,28 +28,24 @@ export const NodeSocketProvider = (props: PropsWithChildren<NodeSocketProviderPr
 
   const [readyState, setReadyState] = useState<number>(INITIATING)
   const [err, setErr] = useState<Error | undefined>()
+  const [daemon, setDaemon] = useState<DaemonWS>()
 
   useEffect(() => {
-    const connect = async () => {
-      setErr(undefined)
-      const [err, _] = await to(daemon.connect(endpoint))
-      if (err) setErr(err)
-    }
-
-    connect()
+    const daemon = new DaemonWS(endpoint)
+    setDaemon(daemon)
+    return () => daemon.socket.close()
   }, [endpoint])
 
   useEffect(() => {
     if (!timeout) return
-    daemon.timeout = timeout
+    if (daemon) daemon.callTimeout = timeout
   }, [timeout])
 
   useEffect(() => {
-    if (!daemon.socket) return
+    if (!daemon) return
     setReadyState(daemon.socket.readyState)
 
     const onOpen = () => {
-      if (!daemon.socket) return
       setReadyState(daemon.socket.readyState)
       setErr(undefined)
     }
@@ -79,7 +72,7 @@ export const NodeSocketProvider = (props: PropsWithChildren<NodeSocketProviderPr
       daemon.socket.removeEventListener(`close`, onClose)
       daemon.socket.removeEventListener(`error`, onError)
     }
-  }, [daemon.socket])
+  }, [daemon])
 
   return <Context.Provider value={{ daemon, err, readyState }}>
     {children}
@@ -89,24 +82,21 @@ export const NodeSocketProvider = (props: PropsWithChildren<NodeSocketProviderPr
 interface NodeSocketSubscribeProps<T> {
   event: RPCEvent
   onLoad: () => void
-  onData: (msgEvent: MessageEvent, data?: T, err?: Error | undefined) => void
+  onData: (event?: MessageEvent, data?: T, err?: Error | undefined) => void
 }
 
 export const useNodeSocketSubscribe = ({ event, onLoad, onData }: NodeSocketSubscribeProps<any>, dependencies: DependencyList) => {
   const nodeSocket = useNodeSocket()
 
   useEffect(() => {
+    if (!nodeSocket.daemon) return;
     if (nodeSocket.readyState !== WebSocket.OPEN) return
     if (typeof onLoad === `function`) onLoad()
 
-    let closeEvent: () => void
-    const listen = async () => {
-      closeEvent = await nodeSocket.daemon.listenEvent(event, onData)
-    }
-
-    listen()
+    nodeSocket.daemon.listen(event, onData)
     return () => {
-      closeEvent && closeEvent()
+      if (!nodeSocket.daemon) return;
+      nodeSocket.daemon.closeListener(event, onData)
     }
   }, [nodeSocket, ...dependencies])
 }

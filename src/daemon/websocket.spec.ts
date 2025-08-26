@@ -1,109 +1,93 @@
 import { to } from 'await-to-js'
 
-import { LOCAL_NODE_WS } from '../config'
+import { LOCAL_NODE_WS, MAINNET_NODE_WS } from '../config'
 import { RPCEvent, RPCMethod } from './types'
 import DaemonWS from './websocket'
 import { RPCRequest } from '../rpc/types'
 
 describe('DaemonWS', () => {
   test('getInfo', async () => {
-    const daemonWS = new DaemonWS()
-    const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
-    expect(err).toBeNull()
-    const [err2, res] = await to(daemonWS.methods.getInfo())
-    expect(err2).toBeNull()
+    const daemonWS = new DaemonWS(MAINNET_NODE_WS)
+    daemonWS.socket.addEventListener(`open`, async () => {
+      const [err1, res] = await to(daemonWS.methods.getInfo())
+      expect(err1).toBeNull()
 
-    console.log(res)
-    expect(res)
+      console.log(res)
+      expect(res)
 
-    daemonWS.close()
-  })
-
-  test('reconnect', async () => {
-    const daemonWS = new DaemonWS()
-    const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
-    expect(err).toBeNull()
-
-    console.log('Reconnecting to testnet...')
-    await daemonWS.connect(LOCAL_NODE_WS)
-    daemonWS.close()
-    expect(true)
+      daemonWS.socket.close()
+    })
   })
 
   const timeout = 40000
   test('listen_NewBlock', () => {
     return new Promise(async (resolve, reject) => {
-      const daemonWS = new DaemonWS()
-      const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
-      expect(err).toBeNull()
+      const daemonWS = new DaemonWS(MAINNET_NODE_WS)
+      daemonWS.socket.addEventListener(`open`, async () => {
+        const doneTest = (err?: any) => {
+          daemonWS.socket.close()
+          if (err) return reject(err)
+          resolve(null)
+        }
 
-      const doneTest = (err?: any) => {
-        daemonWS.close()
-        if (err) return reject(err)
-        resolve(null)
-      }
-
-      const closeListen = await daemonWS.methods.onNewBlock(async (newBlock, msgEvent) => {
-        console.log(newBlock)
-        if (closeListen) await closeListen()
-        doneTest()
-      }).catch(err => doneTest(err))
+        daemonWS.methods.listen(RPCEvent.NewBlock, async (data, err) => {
+          console.log(data)
+          doneTest(err)
+        })
+      })
     })
   }, timeout)
 
   test('multi_listen', () => {
     return new Promise(async (resolve, reject) => {
-      const daemonWS = new DaemonWS()
-      const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
-      expect(err).toBeNull()
+      const daemonWS = new DaemonWS(MAINNET_NODE_WS)
+      daemonWS.socket.addEventListener(`open`, async () => {
+        let count = 3
 
-      let count = 3
-
-      const doneTest = async (err?: any) => {
-        if (err) return reject(err)
-        count--
-        if (count === 0) {
-          const [err] = await to(daemonWS.closeAllListens(RPCEvent.NewBlock))
+        const doneTest = async (err?: any) => {
           if (err) return reject(err)
-
-          daemonWS.close()
-          resolve(null)
+          count--
+          if (count === 0) {
+            daemonWS.socket.close()
+            resolve(null)
+          }
         }
-      }
 
-      for (let i = 0; i < count; i++) {
-        daemonWS.methods.onNewBlock(async (newBlock, msgEvent) => {
-          console.log(newBlock)
-          doneTest()
-        }).catch(err => doneTest(err))
-      }
+        for (let i = 0; i < count; i++) {
+          daemonWS.methods.listen(RPCEvent.NewBlock, async (data, err) => {
+            console.log(data)
+            doneTest(err)
+          })
+        }
+      })
     })
   }, timeout)
 
   test('check_invalid_event', async () => {
-    const daemonWS = new DaemonWS()
-    const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
-    expect(err).toBeNull()
+    const daemonWS = new DaemonWS(MAINNET_NODE_WS)
 
-    //@ts-ignore
-    const [err2, _] = await to(daemonWS.listenEvent(`asdasd`, async (result, msgEvent) => { }))
-    expect(err2).toBeDefined()
-    daemonWS.close()
+    daemonWS.socket.addEventListener(`open`, async () => {
+      daemonWS.listen(`asdasd`, async (data, err) => {
+
+      }).catch((err) => {
+        expect(err).toBeDefined()
+        daemonWS.socket.close()
+      })
+    })
   })
 
   test(`batchRequest`, async () => {
-    const daemonWS = new DaemonWS()
-    const [err] = await to(daemonWS.connect(LOCAL_NODE_WS))
-    expect(err).toBeNull()
+    const daemonWS = new DaemonWS(MAINNET_NODE_WS)
+    daemonWS.socket.addEventListener(`open`, async () => {
+      const requests = [
+        { method: RPCMethod.GetTopoheight },
+        { method: RPCMethod.GetInfo },
+        { method: "invalid" }
+      ] as RPCRequest[]
 
-    const requests = [
-      { method: RPCMethod.GetTopoheight },
-      { method: RPCMethod.GetInfo },
-      { method: "invalid" }
-    ] as RPCRequest[]
-
-    const [err1, res] = await to(daemonWS.batchCall(requests))
-    console.log(err1, res)
-    expect(err1).toBeNull()
+      const [err1, res] = await to(daemonWS.batchCall(requests))
+      console.log(err1, res)
+      expect(err1).toBeNull()
+    })
   })
 })
