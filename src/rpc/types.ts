@@ -1,8 +1,8 @@
 export interface RPCRequest {
-  id: number | null
-  jsonrpc: string
+  id?: number
+  jsonrpc?: string
   method: string
-  params: string
+  params?: any
 }
 
 export interface RPCError {
