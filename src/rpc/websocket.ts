@@ -151,7 +151,7 @@ export class WSRPC {
     })
   }
 
-  batchCall(requests: RPCRequest[]): Promise<any[]> {
+  batchCall(requests: RPCRequest[]): Promise<({} | Error)[]> {
     return new Promise(async (resolve, reject) => {
       let id = this.methodIdIncrement++
       requests.forEach((request) => {
@@ -163,7 +163,7 @@ export class WSRPC {
       const [err, res] = await to(this.rawCall<RPCResponse<any>[]>(id, data))
       if (err) return reject(err)
 
-      let items = [] as any[]
+      let items = [] as ({} | Error)[]
       res.forEach((v) => {
         if (v.error) {
           items.push(new Error(v.error.message))

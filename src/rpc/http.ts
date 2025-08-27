@@ -13,7 +13,7 @@ export class HttpRPC {
     this.headers.set(`Content-Type`, `application/json`)
   }
 
-  async batchRequest(requests: RPCRequest[]): Promise<any | Error[]> {
+  async batchRequest(requests: RPCRequest[]): Promise<({} | Error)[]> {
     try {
       const controller = new AbortController()
 
@@ -40,7 +40,7 @@ export class HttpRPC {
       if (res.ok) {
         const jsonString = await res.text()
 
-        let items = [] as any | Error[]
+        let items = [] as ({} | Error)[]
         const data = parseJSON(jsonString) as RPCResponse<any>[]
         data.forEach((item) => {
           if (item.error) {
