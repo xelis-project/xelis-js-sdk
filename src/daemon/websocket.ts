@@ -1,28 +1,28 @@
 import { MessageEvent } from 'ws'
-import { RPCMethod, RPCEvent, RPCEventResult } from './types'
+import { RPCMethod, RPCEvent } from './types'
 import * as types from './types'
 import { WSRPC } from '../rpc/websocket'
 
 export interface DaemonEventsData {
-  [RPCEvent.NewBlock]: types.Block & RPCEventResult
-  [RPCEvent.BlockOrdered]: types.BlockOrdered & RPCEventResult
-  [RPCEvent.BlockOrphaned]: types.BlockOrphaned & RPCEventResult
-  [RPCEvent.StableHeightChanged]: types.StableHeightChanged & RPCEventResult
-  [RPCEvent.StableTopoHeightChanged]: types.StableTopoHeightChanged & RPCEventResult
-  [RPCEvent.TransactionOrphaned]: types.TransactionResponse & RPCEventResult
-  [RPCEvent.TransactionAddedInMempool]: types.MempoolTransactionSummary & RPCEventResult
-  [RPCEvent.TransactionExecuted]: types.TransactionExecuted & RPCEventResult
-  [RPCEvent.InvokeContract]: types.InvokeContract & RPCEventResult
-  [RPCEvent.ContractTransfer]: types.ContractTransfer & RPCEventResult
-  [RPCEvent.ContractEvent]: types.ContractEvent & RPCEventResult
-  [RPCEvent.DeployContract]: types.NewContract & RPCEventResult
-  [RPCEvent.NewAsset]: types.AssetWithData & RPCEventResult
-  [RPCEvent.PeerConnected]: types.Peer & RPCEventResult
-  [RPCEvent.PeerDisconnected]: number & RPCEventResult
-  [RPCEvent.PeerStateUpdated]: types.Peer & RPCEventResult
-  [RPCEvent.PeerPeerListUpdated]: types.PeerPeerListUpdated & RPCEventResult
-  [RPCEvent.PeerPeerDisconnected]: types.PeerPeerDisconnected & RPCEventResult
-  [RPCEvent.NewBlockTemplate]: types.GetBlockTemplateResult & RPCEventResult
+  [RPCEvent.NewBlock]: types.Block
+  [RPCEvent.BlockOrdered]: types.BlockOrdered
+  [RPCEvent.BlockOrphaned]: types.BlockOrphaned
+  [RPCEvent.StableHeightChanged]: types.StableHeightChanged
+  [RPCEvent.StableTopoHeightChanged]: types.StableTopoHeightChanged
+  [RPCEvent.TransactionOrphaned]: types.TransactionResponse
+  [RPCEvent.TransactionAddedInMempool]: types.MempoolTransactionSummary
+  [RPCEvent.TransactionExecuted]: types.TransactionExecuted
+  [RPCEvent.InvokeContract]: types.InvokeContract
+  [RPCEvent.ContractTransfer]: types.ContractTransfer
+  [RPCEvent.ContractEvent]: types.ContractEvent
+  [RPCEvent.DeployContract]: types.NewContract
+  [RPCEvent.NewAsset]: types.AssetWithData
+  [RPCEvent.PeerConnected]: types.Peer
+  [RPCEvent.PeerDisconnected]: number
+  [RPCEvent.PeerStateUpdated]: types.Peer
+  [RPCEvent.PeerPeerListUpdated]: types.PeerPeerListUpdated
+  [RPCEvent.PeerPeerDisconnected]: types.PeerPeerDisconnected
+  [RPCEvent.NewBlockTemplate]: types.GetBlockTemplateResult
 }
 
 export class DaemonMethods {

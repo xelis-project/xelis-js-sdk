@@ -53,19 +53,14 @@ export class WSRPC {
       let idRefObject = {} as IdRefObj
       this.dataCall<boolean>(`subscribe`, { notify: event }, idRefObject)
 
-      let subscribed = false;
       const onMessage = (msgEvent: MessageEvent) => {
-        // the first message will return true if subscription is successful
-        if (!subscribed) {
-          subscribed = true;
-          return;
-        }
-
-        const eventData = this.events.get(event)
+        const eventData = this.events.get(event) as EventData
         if (eventData && typeof msgEvent.data === `string`) {
           try {
             const data = parseJSON(msgEvent.data) as RPCResponse<any>
-            if (data.id === idRefObject.id) {
+
+            // event result will contain an event parameter with the event name defined
+            if (data.result["event"] === event && data.id === idRefObject.id) {
               eventData.listeners.forEach((listener) => {
                 if (data.error) {
                   listener(undefined, new Error(data.error.message))

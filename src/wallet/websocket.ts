@@ -1,21 +1,19 @@
 import { WSRPC } from '../rpc/websocket'
 import { MessageEvent } from 'ws'
-
-import { RPCEventResult } from '../daemon/types'
 import * as daemonTypes from '../daemon/types'
 import { RPCMethod, RPCEvent } from './types'
 import * as types from './types'
 import { Element } from '../data/element'
 
 export interface WalletEventsData {
-  [RPCEvent.NewTopoheight]: types.NewTopoheightResult & RPCEventResult
-  [RPCEvent.NewAsset]: daemonTypes.AssetWithData & RPCEventResult,
-  [RPCEvent.NewTransaction]: types.TransactionEntry & RPCEventResult,
-  [RPCEvent.BalanceChanged]: types.BalanceChangedResult & RPCEventResult,
-  [RPCEvent.Rescan]: types.RescanResult & RPCEventResult
-  [RPCEvent.HistorySynced]: types.HistorySyncedResult & RPCEventResult
-  [RPCEvent.Online]: RPCEventResult
-  [RPCEvent.Offline]: RPCEventResult
+  [RPCEvent.NewTopoheight]: types.NewTopoheightResult
+  [RPCEvent.NewAsset]: daemonTypes.AssetWithData,
+  [RPCEvent.NewTransaction]: types.TransactionEntry,
+  [RPCEvent.BalanceChanged]: types.BalanceChangedResult,
+  [RPCEvent.Rescan]: types.RescanResult
+  [RPCEvent.HistorySynced]: types.HistorySyncedResult
+  [RPCEvent.Online]: void
+  [RPCEvent.Offline]: void
 }
 
 export class WalletMethods {

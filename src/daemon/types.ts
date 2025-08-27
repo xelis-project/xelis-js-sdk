@@ -120,10 +120,6 @@ export interface HeightRangeParams {
   end_height?: number
 }
 
-export interface RPCEventResult {
-  event: string
-}
-
 export interface TimedDirection {
   in?: { received_at: number }
   out?: { sent_at: number }
