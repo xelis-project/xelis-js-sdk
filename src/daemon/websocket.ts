@@ -18,7 +18,7 @@ export interface DaemonEventsData {
   [RPCEvent.DeployContract]: types.NewContract
   [RPCEvent.NewAsset]: types.AssetWithData
   [RPCEvent.PeerConnected]: types.Peer
-  [RPCEvent.PeerDisconnected]: number
+  [RPCEvent.PeerDisconnected]: string
   [RPCEvent.PeerStateUpdated]: types.Peer
   [RPCEvent.PeerPeerListUpdated]: types.PeerPeerListUpdated
   [RPCEvent.PeerPeerDisconnected]: types.PeerPeerDisconnected
