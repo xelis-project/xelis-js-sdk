@@ -103,7 +103,7 @@ export interface GetBalanceResult {
 export interface P2PStatusResult {
   peer_count: number
   tag?: string
-  peer_id: number
+  peer_id: string
   our_topoheight: number
   best_topoheight: number
   median_topoheight: number
@@ -127,7 +127,7 @@ export interface TimedDirection {
 }
 
 export interface Peer {
-  id: number
+  id: string
   addr: string
   local_port: number
   tag?: string
@@ -295,12 +295,12 @@ export interface AccounHistory {
 }
 
 export interface PeerPeerListUpdated {
-  peer_id: number
+  peer_id: string
   peerlist: string[]
 }
 
 export interface PeerPeerDisconnected {
-  peer_id: number
+  peer_id: string
   peer_addr: string
 }
 
@@ -634,7 +634,7 @@ export interface GetP2pBlockPropagationParams {
 }
 
 export interface P2pBlockPropagationResult {
-  peers: { [id: number]: TimedDirection }
+  peers: { [id: string]: TimedDirection }
   first_seen?: number
   processing_at?: number
 }
