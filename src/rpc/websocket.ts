@@ -45,38 +45,52 @@ export class WSRPC {
   }
 
   async listen(event: string, listener: EventDataListener) {
-    const eventData = this.events.get(event)
-    if (eventData) {
-      eventData.listeners.push(listener)
-      this.events.set(event, eventData)
-    } else {
-      let idRefObject = {} as IdRefObj
-      this.dataCall<boolean>(`subscribe`, { notify: event }, idRefObject)
+    const listenEvent = () => {
+      const eventData = this.events.get(event)
+      if (eventData) {
+        eventData.listeners.push(listener)
+        this.events.set(event, eventData)
+      } else {
+        let idRefObject = {} as IdRefObj
+        this.dataCall<boolean>(`subscribe`, { notify: event }, idRefObject)
 
-      const onMessage = (msgEvent: MessageEvent) => {
-        const eventData = this.events.get(event) as EventData
-        if (eventData && typeof msgEvent.data === `string`) {
-          try {
-            const data = parseJSON(msgEvent.data) as RPCResponse<any>
+        const onMessage = (msgEvent: MessageEvent) => {
+          const eventData = this.events.get(event) as EventData
+          if (eventData && typeof msgEvent.data === `string`) {
+            try {
+              const data = parseJSON(msgEvent.data) as RPCResponse<any>
 
-            // event result will contain an event parameter with the event name defined
-            if (data.result["event"] === event && data.id === idRefObject.id) {
-              eventData.listeners.forEach((listener) => {
-                if (data.error) {
-                  listener(undefined, new Error(data.error.message))
-                } else {
-                  listener(data.result, undefined)
-                }
-              })
+              // event result will contain an event parameter with the event name defined
+              if (data.result["event"] === event && data.id === idRefObject.id) {
+                eventData.listeners.forEach((listener) => {
+                  if (data.error) {
+                    listener(undefined, new Error(data.error.message))
+                  } else {
+                    listener(data.result, undefined)
+                  }
+                })
+              }
+            } catch {
+              // can't parse json -- do nothing
             }
-          } catch {
-            // can't parse json -- do nothing
           }
         }
+
+        this.socket.addEventListener(`message`, onMessage)
+        this.events.set(event, { onMessage, listeners: [listener] })
+      }
+    }
+
+    // make sure connection is open or wait
+    if (this.socket.readyState === WebSocket.OPEN) {
+      listenEvent();
+    } else {
+      const wait_for_open = () => {
+        listenEvent();
+        this.socket.removeEventListener(`open`, wait_for_open);
       }
 
-      this.socket.addEventListener(`message`, onMessage)
-      this.events.set(event, { onMessage, listeners: [listener] })
+      this.socket.addEventListener(`open`, wait_for_open);
     }
   }
 
