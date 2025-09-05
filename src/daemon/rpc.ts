@@ -193,7 +193,7 @@ export class RPC extends HttpRPC {
   }
 
   getAccountRegistrationTopoheight(address: String) {
-    return this.request<Number>(RPCMethod.GetAccountRegistrationTopoheight, { address })
+    return this.request<number>(RPCMethod.GetAccountRegistrationTopoheight, { address })
   }
 
   validateAddress(params: types.ValidateAddressParams) {
