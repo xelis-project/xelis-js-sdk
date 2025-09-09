@@ -289,11 +289,22 @@ export interface GetAccountHistoryParams {
 export interface AccountHistory {
   topoheight: number
   hash: string
+  block_timestamp: number // in milliseconds
+  // AccountHistoryType
+  dev_fee?: { reward: number }
   mining?: { reward: number }
   burn?: { amount: number }
   outgoing?: { to: string }
   incoming?: { from: string }
-  block_timestamp: number // in milliseconds
+  multi_sig?: {
+    participants: string[]
+    threshold: number
+  }
+  invoke_contract?: {
+    contract: string
+    chunk_id: number
+  }
+  deploy_contract?: {}
 }
 
 export interface PeerPeerListUpdated {
