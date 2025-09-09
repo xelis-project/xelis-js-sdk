@@ -284,7 +284,7 @@ export interface GetAccountHistoryParams {
   maximum_topoheight?: number
 }
 
-export interface AccounHistory {
+export interface AccountHistory {
   topoheight: number
   hash: string
   mining?: { reward: number }

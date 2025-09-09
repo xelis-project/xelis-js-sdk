@@ -177,7 +177,7 @@ export class RPC extends HttpRPC {
   }
 
   getAccountHistory(params: types.GetAccountHistoryParams) {
-    return this.request<types.AccounHistory[]>(RPCMethod.GetAccountHistory, params)
+    return this.request<types.AccountHistory[]>(RPCMethod.GetAccountHistory, params)
   }
 
   getAccountAssets(address: string) {

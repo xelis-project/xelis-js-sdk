@@ -219,7 +219,7 @@ export class DaemonMethods {
   }
 
   getAccountHistory(params: types.GetAccountHistoryParams) {
-    return this.dataCall<types.AccounHistory[]>(RPCMethod.GetAccountHistory, params)
+    return this.dataCall<types.AccountHistory[]>(RPCMethod.GetAccountHistory, params)
   }
 
   getAccountAssets(address: string) {
