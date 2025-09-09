@@ -282,6 +282,8 @@ export interface GetAccountHistoryParams {
   asset?: string
   minimum_topoheight?: number
   maximum_topoheight?: number
+  incoming_flow?: boolean
+  outgoing_flow?: boolean
 }
 
 export interface AccountHistory {
