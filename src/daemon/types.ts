@@ -34,7 +34,7 @@ export interface Block {
   tips: string[]
   timestamp: number // in milliseconds
   height: number
-  nonce: string
+  nonce: number
   extra_nonce: string
   miner: string
   txs_hashes: string[]
