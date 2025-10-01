@@ -102,6 +102,49 @@ describe('WalletRPC', () => {
     console.log(res)
     expect(res)
   })
+
+  test('transferTransaction', async () => {
+    const [err, res] = await to(walletRPC.buildTransaction({
+      broadcast: true,
+      tx_as_hex: true,
+      transfers: [{
+        amount: 100,
+        asset: XELIS_ASSET,
+        destination: `xet:6eadzwf5xdacts6fs4y3csmnsmy4mcxewqt3xyygwfx0hm0tm32sqxdy9zk`
+      }],
+    }))
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res)
+  })
+
+  test('burnTransaction', async () => {
+    const [err, res] = await to(walletRPC.buildTransaction({
+      broadcast: true,
+      tx_as_hex: true,
+      burn: {
+        amount: 500,
+        asset: XELIS_ASSET
+      }
+    }))
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res)
+  })
+
+  test('deploySmartContractTransaction', async () => {
+    // hello world smart contract
+    const [err, res] = await to(walletRPC.buildTransaction({
+      broadcast: true,
+      tx_as_hex: true,
+      deploy_contract: {
+        module: "00020008000d48656c6c6f2c20576f726c64210004000000000000000000010000000a0000001895000001001402"
+      }
+    }))
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res)
+  })
   
   test('listTransactions', async () => {
     const [err, res] = await to(walletRPC.listTransactions())
