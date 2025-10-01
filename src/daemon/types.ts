@@ -201,10 +201,20 @@ export interface ContractDeposit {
 
 export interface InvokeContractPayload {
   contract: string
-  deposits: { [key: string]: ContractDeposit }
+  deposits: { [hash: string]: ContractDeposit }
   chunk_id: number
   max_gas: number
   parameters: number[][]
+}
+
+export interface InvokeConstructorPayload {
+  max_gas: number
+  deposits: { [hash: string]: ContractDeposit }
+}
+
+export interface DeployContractPayload {
+  module: Module
+  invoke: InvokeConstructorPayload | null
 }
 
 export interface TransactionData {
@@ -212,7 +222,7 @@ export interface TransactionData {
   burn: Burn | null
   multi_sig: MultiSigPayload | null
   invoke_contract: InvokeContractPayload | null
-  deploy_contract: Module | null
+  deploy_contract: DeployContractPayload | null
 }
 
 export interface SourceCommitment {
@@ -538,12 +548,12 @@ export interface Chunk {
   instructions: number[]
 }
 
+export type Access = "all" | "internal" | { "hook": { id: number } } | "entry"
+
 export interface Module {
-  constants: any
-  chunks: Chunk[]
+  chunks: (Chunk | Access)[]
+  constants: any[]
   entry_chunk_ids: number[]
-  structs: any[]
-  enums: any[]
 }
 
 export interface GetContractModuleResult {
