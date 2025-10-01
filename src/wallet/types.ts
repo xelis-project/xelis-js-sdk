@@ -19,6 +19,16 @@ export interface ContractDepositBuilder {
   private: boolean
 }
 
+export interface DeployContractInvokeBuilder {
+  max_gas: number
+  deposits: { [key: string]: ContractDepositBuilder }
+}
+
+export interface DeployContractBuilder {
+  module: string
+  invoke?: DeployContractInvokeBuilder
+}
+
 export interface InvokeContractBuilder {
   contract: string
   max_gas: number
@@ -44,7 +54,7 @@ export interface BuildTransactionParams {
   burn?: daemonTypes.Burn
   multi_sig?: MultiSigBuilder
   invoke_contract?: InvokeContractBuilder
-  deploy_contract?: string
+  deploy_contract?: DeployContractBuilder
   fee?: FeeBuilder
   nonce?: number
   tx_version?: number
