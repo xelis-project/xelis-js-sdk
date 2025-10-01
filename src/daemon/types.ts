@@ -600,9 +600,9 @@ export type ContractOutput =
   | ContractOutputRefundDeposits
 
 export interface TransactionResponse extends Transaction {
-  blocks: string[]
-  executed_in_block: string
   in_mempool: boolean
+  blocks?: string[]
+  executed_in_block?: string
   first_seen?: number // in seconds
 }
 
