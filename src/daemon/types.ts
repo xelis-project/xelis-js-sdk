@@ -202,7 +202,7 @@ export interface ContractDeposit {
 export interface InvokeContractPayload {
   contract: string
   deposits: { [hash: string]: ContractDeposit }
-  chunk_id: number
+  entry_id: number
   max_gas: number
   parameters: number[][]
 }
@@ -312,7 +312,7 @@ export interface AccountHistory {
   }
   invoke_contract?: {
     contract: string
-    chunk_id: number
+    entry_id: number
   }
   deploy_contract?: {}
 }
@@ -553,7 +553,7 @@ export type Access = "all" | "internal" | { "hook": { id: number } } | "entry"
 export interface Module {
   chunks: (Chunk | Access)[]
   constants: any[]
-  entry_chunk_ids: number[]
+  hook_chunk_ids: number[]
 }
 
 export interface GetContractModuleResult {

@@ -32,7 +32,7 @@ export interface DeployContractBuilder {
 export interface InvokeContractBuilder {
   contract: string
   max_gas: number
-  chunk_id: number
+  entry_id: number
   parameters: any[]
   deposits: { [key: string]: ContractDepositBuilder }
 }
