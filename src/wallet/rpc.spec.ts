@@ -145,14 +145,32 @@ describe('WalletRPC', () => {
     console.log(res)
     expect(res)
   })
-  
+
+  test('invokeSmartContractTransaction', async () => {
+    // hello world smart contract
+    const [err, res] = await to(walletRPC.buildTransaction({
+      broadcast: true,
+      tx_as_hex: true,
+      invoke_contract: {
+        contract: "24015adec1285b1c77fa83e20a506dcd4343b6ff1cf050a3aae1317b46664a58",
+        entry_id: 0,
+        deposits: {},
+        max_gas: 0,
+        parameters: []
+      }
+    }))
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res)
+  })
+
   test('listTransactions', async () => {
     const [err, res] = await to(walletRPC.listTransactions())
     expect(err).toBeNull()
     console.log(res)
     expect(res)
   })
-  
+
   test('isOnline', async () => {
     const [err, res] = await to(walletRPC.isOnline())
     expect(err).toBeNull()
