@@ -232,15 +232,27 @@ export class RPC extends HttpRPC {
     return this.request<boolean>(RPCMethod.HasMultisigAtTopoheight, params)
   }
 
+  getContractLogs(params: types.GetContractLogsParams) {
+    return this.request<types.ContractLog[]>(RPCMethod.GetContractLogs, params);
+  }
+
+  getContractScheduledExecutionsAtTopoheight(params: types.GetContractScheduledExecutionsAtTopoheightParams) {
+    return this.request<types.ScheduledExecution[]>(RPCMethod.GetContractScheduledExecutionsAtTopoheight, params);
+  }
+
+  getContractRegisteredExecutionsAtTopoheight(params: types.GetContractScheduledExecutionsAtTopoheightParams) {
+    return this.request<Array<[number, string]>>(RPCMethod.GetContractRegisteredExecutionsAtTopoheight, params);
+  }
+
   getContractOutputs(params: types.GetContractOutputsParams) {
-    return this.request<types.ContractOutput[]>(RPCMethod.GetContractOutputs, params)
+    return this.request<types.ContractOutputs>(RPCMethod.GetContractOutputs, params)
   }
 
   getContractModule(params: types.GetContractModuleParams) {
     return this.request<types.GetContractModuleResult>(RPCMethod.GetContractModule, params)
   }
 
-  getContractData(params: types.GetContractModuleParams) {
+  getContractData(params: types.GetContractDataParams) {
     return this.request(RPCMethod.GetContractData, params)
   }
 

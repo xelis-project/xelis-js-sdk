@@ -274,15 +274,27 @@ export class DaemonMethods {
     return this.dataCall<boolean>(RPCMethod.HasMultisigAtTopoheight, params)
   }
 
+  getContractLogs(params: types.GetContractLogsParams) {
+    return this.dataCall<types.ContractLog[]>(RPCMethod.GetContractLogs, params);
+  }
+
+  getContractScheduledExecutionsAtTopoheight(params: types.GetContractScheduledExecutionsAtTopoheightParams) {
+    return this.dataCall<types.ScheduledExecution[]>(RPCMethod.GetContractScheduledExecutionsAtTopoheight, params);
+  }
+
+  getContractRegisteredExecutionsAtTopoheight(params: types.GetContractScheduledExecutionsAtTopoheightParams) {
+    return this.dataCall<Array<[number, string]>>(RPCMethod.GetContractRegisteredExecutionsAtTopoheight, params);
+  }
+
   getContractOutputs(params: types.GetContractOutputsParams) {
-    return this.dataCall<types.ContractOutput[]>(RPCMethod.GetContractOutputs, params)
+    return this.dataCall<types.ContractOutputs>(RPCMethod.GetContractOutputs, params)
   }
 
   getContractModule(params: types.GetContractModuleParams) {
     return this.dataCall<types.GetContractModuleResult>(RPCMethod.GetContractModule, params)
   }
 
-  getContractData(params: types.GetContractModuleParams) {
+  getContractData(params: types.GetContractDataParams) {
     return this.dataCall(RPCMethod.GetContractData, params)
   }
 

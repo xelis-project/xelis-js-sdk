@@ -515,14 +515,15 @@ export interface HasMultisigParams {
 }
 
 export interface GetContractOutputsParams {
-  transaction: string
+  address: string
+  topoheight: number
 }
 
 export interface GetContractModuleParams {
   contract: string
 }
 
-export interface GetContractDataPrams {
+export interface GetContractDataParams {
   contract: string
   key: any
 }
@@ -577,28 +578,6 @@ export interface GetContractBalanceResult {
   previous_topoheight: number | null
 }
 
-export interface ContractOutputRefundGas {
-  amount: number
-}
-
-export interface ContractOutputTransfer {
-  amount: number
-  asset: string
-  destination: string
-}
-
-export interface ContractOutputExitCode {
-  exit_code: number
-}
-
-export interface ContractOutputRefundDeposits { }
-
-export type ContractOutput =
-  | ContractOutputRefundGas
-  | ContractOutputTransfer
-  | ContractOutputExitCode
-  | ContractOutputRefundDeposits
-
 export interface TransactionResponse extends Transaction {
   in_mempool: boolean
   blocks?: string[]
@@ -641,7 +620,7 @@ export interface InvokeContract {
   block_hash: string
   tx_hash: string
   topoheight: number
-  contract_outputs: ContractOutput[]
+  contract_outputs: ContractLog[]
 }
 
 export interface NewContract {
@@ -671,6 +650,109 @@ export interface ContractTransfer {
 
 export interface ContractEvent {
   data: any
+}
+
+export interface GetContractLogsParams {
+  caller: string
+}
+
+export interface GetContractScheduledExecutionsAtTopoheightParams {
+  topoheight: number
+  max?: number
+  min?: number
+}
+
+export interface ScheduledExecution {
+  hash: string
+  contract: string
+  chunk_id: number
+  params: any[]
+  max_gas: number
+}
+
+export interface ContractLogRefundGas {
+  type: "refund_gas"
+  value: { amount: number }
+}
+
+export interface ContractLogTransfer {
+  type: "transfer"
+  value: {
+    contract: string
+    amount: number
+    asset: string
+    destination: string
+  }
+}
+
+export interface ContractLogTransferContract {
+  type: "transfer_contract"
+  value: {
+    contract: string
+    amount: number
+    asset: string
+    destination: string
+  }
+}
+
+export interface ContractLogMint {
+  type: "mint"
+  value: {
+    contract: string
+    asset: string
+    amount: number
+  }
+}
+
+export interface ContractLogBurn {
+  type: "burn"
+  value: {
+    contract: string
+    asset: string
+    amount: number
+  }
+}
+
+export interface ContractLogNewAsset {
+  type: "new_asset"
+  value: {
+    contract: string
+    asset: string
+  }
+}
+
+export interface ContractLogExitCode {
+  type: "exit_code"
+  value?: number
+}
+
+export interface ContractLogRefundDeposits {
+  type: "refund_deposits"
+}
+
+export interface ContractLogGasInjection {
+  type: "gas_injection"
+  value: {
+    contract: string
+    amount: number
+  }
+}
+
+export interface ContractLogScheduledExecution {
+  type: "scheduled_execution"
+  value: {
+    contract: string
+    hash: string
+    kind: "topo_height" | "block_end"
+  }
+}
+
+export type ContractLog = ContractLogRefundGas | ContractLogTransfer | ContractLogTransferContract | ContractLogMint | ContractLogBurn
+  | ContractLogNewAsset | ContractLogExitCode | ContractLogRefundDeposits | ContractLogGasInjection | ContractLogScheduledExecution
+
+export interface ContractOutputs {
+  caller: string
+  outputs: ContractLog[]
 }
 
 export enum RPCMethod {
@@ -745,6 +827,9 @@ export enum RPCMethod {
   HasMultisig = "has_multisig",
   HasMultisigAtTopoheight = "has_multisig_at_topoheight",
 
+  GetContractLogs = "get_contract_logs",
+  GetContractScheduledExecutionsAtTopoheight = "get_contract_scheduled_executions_at_topoheight",
+  GetContractRegisteredExecutionsAtTopoheight = "get_contract_registered_executions_at_topoheight",
   GetContractOutputs = "get_contract_outputs",
   GetContractModule = "get_contract_module",
   GetContractData = "get_contract_data",
