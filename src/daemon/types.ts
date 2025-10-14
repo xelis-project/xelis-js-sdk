@@ -190,7 +190,7 @@ export interface Burn {
 }
 
 export interface MultiSigPayload {
-  participants: string[]
+  participants: number[]
   threshold: number
 }
 
