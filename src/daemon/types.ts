@@ -140,6 +140,8 @@ export interface Peer {
   peers: { [addr: string]: TimedDirection }
   cumulative_difficulty: string
   connected_on: number // in seconds
+  bytes_sent: number
+  bytes_recv: number
 }
 
 export interface BlockOrdered {
