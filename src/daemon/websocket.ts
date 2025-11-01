@@ -143,7 +143,7 @@ export class DaemonMethods {
   }
 
   getAssetSupply(params: types.GetAssetParams) {
-    return this.dataCall<number>(RPCMethod.GetAssetSupply, params)
+    return this.dataCall<types.GetAssetSupplyResult>(RPCMethod.GetAssetSupply, params)
   }
 
   getAssets(params?: types.GetAssetsParams) {
