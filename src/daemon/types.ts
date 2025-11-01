@@ -575,9 +575,14 @@ export interface GetContractBalanceAtTopoheightResult {
 }
 
 export interface GetContractBalanceResult {
+  data: number
   topoheight: number
-  amount: number
   previous_topoheight: number | null
+}
+
+export interface GetAssetSupplyResult {
+  topoheight: number
+  data: number
 }
 
 export interface TransactionResponse extends Transaction {
@@ -787,6 +792,7 @@ export enum RPCMethod {
   GetNonceAtTopoheight = "get_nonce_at_topoheight",
 
   GetAsset = "get_asset",
+  GetAssetSupply = "get_asset_supply",
   GetAssets = "get_assets",
 
   CountAssets = "count_assets",
