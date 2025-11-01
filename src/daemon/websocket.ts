@@ -314,7 +314,7 @@ export class DaemonMethods {
     return this.dataCall<types.GetContractBalanceAtTopoheightResult>(RPCMethod.GetContractBalanceAtTopoheight, params)
   }
 
-  getContractAssets(params: types.GetContractBalanceParams) {
+  getContractAssets(params: types.GetContractBalancesParams) {
     return this.dataCall<string[]>(RPCMethod.GetContractAssets, params)
   }
 

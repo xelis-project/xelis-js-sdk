@@ -547,6 +547,12 @@ export interface GetContractBalanceAtTopoheightParams {
   topoheight: number
 }
 
+export interface GetContractBalancesParams {
+  contract: string
+  skip?: number
+  maximum?: number
+}
+
 export interface Chunk {
   instructions: number[]
 }
