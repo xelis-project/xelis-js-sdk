@@ -661,8 +661,21 @@ export interface ContractTransfer {
   topoheight: number
 }
 
+export interface ContractEventSource {
+  contract: string
+  id: number
+}
+
+export interface ContractEventMetadata {
+  block_hash: string
+  topoheight: number
+}
+
 export interface ContractEvent {
   data: any
+  meta: ContractEventMetadata
+  contract_event: ContractEventSource
+  raw: any
 }
 
 export interface GetContractLogsParams {
