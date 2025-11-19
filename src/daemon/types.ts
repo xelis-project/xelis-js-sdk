@@ -29,6 +29,7 @@ export interface Block {
   miner_reward?: number
   cumulative_difficulty: string
   total_fees?: number // is null if include_txs is false
+  total_fees_burned?: number
   total_size_in_bytes: number
   version: number
   tips: string[]
