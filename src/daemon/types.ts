@@ -202,12 +202,18 @@ export interface ContractDeposit {
   // TODO: private
 }
 
+export interface ContractCall {
+  contract: string
+  chunk: "all" | { specific: number[] } | { exclude: number[] }
+}
+
 export interface InvokeContractPayload {
   contract: string
   deposits: { [hash: string]: ContractDeposit }
   entry_id: number
   max_gas: number
   parameters: number[][]
+  permission: "none" | "all" | { specific: ContractCall[] } | { exclude: ContractCall[] }
 }
 
 export interface InvokeConstructorPayload {
