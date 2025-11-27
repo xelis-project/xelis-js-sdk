@@ -346,14 +346,36 @@ export interface DiskSize {
   size_formatted: string
 }
 
-export interface AssetData {
-  topoheight: number
-  decimals: number
+export interface MaxSupplyFixed {
+  fixed: number
 }
 
-export interface AssetWithData {
+export interface MaxSupplyMintable {
+  mintable: number
+}
+
+export interface AssetCreator {
+  contract: string
+  id: number
+}
+
+export interface AssetOwner {
+  origin: string
+  origin_id: number
+  owner: string
+}
+
+export interface AssetData {
+  decimals: number
+  name: string
+  ticker: string
+  max_supply: "none" | MaxSupplyFixed | MaxSupplyMintable
+  owner: "none" | AssetCreator | AssetOwner
+  topoheight: number
+}
+
+export interface AssetWithData extends AssetData {
   asset: string
-  data: AssetData
 }
 
 export interface HasBalanceParams {

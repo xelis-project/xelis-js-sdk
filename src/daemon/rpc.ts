@@ -105,7 +105,7 @@ export class RPC extends HttpRPC {
   }
 
   getAssets(params: types.GetAssetsParams) {
-    return this.request<string[]>(RPCMethod.GetAssets, params)
+    return this.request<types.AssetWithData[]>(RPCMethod.GetAssets, params)
   }
 
   countAssets() {
