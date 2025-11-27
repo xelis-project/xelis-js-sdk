@@ -277,6 +277,12 @@ export interface GetAccountsParams {
   maximum_topoheight?: number
 }
 
+export interface GetAccountAssetsParams {
+  address: string
+  skip?: number
+  maximum?: number
+}
+
 export interface GetBlockAtTopoheightParams {
   topoheight: number
   include_txs?: boolean
