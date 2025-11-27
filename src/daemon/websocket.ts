@@ -147,7 +147,7 @@ export class DaemonMethods {
   }
 
   getAssets(params?: types.GetAssetsParams) {
-    return this.dataCall<string[]>(RPCMethod.GetAssets, params)
+    return this.dataCall<types.AssetWithData[]>(RPCMethod.GetAssets, params)
   }
 
   countAssets() {
@@ -226,8 +226,8 @@ export class DaemonMethods {
     return this.dataCall<types.AccountHistory[]>(RPCMethod.GetAccountHistory, params)
   }
 
-  getAccountAssets(address: string) {
-    return this.dataCall<string[]>(RPCMethod.GetAccountAssets, { address })
+  getAccountAssets(params: types.GetAccountAssetsParams) {
+    return this.dataCall<string[]>(RPCMethod.GetAccountAssets, params)
   }
 
   getAccounts(params: types.GetAccountsParams) {
