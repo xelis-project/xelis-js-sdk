@@ -168,6 +168,10 @@ export class RPC extends HttpRPC {
     return this.request<types.FeeRatesEstimated>(RPCMethod.GetEstimatedFeeRates)
   }
 
+  getEstimatedFeePerKB() {
+    return this.request<types.PredicatedBaseFeeResult>(RPCMethod.GetEstimatedFeePerKB)
+  }
+
   getDAGOrder(params?: types.TopoheightRangeParams) {
     return this.request<string[]>(RPCMethod.GetDAGOrder, params)
   }

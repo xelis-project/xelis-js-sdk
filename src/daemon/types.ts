@@ -816,6 +816,11 @@ export interface ContractOutputs {
   outputs: ContractLog[]
 }
 
+export interface PredicatedBaseFeeResult {
+  fee_per_kb: number
+  predicated_fee_per_kb: number
+}
+
 export enum RPCMethod {
   GetVersion = "get_version",
   GetHeight = "get_height",
@@ -867,6 +872,7 @@ export enum RPCMethod {
   GetMempoolSummary = "get_mempool_summary",
   GetMempoolCache = "get_mempool_cache",
   GetEstimatedFeeRates = "get_estimated_fee_rates",
+  GetEstimatedFeePerKB = "get_estimated_fee_per_kb",
 
   GetDAGOrder = "get_dag_order",
   GetBlocksRangeByTopoheight = "get_blocks_range_by_topoheight",

@@ -210,6 +210,10 @@ export class DaemonMethods {
     return this.dataCall<types.FeeRatesEstimated>(RPCMethod.GetEstimatedFeeRates)
   }
 
+  getEstimatedFeePerKB() {
+    return this.dataCall<types.PredicatedBaseFeeResult>(RPCMethod.GetEstimatedFeePerKB)
+  }
+
   getDAGOrder(params: types.TopoheightRangeParams) {
     return this.dataCall<string[]>(RPCMethod.GetDAGOrder, params)
   }
