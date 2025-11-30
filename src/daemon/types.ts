@@ -899,6 +899,7 @@ export enum RPCMethod {
   GetContractBalance = "get_contract_balance",
   GetContractBalanceAtTopoheight = "get_contract_balance_at_topoheight",
   GetContractAssets = "get_contract_assets",
+  GetContracts = "get_contracts",
 
   GetP2PBlockPropagation = "get_p2p_block_propagation",
 
