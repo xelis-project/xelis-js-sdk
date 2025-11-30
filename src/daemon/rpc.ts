@@ -284,6 +284,10 @@ export class RPC extends HttpRPC {
     return this.request<string[]>(RPCMethod.GetContracts, params)
   }
 
+  getContractDataEntries(params: types.GetContractDataEntriesParams) {
+    return this.request(RPCMethod.GetContractDataEntries, params)
+  }
+
   getP2PBlockPropagation(params: types.GetP2pBlockPropagationParams) {
     return this.request<types.P2pBlockPropagationResult>(RPCMethod.GetP2PBlockPropagation, params)
   }

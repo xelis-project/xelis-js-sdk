@@ -821,6 +821,14 @@ export interface PredicatedBaseFeeResult {
   predicated_fee_per_kb: number
 }
 
+export interface GetContractDataEntriesParams {
+  contract: string
+  minimum_topoheight?: number
+  maximum_topoheight?: number
+  skip?: number
+  maximum?: number
+}
+
 export enum RPCMethod {
   GetVersion = "get_version",
   GetHeight = "get_height",
@@ -906,6 +914,7 @@ export enum RPCMethod {
   GetContractBalanceAtTopoheight = "get_contract_balance_at_topoheight",
   GetContractAssets = "get_contract_assets",
   GetContracts = "get_contracts",
+  GetContractDataEntries = "get_contract_data_entries",
 
   GetP2PBlockPropagation = "get_p2p_block_propagation",
 
