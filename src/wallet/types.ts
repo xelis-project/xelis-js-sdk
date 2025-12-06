@@ -354,6 +354,18 @@ export interface SearchTransactionResult {
   is_raw_search: boolean
 }
 
+export interface SyncError {
+  message: string
+}
+
+export interface TrackAsset {
+  asset: string
+}
+
+export interface UntrackAsset {
+  asset: string
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetNetwork = 'get_network',
@@ -405,5 +417,8 @@ export enum RPCEvent {
   Rescan = 'rescan',
   HistorySynced = 'history_synced',
   Online = 'online',
-  Offline = 'offline'
+  Offline = 'offline',
+  SyncError = 'sync_error',
+  TrackAsset = 'track_asset',
+  UntrackAsset = 'untrack_asset'
 }

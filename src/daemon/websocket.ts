@@ -13,10 +13,10 @@ export interface DaemonEventsData {
   [RPCEvent.TransactionAddedInMempool]: types.MempoolTransactionSummary
   [RPCEvent.TransactionExecuted]: types.TransactionExecuted
   [RPCEvent.InvokeContract]: types.InvokeContract
-  [RPCEvent.ContractTransfer]: types.ContractTransfer
+  [RPCEvent.ContractTransfers]: types.ContractTransfers
   [RPCEvent.ContractEvent]: types.ContractEvent
   [RPCEvent.DeployContract]: types.NewContract
-  [RPCEvent.NewAsset]: types.AssetWithData
+  [RPCEvent.NewAsset]: types.NewAsset
   [RPCEvent.PeerConnected]: types.Peer
   [RPCEvent.PeerDisconnected]: types.Peer
   [RPCEvent.PeerStateUpdated]: types.Peer

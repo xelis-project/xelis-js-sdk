@@ -7,13 +7,16 @@ import { Element } from '../data/element'
 
 export interface WalletEventsData {
   [RPCEvent.NewTopoheight]: types.NewTopoheightResult
-  [RPCEvent.NewAsset]: daemonTypes.AssetWithData,
-  [RPCEvent.NewTransaction]: types.TransactionEntry,
-  [RPCEvent.BalanceChanged]: types.BalanceChangedResult,
+  [RPCEvent.NewAsset]: daemonTypes.AssetWithData
+  [RPCEvent.NewTransaction]: types.TransactionEntry
+  [RPCEvent.BalanceChanged]: types.BalanceChangedResult
   [RPCEvent.Rescan]: types.RescanResult
   [RPCEvent.HistorySynced]: types.HistorySyncedResult
   [RPCEvent.Online]: void
   [RPCEvent.Offline]: void
+  [RPCEvent.SyncError]: types.SyncError
+  [RPCEvent.TrackAsset]: types.TrackAsset
+  [RPCEvent.UntrackAsset]: types.UntrackAsset
 }
 
 export class WalletMethods {

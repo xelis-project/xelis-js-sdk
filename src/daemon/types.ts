@@ -384,6 +384,12 @@ export interface AssetWithData extends AssetData {
   asset: string
 }
 
+export interface NewAsset {
+  asset: string
+  block_hash: string
+  topoheight: number
+}
+
 export interface HasBalanceParams {
   address: string
   asset: string
@@ -689,10 +695,15 @@ export interface P2pBlockPropagationResult {
   processing_at?: number
 }
 
-export interface ContractTransfer {
-  asset: string
-  amount: number
+export interface ContractTransfersEntry {
+  contract: string
+  caller: string
+}
+
+export interface ContractTransfers {
   block_hash: string
+  block_timestamp: number
+  executions: { [key: string]: ContractTransfersEntry }
   topoheight: number
 }
 
@@ -933,7 +944,8 @@ export enum RPCEvent {
   TransactionAddedInMempool = 'transaction_added_in_mempool',
   TransactionExecuted = 'transaction_executed',
   InvokeContract = 'invoke_contract',
-  ContractTransfer = 'contract_transfer',
+  ContractTransfers = 'contract_transfers',
+  InvokeContractError = 'invoke_contract_error',
   ContractEvent = 'contract_event',
   DeployContract = 'deploy_contract',
   NewAsset = 'new_asset',
