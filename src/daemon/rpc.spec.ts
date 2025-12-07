@@ -309,7 +309,7 @@ describe('DaemonRPC', () => {
   })
 
   test('getAccountAssets', async () => {
-    const [err, res] = await to(daemonRPC.getAccountAssets(MAINNET_ADDR))
+    const [err, res] = await to(daemonRPC.getAccountAssets({ address: MAINNET_ADDR }))
     expect(err).toBeNull()
     console.log(res)
     expect(res)
