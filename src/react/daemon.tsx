@@ -93,10 +93,10 @@ export const useNodeSocketSubscribe = ({ event, onLoad, onData }: NodeSocketSubs
     if (nodeSocket.readyState !== WebSocket.OPEN) return
     if (typeof onLoad === `function`) onLoad()
 
-    nodeSocket.daemon.listen(event, onData)
+    nodeSocket.daemon.addListener(event, onData)
     return () => {
       if (!nodeSocket.daemon) return;
-      nodeSocket.daemon.closeListener(event, onData)
+      nodeSocket.daemon.removeListener(event, onData)
     }
   }, [nodeSocket, ...dependencies])
 }
