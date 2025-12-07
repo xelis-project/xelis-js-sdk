@@ -6,17 +6,17 @@ import * as types from './types'
 import { Element } from '../data/element'
 
 export interface WalletEventsData {
-  [RPCEvent.NewTopoheight]: types.NewTopoheightResult
-  [RPCEvent.NewAsset]: daemonTypes.AssetWithData
-  [RPCEvent.NewTransaction]: types.TransactionEntry
-  [RPCEvent.BalanceChanged]: types.BalanceChangedResult
-  [RPCEvent.Rescan]: types.RescanResult
-  [RPCEvent.HistorySynced]: types.HistorySyncedResult
-  [RPCEvent.Online]: void
-  [RPCEvent.Offline]: void
-  [RPCEvent.SyncError]: types.SyncError
-  [RPCEvent.TrackAsset]: types.TrackAsset
-  [RPCEvent.UntrackAsset]: types.UntrackAsset
+  [RPCEvent.NewTopoheight]: { params: null, returnType: types.NewTopoheightResult }
+  [RPCEvent.NewAsset]: { params: null, returnType: daemonTypes.AssetWithData }
+  [RPCEvent.NewTransaction]: { params: null, returnType: types.TransactionEntry }
+  [RPCEvent.BalanceChanged]: { params: null, returnType: types.BalanceChangedResult }
+  [RPCEvent.Rescan]: { params: null, returnType: types.RescanResult }
+  [RPCEvent.HistorySynced]: { params: null, returnType: types.HistorySyncedResult }
+  [RPCEvent.Online]: { params: null, returnType: void }
+  [RPCEvent.Offline]: { params: null, returnType: void }
+  [RPCEvent.SyncError]: { params: null, returnType: types.SyncError }
+  [RPCEvent.TrackAsset]: { params: null, returnType: types.TrackAsset }
+  [RPCEvent.UntrackAsset]: { params: null, returnType: types.UntrackAsset }
 }
 
 export class WalletMethods {
@@ -32,12 +32,16 @@ export class WalletMethods {
     return this.ws.dataCall(this.prefix + method, params)
   }
 
-  closeListener<K extends keyof WalletEventsData>(event: K, listener: (data?: WalletEventsData[K], err?: Error) => void) {
-    this.ws.closeListener(event, listener)
+  removeListener<K extends keyof WalletEventsData>(event: K, params: WalletEventsData[K]["params"], listener: (data?: WalletEventsData[K]["returnType"], err?: Error) => void) {
+    let eventObj = this.prefix + event as any
+    if (params) eventObj = { [eventObj]: params }
+    this.ws.removeListener(event, listener)
   }
 
-  listen<K extends keyof WalletEventsData>(event: K, listener: (data?: WalletEventsData[K], err?: Error) => void) {
-    this.ws.listen(this.prefix + event, listener as any)
+  addListener<K extends keyof WalletEventsData>(event: K, params: WalletEventsData[K]["params"], listener: (data?: WalletEventsData[K]["returnType"], err?: Error) => void) {
+    let eventObj = this.prefix + event as any
+    if (params) eventObj = { [eventObj]: params }
+    this.ws.addListener(eventObj, listener)
   }
 
   getVersion() {

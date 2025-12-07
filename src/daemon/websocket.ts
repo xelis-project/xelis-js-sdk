@@ -4,25 +4,26 @@ import * as types from './types'
 import { WSRPC } from '../rpc/websocket'
 
 export interface DaemonEventsData {
-  [RPCEvent.NewBlock]: types.Block
-  [RPCEvent.BlockOrdered]: types.BlockOrdered
-  [RPCEvent.BlockOrphaned]: types.BlockOrphaned
-  [RPCEvent.StableHeightChanged]: types.StableHeightChanged
-  [RPCEvent.StableTopoHeightChanged]: types.StableTopoHeightChanged
-  [RPCEvent.TransactionOrphaned]: types.TransactionResponse
-  [RPCEvent.TransactionAddedInMempool]: types.MempoolTransactionSummary
-  [RPCEvent.TransactionExecuted]: types.TransactionExecuted
-  [RPCEvent.InvokeContract]: types.InvokeContract
-  [RPCEvent.ContractTransfers]: types.ContractTransfers
-  [RPCEvent.ContractEvent]: types.ContractEvent
-  [RPCEvent.DeployContract]: types.NewContract
-  [RPCEvent.NewAsset]: types.NewAsset
-  [RPCEvent.PeerConnected]: types.Peer
-  [RPCEvent.PeerDisconnected]: types.Peer
-  [RPCEvent.PeerStateUpdated]: types.Peer
-  [RPCEvent.PeerPeerListUpdated]: types.PeerPeerListUpdated
-  [RPCEvent.PeerPeerDisconnected]: types.PeerPeerDisconnected
-  [RPCEvent.NewBlockTemplate]: types.GetBlockTemplateResult
+  [RPCEvent.NewBlock]: { params: null, returnType: types.Block }
+  [RPCEvent.BlockOrdered]: { params: null, returnType: types.BlockOrdered }
+  [RPCEvent.BlockOrphaned]: { params: null, returnType: types.BlockOrphaned }
+  [RPCEvent.StableHeightChanged]: { params: null, returnType: types.StableHeightChanged }
+  [RPCEvent.StableTopoHeightChanged]: { params: null, returnType: types.StableTopoHeightChanged }
+  [RPCEvent.TransactionOrphaned]: { params: null, returnType: types.TransactionResponse }
+  [RPCEvent.TransactionAddedInMempool]: { params: null, returnType: types.MempoolTransactionSummary }
+  [RPCEvent.TransactionExecuted]: { params: null, returnType: types.TransactionExecuted }
+  [RPCEvent.InvokeContract]: { params: { contract: string }, returnType: types.InvokeContract }
+  [RPCEvent.ContractTransfers]: { params: { address: string }, returnType: types.ContractTransfers }
+  [RPCEvent.InvokeContractError]: { params: { address: string }, returnType: null }
+  [RPCEvent.ContractEvent]: { params: { contract: string, id: number }, returnType: types.ContractEvent }
+  [RPCEvent.DeployContract]: { params: null, returnType: types.NewContract }
+  [RPCEvent.NewAsset]: { params: null, returnType: types.NewAsset }
+  [RPCEvent.PeerConnected]: { params: null, returnType: types.Peer }
+  [RPCEvent.PeerDisconnected]: { params: null, returnType: types.Peer }
+  [RPCEvent.PeerStateUpdated]: { params: null, returnType: types.Peer }
+  [RPCEvent.PeerPeerListUpdated]: { params: null, returnType: types.PeerPeerListUpdated }
+  [RPCEvent.PeerPeerDisconnected]: { params: null, returnType: types.PeerPeerDisconnected }
+  [RPCEvent.NewBlockTemplate]: { params: null, returnType: types.GetBlockTemplateResult }
 }
 
 export class DaemonMethods {
@@ -38,12 +39,16 @@ export class DaemonMethods {
     return this.ws.dataCall(this.prefix + method, params)
   }
 
-  closeListener<K extends keyof DaemonEventsData>(event: K, listener: (data?: DaemonEventsData[K], err?: Error) => void) {
-    this.ws.closeListener(event, listener)
+  removeListener<K extends keyof DaemonEventsData>(event: K, params: DaemonEventsData[K]["params"], listener: (data?: DaemonEventsData[K]["returnType"], err?: Error) => void) {
+    let eventObj = this.prefix + event as any
+    if (params) eventObj = { [eventObj]: params }
+    this.ws.removeListener(eventObj, listener)
   }
 
-  listen<K extends keyof DaemonEventsData>(event: K, listener: (data?: DaemonEventsData[K], err?: Error) => void) {
-    this.ws.listen(this.prefix + event, listener)
+  addListener<K extends keyof DaemonEventsData>(event: K, params: DaemonEventsData[K]["params"], listener: (data?: DaemonEventsData[K]["returnType"], err?: Error) => void) {
+    let eventObj = this.prefix + event as any
+    if (params) eventObj = { [eventObj]: params }
+    this.ws.addListener(eventObj, listener)
   }
 
   getVersion() {

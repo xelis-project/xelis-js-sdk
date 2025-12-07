@@ -18,7 +18,7 @@ export class WSRPC {
   socket: WebSocket
   methodIdIncrement: number
   callTimeout: number
-  events: Map<string, EventData>
+  events: Map<any, EventData>
 
   constructor(endpoint: string, options?: ClientOptions | ClientRequestArgs) {
     this.socket = new WebSocket(endpoint, options)
@@ -30,7 +30,7 @@ export class WSRPC {
     })
   }
 
-  async closeListener(event: string, listener: EventDataListener) {
+  async removeListener(event: any, listener: EventDataListener) {
     const eventData = this.events.get(event)
     if (eventData) {
       if (eventData.listeners.length > 1) {
@@ -44,15 +44,16 @@ export class WSRPC {
     }
   }
 
-  async listen(event: string, listener: EventDataListener) {
-    const listenEvent = () => {
+  async addListener(event: any, listener: EventDataListener) {
+    const listenEvent = async () => {
       const eventData = this.events.get(event)
       if (eventData) {
         eventData.listeners.push(listener)
         this.events.set(event, eventData)
       } else {
         let idRefObject = {} as IdRefObj
-        this.dataCall<boolean>(`subscribe`, { notify: event }, idRefObject)
+        await this.dataCall<boolean>(`subscribe`, { notify: event }, idRefObject)
+          .catch(err => listener(null, err))
 
         const onMessage = (msgEvent: MessageEvent) => {
           const eventData = this.events.get(event) as EventData
