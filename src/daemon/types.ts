@@ -315,12 +315,20 @@ export interface AccountHistory {
   topoheight: number
   hash: string
   block_timestamp: number // in milliseconds
-  // AccountHistoryType
   dev_fee?: { reward: number }
   mining?: { reward: number }
-  burn?: { amount: number }
-  outgoing?: { to: string }
-  incoming?: { from: string }
+  burn?: {
+    amount: number
+    asset: string
+  }
+  outgoing?: {
+    to: string,
+    asset: string
+  }
+  incoming?: {
+    from: string,
+    asset: string
+  }
   multi_sig?: {
     participants: string[]
     threshold: number
@@ -328,8 +336,11 @@ export interface AccountHistory {
   invoke_contract?: {
     contract: string
     entry_id: number
+    deposits: string[]
   }
-  deploy_contract?: {}
+  deploy_contract?: {
+    deposits?: string[]
+  }
 }
 
 export interface PeerPeerListUpdated {
