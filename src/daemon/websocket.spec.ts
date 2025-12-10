@@ -8,15 +8,16 @@ import { RPCRequest } from '../rpc/types'
 describe('DaemonWS', () => {
   test('getInfo', async () => {
     const daemonWS = new DaemonWS(MAINNET_NODE_WS)
-    daemonWS.socket.addEventListener(`open`, async () => {
-      const [err1, res] = await to(daemonWS.methods.getInfo())
-      expect(err1).toBeNull()
+    // we don't need to wait for socket open
+    //daemonWS.socket.addEventListener(`open`, async () => {
+    const [err1, res] = await to(daemonWS.methods.getInfo())
+    expect(err1).toBeNull()
 
-      console.log(res)
-      expect(res)
+    console.log(res)
+    expect(res)
 
-      daemonWS.socket.close()
-    })
+    daemonWS.socket.close()
+    //})
   })
 
   const timeout = 40000

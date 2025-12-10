@@ -84,14 +84,14 @@ export class WSRPC {
 
     // make sure connection is open or wait
     if (this.socket.readyState === WebSocket.OPEN) {
-      listenEvent();
+      listenEvent()
     } else {
       const wait_for_open = () => {
-        listenEvent();
-        this.socket.removeEventListener(`open`, wait_for_open);
+        listenEvent()
+        this.socket.removeEventListener(`open`, wait_for_open)
       }
 
-      this.socket.addEventListener(`open`, wait_for_open);
+      this.socket.addEventListener(`open`, wait_for_open)
     }
   }
 
@@ -150,19 +150,33 @@ export class WSRPC {
 
   dataCall<T>(method: string, params?: any, idRefObj?: IdRefObj): Promise<T> {
     return new Promise(async (resolve, reject) => {
-      const id = this.methodIdIncrement++
-      if (idRefObj) idRefObj.id = id
-      const request = { id, jsonrpc: `2.0`, method } as RPCRequest
-      if (params) request.params = params
-      const data = JSON.stringify(request)
+      const sendDataCall = async () => {
+        const id = this.methodIdIncrement++
+        if (idRefObj) idRefObj.id = id
+        const request = { id, jsonrpc: `2.0`, method } as RPCRequest
+        if (params) request.params = params
+        const data = JSON.stringify(request)
 
-      const [err, res] = await to(this.rawCall<RPCResponse<T>>(id, data))
-      if (err) return reject(err)
-      if (res.error) {
-        return reject(res.error.message)
+        const [err, res] = await to(this.rawCall<RPCResponse<T>>(id, data))
+        if (err) return reject(err)
+        if (res.error) {
+          return reject(res.error.message)
+        }
+
+        return resolve(res.result)
       }
 
-      return resolve(res.result)
+      // make sure connection is open or wait
+      if (this.socket.readyState === WebSocket.OPEN) {
+        sendDataCall()
+      } else {
+        const wait_for_open = () => {
+          sendDataCall()
+          this.socket.removeEventListener(`open`, wait_for_open)
+        }
+
+        this.socket.addEventListener(`open`, wait_for_open)
+      }
     })
   }
 
