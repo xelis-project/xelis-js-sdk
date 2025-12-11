@@ -35,6 +35,7 @@ export interface InvokeContractBuilder {
   entry_id: number
   parameters: any[]
   deposits: { [key: string]: ContractDepositBuilder }
+  permission: daemonTypes.InterContractPermission
 }
 
 export interface TransferBuilder {
