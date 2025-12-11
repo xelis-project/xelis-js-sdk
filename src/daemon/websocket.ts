@@ -299,10 +299,6 @@ export class DaemonMethods {
     return this.dataCall<Array<[number, string]>>(RPCMethod.GetContractRegisteredExecutionsAtTopoheight, params);
   }
 
-  getContractOutputs(params: types.GetContractOutputsParams) {
-    return this.dataCall<types.ContractOutputs>(RPCMethod.GetContractOutputs, params)
-  }
-
   getContractModule(params: types.GetContractModuleParams) {
     return this.dataCall<types.GetContractModuleResult>(RPCMethod.GetContractModule, params)
   }

@@ -252,10 +252,6 @@ export class RPC extends HttpRPC {
     return this.request<Array<[number, string]>>(RPCMethod.GetContractRegisteredExecutionsAtTopoheight, params);
   }
 
-  getContractOutputs(params: types.GetContractOutputsParams) {
-    return this.request<types.ContractOutputs>(RPCMethod.GetContractOutputs, params)
-  }
-
   getContractModule(params: types.GetContractModuleParams) {
     return this.request<types.GetContractModuleResult>(RPCMethod.GetContractModule, params)
   }

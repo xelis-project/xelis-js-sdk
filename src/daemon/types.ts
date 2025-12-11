@@ -570,11 +570,6 @@ export interface HasMultisigParams {
   topoheight?: number
 }
 
-export interface GetContractOutputsParams {
-  address: string
-  topoheight: number
-}
-
 export interface GetContractModuleParams {
   contract: string
 }
@@ -839,11 +834,6 @@ export interface ContractLogScheduledExecution {
 export type ContractLog = ContractLogRefundGas | ContractLogTransfer | ContractLogTransferContract | ContractLogMint | ContractLogBurn
   | ContractLogNewAsset | ContractLogExitCode | ContractLogRefundDeposits | ContractLogGasInjection | ContractLogScheduledExecution
 
-export interface ContractOutputs {
-  caller: string
-  outputs: ContractLog[]
-}
-
 export interface PredicatedBaseFeeResult {
   fee_per_kb: number
   predicated_fee_per_kb: number
@@ -934,7 +924,6 @@ export enum RPCMethod {
   GetContractLogs = "get_contract_logs",
   GetContractScheduledExecutionsAtTopoheight = "get_contract_scheduled_executions_at_topoheight",
   GetContractRegisteredExecutionsAtTopoheight = "get_contract_registered_executions_at_topoheight",
-  GetContractOutputs = "get_contract_outputs",
   GetContractModule = "get_contract_module",
   GetContractData = "get_contract_data",
   GetContractDataAtTopoheight = "get_contract_data_at_topoheight",
