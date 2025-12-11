@@ -207,13 +207,15 @@ export interface ContractCall {
   chunk: "all" | { specific: number[] } | { exclude: number[] }
 }
 
+export type InterContractPermission = "none" | "all" | { specific: ContractCall[] } | { exclude: ContractCall[] }
+
 export interface InvokeContractPayload {
   contract: string
   deposits: { [hash: string]: ContractDeposit }
   entry_id: number
   max_gas: number
   parameters: number[][]
-  permission: "none" | "all" | { specific: ContractCall[] } | { exclude: ContractCall[] }
+  permission: InterContractPermission
 }
 
 export interface InvokeConstructorPayload {
@@ -619,7 +621,11 @@ export interface Module {
 
 export interface GetContractModuleResult {
   previous_topoheight: number | null
-  data: Module | null
+  topoheight: number
+  data: {
+    module: Module | null
+    version: string
+  }
 }
 
 export interface GetContractDataResult {
