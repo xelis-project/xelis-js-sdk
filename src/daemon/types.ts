@@ -389,7 +389,7 @@ export interface AssetData {
   name: string
   ticker: string
   max_supply: "none" | MaxSupplyFixed | MaxSupplyMintable
-  owner: "none" | AssetCreator | AssetOwner
+  owner: "none" | { creator: AssetCreator } | { owner: AssetOwner }
   topoheight: number
 }
 
