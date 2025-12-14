@@ -138,7 +138,75 @@ describe('WalletRPC', () => {
       broadcast: true,
       tx_as_hex: true,
       deploy_contract: {
-        module: "00020008000d48656c6c6f2c20576f726c64210004000000000000000000010000000a0000001895000001001402"
+        module: "0200081868656c6c6f20776f726c642066726f6d20696e766f6b65210004000000000000000000010a000000182b010001001402"
+      }
+    }))
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res)
+  })
+
+  test('deploySmartContractWithConstructor', async () => {
+    // hello world smart contract
+    const [err, res] = await to(walletRPC.buildTransaction({
+      broadcast: true,
+      tx_as_hex: true,
+      deploy_contract: {
+        module: "0300081d68656c6c6f20776f726c642066726f6d20636f6e7374727563746f72210004000000000000000000081868656c6c6f20776f726c642066726f6d20696e766f6b652100020a000000182b010001001403000a000200182b010001001402",
+        invoke: {
+          max_gas: 5000000,
+          deposits: {
+            "0000000000000000000000000000000000000000000000000000000000000000": {
+              amount: 100000000,
+              private: false
+            }
+          }
+        }
+      }
+    }))
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res)
+  })
+
+  test('deplySmartContractAsset', async () => {
+    // hello world smart contract
+    const [err, res] = await to(walletRPC.buildTransaction({
+      broadcast: true,
+      tx_as_hex: true,
+      deploy_contract: {
+        module: "0602020001010004000009184e72a0000004000000000000000000080948617368506f77657200080248500001080004000009184e72a00000013c000000020000000100000200000300000400010000186c010201000101000005001876010718d20118260000050001010018720118c90107000100140300",
+        /*invoke: {
+          max_gas: 100000000,
+          deposits: {
+            "0000000000000000000000000000000000000000000000000000000000000000": {
+              amount: 100000000,
+              private: false
+            }
+          }
+        }*/
+      }
+    }))
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res)
+  })
+
+  test('invokeSmartContractMint', async () => {
+    // hello world smart contract
+    const [err, res] = await to(walletRPC.buildTransaction({
+      broadcast: true,
+      tx_as_hex: true,
+      invoke_contract: {
+        contract: "4ee56bf69a18c03b5e5ee68f92a8bf73c0ba97801832dcf573231efaadc8548e",
+        entry_id: 1,
+        deposits: {},
+        max_gas: 1000000,
+        parameters: [{
+          type: "primitive",
+          value: { type: "u64", value: "1000" }
+        }],
+        permission: "none"
       }
     }))
     expect(err).toBeNull()
@@ -152,11 +220,12 @@ describe('WalletRPC', () => {
       broadcast: true,
       tx_as_hex: true,
       invoke_contract: {
-        contract: "24015adec1285b1c77fa83e20a506dcd4343b6ff1cf050a3aae1317b46664a58",
+        contract: "16d69521a8b66e3098251d87e9e7e2ed430bac44d0bc56bc881d9bbfe2569297",
         entry_id: 0,
         deposits: {},
-        max_gas: 0,
-        parameters: []
+        max_gas: 1000,
+        parameters: [],
+        permission: "none"
       }
     }))
     expect(err).toBeNull()
