@@ -423,6 +423,11 @@ export interface AccountHistory {
   deploy_contract?: {
     deposits?: string[]
   }
+  from_contract?: {
+    contract: string
+    asset: string
+    amount: number
+  }
 }
 
 export interface PeerPeerListUpdated {
