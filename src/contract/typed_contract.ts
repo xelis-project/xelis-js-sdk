@@ -1,9 +1,11 @@
 import { 
   VMParameter, 
-  createVMParameter, 
-  ValidationType,
   createContractInvocation,
-  ContractInvocationParams 
+  ContractInvocationParams,
+  typeRegistry,
+  defineEnum,
+  defineStruct,
+  createVMParameter
 } from './xvm_serializer';
 
 // Enhanced type definitions for better TypeScript support
@@ -19,13 +21,24 @@ export interface ABIEntry {
   name: string;
   outputs?: string | string[];
   params: ABIParam[];
-  type: 'entry' | 'view';
+  type: 'entry';
   description?: string;
 }
 
+export interface InternalType {
+  name: string;
+  kind: 'struct' | 'enum';
+  fields?: Array<{ name: string; type: string }>;
+  variants?: Array<{
+    name: string;
+    fields: Array<{ name: string; type: string }>;
+  }>;
+}
+
 export type ABI = {
-  data: ABIEntry[],
-  version: string
+  data: ABIEntry[];
+  version: string;
+  internal_types?: InternalType[];
 };
 
 // Type mapping for parameters
@@ -42,9 +55,27 @@ type ParamType<T extends string> =
   T extends 'U32' | 'u32' ? number :
   T extends 'U16' | 'u16' ? number :
   T extends 'U8' | 'u8' ? number :
+  
+  // Arrays - Person[] becomes any[], u64[] becomes (bigint|number)[]
+  T extends `${infer Inner}[]` ? Array<ParamType<Inner>> :
+  
+  // Optionals - optional<Person> becomes any | null
+  T extends `optional<${infer Inner}>` ? ParamType<Inner> | null | undefined :
+  
+  // Maps - map<Address, Permission> becomes Record<string, any>
+  T extends `map<${infer K}, ${infer V}>` ? 
+    ParamType<K> extends string | number | symbol 
+      ? Record<ParamType<K>, ParamType<V>>
+      : Record<string, ParamType<V>> :
+    
+  // TODO Ranges - range<u64> becomes object (structure unknown)
+  // T extends `range<${infer Inner}>` ? { start: ParamType<Inner>; end: ParamType<Inner> } :
+  
+  // Tuples - (string, u64) would need parser, fallback to any for now
+  T extends `(${string})` ? any[] :
+  
   any;
 
-// Extract parameter types from ABI entry
 type ExtractParams<T extends ABIEntry> = {
   [K in T['params'][number] as K['name']]: K extends { optional: true } 
     ? ParamType<K['type']> | undefined
@@ -54,48 +85,13 @@ type ExtractParams<T extends ABIEntry> = {
   deposits?: Record<string, number | bigint>;
 };
 
-// Generate method type from ABI entry
 type MethodFromEntry<T extends ABIEntry> = (
   params: ExtractParams<T>
 ) => Record<string, any>;
 
-// Generate all methods from ABI
 type MethodsFromABI<T extends ABI> = {
   [K in T['data'][number] as K['name']]: MethodFromEntry<K>
 };
-
-// Convert ABI type to validator type
-function normalizeType(abiType: string): ValidationType {
-  const typeMap: Record<string, ValidationType> = {
-    'Hash': 'Hash',
-    'Address': 'Address',
-    'PublicKey': 'PublicKey',
-    'Blob': 'Blob',
-    'u256': 'u256',
-    'u128': 'u128',
-    'u64': 'u64',
-    'u32': 'u32',
-    'u16': 'u16',
-    'u8': 'u8',
-    'boolean': 'boolean',
-    'bool': 'boolean',
-    'string': 'string',
-    'String': 'string',
-    'Boolean': 'boolean',
-    'U256': 'u256',
-    'U128': 'u128',
-    'U64': 'u64',
-    'U32': 'u32',
-    'U16': 'u16',
-    'U8': 'u8'
-  };
-  
-  const normalized = typeMap[abiType];
-  if (!normalized) {
-    throw new Error(`Unknown ABI type: ${abiType}`);
-  }
-  return normalized;
-}
 
 /**
  * Strongly typed contract class
@@ -110,24 +106,20 @@ export class TypedContract<T extends ABI> {
     this.abi = abi;
     this.methods = new Map();
 
-    // Initialize methods
+    this.register_internal_types();
+
     for (const entry of abi.data) {
       if (entry.type === 'entry') {
-        console.log("new method", entry.name)
-
         this.methods.set(entry.name, entry);
       }
     }
 
-    // Return a Proxy to handle dynamic method calls
     return new Proxy(this, {
       get(target, prop, receiver) {
-        // If it's a known property/method, return it
         if (prop in target) {
           return Reflect.get(target, prop, receiver);
         }
 
-        // If it's a string property that matches a method name, create dynamic method
         if (typeof prop === 'string' && target.methods.has(prop)) {
           return (params: any) => target.invokeUnsafe(prop, params);
         }
@@ -138,64 +130,173 @@ export class TypedContract<T extends ABI> {
   }
 
   /**
-   * Internal method to invoke contract functions
+   * Register all custom types from ABI
    */
-  public invokeUnsafe(methodName: string, params: any = {}): Record<string, any> {
-    const entry = this.methods.get(methodName);
+  private register_internal_types(): void {
+    if (!this.abi.internal_types) return;
+
+    for (const type_def of this.abi.internal_types) {
+      if (type_def.kind === 'enum' && type_def.variants) {
+        typeRegistry.register(
+          defineEnum(type_def.name, type_def.variants)
+        );
+      } else if (type_def.kind === 'struct' && type_def.fields) {
+        typeRegistry.register(
+          defineStruct(type_def.name, type_def.fields)
+        );
+      }
+    }
+  }
+
+  /**
+   * Helper to create struct values with positional arguments
+   * Validates field types immediately
+   * @param type_name - Name of the struct type
+   * @param field_values - Field values in the order defined in ABI
+   */
+  public struct(type_name: string, ...field_values: any[]): any {
+    const type_def = this.abi.internal_types?.find(
+      t => t.name === type_name && t.kind === 'struct'
+    );
     
-    if (!entry) {
-      throw new Error(`Method '${methodName}' not found in contract ABI`);
+    if (!type_def || !type_def.fields) {
+      throw new Error(`Struct type '${type_name}' not found in contract ABI`);
     }
 
-    // Extract special parameters
-    const { maxGas, deposits, ...methodParams } = params;
+    if (field_values.length !== type_def.fields.length) {
+      throw new Error(
+        `Struct '${type_name}' expects ${type_def.fields.length} fields ` +
+        `(${type_def.fields.map(f => f.name).join(', ')}), ` +
+        `but got ${field_values.length}`
+      );
+    }
 
-    // Build parameter list according to ABI
+    const result: any = {};
+    for (let i = 0; i < type_def.fields.length; i++) {
+      const field = type_def.fields[i];
+      const value = field_values[i];
+      
+      try {
+        createVMParameter(value, field.type);
+      } catch (error) {
+        throw new Error(
+          `Invalid value for field '${field.name}' (position ${i}) of struct '${type_name}': ${error}`
+        );
+      }
+      
+      result[field.name] = value;
+    }
+
+    return result;
+  }
+
+  /**
+   * Helper to create enum values with positional arguments
+   * Validates field types immediately
+   * @param type_name - Name of the enum type
+   * @param variant_name - Name of the variant
+   * @param field_values - Field values in the order defined in ABI
+   */
+  public enum(type_name: string, variant_name: string, ...field_values: any[]): any {
+    const type_def = this.abi.internal_types?.find(
+      t => t.name === type_name && t.kind === 'enum'
+    );
+    
+    if (!type_def || !type_def.variants) {
+      throw new Error(`Enum type '${type_name}' not found in contract ABI`);
+    }
+
+    const variant = type_def.variants.find(v => v.name === variant_name);
+    if (!variant) {
+      const available = type_def.variants.map(v => v.name).join(', ');
+      throw new Error(
+        `Unknown variant '${variant_name}' for enum '${type_name}'. ` +
+        `Available variants: ${available}`
+      );
+    }
+
+    if (field_values.length !== variant.fields.length) {
+      throw new Error(
+        `Variant '${variant_name}' of enum '${type_name}' expects ${variant.fields.length} fields ` +
+        `(${variant.fields.map(f => f.name).join(', ')}), ` +
+        `but got ${field_values.length}`
+      );
+    }
+
+    const result: any = { type: variant_name };
+    for (let i = 0; i < variant.fields.length; i++) {
+      const field = variant.fields[i];
+      const value = field_values[i];
+      
+      try {
+        createVMParameter(value, field.type);
+      } catch (error) {
+        throw new Error(
+          `Invalid value for field '${field.name}' (position ${i}) of variant '${variant_name}' in enum '${type_name}': ${error}`
+        );
+      }
+      
+      result[field.name] = value;
+    }
+
+    return result;
+  }
+
+  /**
+   * Internal method to invoke contract functions
+   */
+  public invokeUnsafe(method_name: string, params: any = {}): Record<string, any> {
+    const entry = this.methods.get(method_name);
+    
+    if (!entry) {
+      throw new Error(`Method '${method_name}' not found in contract ABI`);
+    }
+
+    const { maxGas, deposits, permission, ...method_params } = params;
+
     const parameters: VMParameter[] = [];
     
-    for (const abiParam of entry.params) {
-      const value = methodParams[abiParam.name];
+    for (const abi_param of entry.params) {
+      const value = method_params[abi_param.name];
       
-      // Check if parameter is required
-      if (value === undefined && !abiParam.optional) {
-        if (abiParam.default !== undefined) {
-          methodParams[abiParam.name] = abiParam.default;
+      if (value === undefined && !abi_param.optional) {
+        if (abi_param.default !== undefined) {
+          method_params[abi_param.name] = abi_param.default;
         } else {
-          throw new Error(`Missing required parameter '${abiParam.name}' for method '${methodName}'`);
+          throw new Error(`Missing required parameter '${abi_param.name}' for method '${method_name}'`);
         }
       }
 
       if (value !== undefined) {
         try {
-          const normalizedType = normalizeType(abiParam.type);
-          const vmParam = createVMParameter(value, normalizedType);
-          parameters.push(vmParam);
+          const VMParam = createVMParameter(value, abi_param.type);
+          parameters.push(VMParam);
         } catch (error) {
-          throw new Error(`Invalid parameter '${abiParam.name}' for method '${methodName}': ${error}`);
+          throw new Error(`Invalid parameter '${abi_param.name}' for method '${method_name}': ${error}`);
         }
       }
     }
 
-    // Create the contract invocation
-    const invocationParams: ContractInvocationParams = {
+    const invocation_params: ContractInvocationParams = {
       contract: this.address,
-      chunkId: entry.chunk_id,
+      chunk_id: entry.chunk_id,
       parameters,
-      maxGas: maxGas || 200000000
+      permission,
+      maxGas: maxGas || 50000000
     };
 
     if (deposits && Object.keys(deposits).length > 0) {
-      invocationParams.deposits = deposits;
+      invocation_params.deposits = deposits;
     }
 
-    return createContractInvocation(invocationParams);
+    return createContractInvocation(invocation_params);
   }
 
   /**
    * Type-safe invoke method
    */
   public invoke<K extends T['data'][number]['name']>(
-    methodName: K,
+    method_name: K,
     params: K extends T['data'][number]['name'] 
       ? T['data'][number] extends infer E 
         ? E extends ABIEntry 
@@ -206,27 +307,27 @@ export class TypedContract<T extends ABI> {
         : never
       : never
   ): Record<string, any> {
-    return this.invokeUnsafe(methodName, params);
+    return this.invokeUnsafe(method_name, params);
   }
 
   /**
    * Get list of available methods
    */
-  public getMethods(): string[] {
+  public get_methods(): string[] {
     return Array.from(this.methods.keys());
   }
 
   /**
    * Get method signature information
    */
-  public getMethodSignature(methodName: string): ABIEntry | undefined {
-    return this.methods.get(methodName);
+  public get_method_signature(method_name: string): ABIEntry | undefined {
+    return this.methods.get(method_name);
   }
 
   /**
    * Generate TypeScript interface for the contract
    */
-  public generateInterface(): string {
+  public generate_interface(): string {
     const lines: string[] = [
       `interface ${this.constructor.name}Methods {`
     ];
@@ -234,7 +335,7 @@ export class TypedContract<T extends ABI> {
     for (const [name, entry] of this.methods) {
       const params = entry.params.map(p => {
         const optional = p.optional ? '?' : '';
-        return `    ${p.name}${optional}: ${this.getTypeScriptType(p.type)};`;
+        return `    ${p.name}${optional}: ${this.get_typescript_type(p.type)};`;
       }).join('\n');
 
       lines.push(`  ${name}(params: {`);
@@ -249,8 +350,8 @@ export class TypedContract<T extends ABI> {
     return lines.join('\n');
   }
 
-  private getTypeScriptType(abiType: string): string {
-    const typeMap: Record<string, string> = {
+  private get_typescript_type(abi_type: string): string {
+    const type_map: Record<string, string> = {
       'Hash': 'string',
       'Address': 'string',
       'PublicKey': 'string',
@@ -274,14 +375,14 @@ export class TypedContract<T extends ABI> {
       'u8': 'number'
     };
     
-    return typeMap[abiType] || 'any';
+    return type_map[abi_type] || 'any';
   }
 }
 
 /**
  * Create a typed contract instance with full TypeScript support
  */
-export function createTypedContract<T extends ABI>(
+export function create_typed_contract<T extends ABI>(
   address: string,
   abi: T
 ): TypedContract<T> & MethodsFromABI<T> {
@@ -293,45 +394,49 @@ export function createTypedContract<T extends ABI>(
  */
 export class TypedContractFactory<T extends ABI> {
   private readonly abi: T;
-  private readonly contractName: string;
+  private readonly contract_name: string;
 
-  constructor(abi: T, contractName: string = 'Contract') {
+  constructor(abi: T, contract_name: string = 'Contract') {
     this.abi = abi;
-    this.contractName = contractName;
+    this.contract_name = contract_name;
   }
 
   /**
    * Create a new contract instance at the specified address
    */
   public at(address: string): TypedContract<T> & MethodsFromABI<T> {
-    return createTypedContract(address, this.abi);
+    return create_typed_contract(address, this.abi);
   }
 
   /**
    * Get the ABI
    */
-  public getABI(): T {
+  public get_abi(): T {
     return this.abi;
   }
 
   /**
    * Generate TypeScript definitions for this contract
    */
-  public generateTypeDefinitions(): string {
+  public generate_type_definitions(): string {
     const contract = new TypedContract('0x0', this.abi);
-    return contract.generateInterface();
+    return contract.generate_interface();
   }
 }
 
 /**
  * Utility to validate ABI structure
  */
-export function validateABI(abi: any): abi is ABI {
-  if (!Array.isArray(abi)) {
+export function validate_abi(abi: any): abi is ABI {
+  if (!abi || typeof abi !== 'object') {
     return false;
   }
 
-  for (const entry of abi) {
+  if (!Array.isArray(abi.data)) {
+    return false;
+  }
+
+  for (const entry of abi.data) {
     if (typeof entry !== 'object' || !entry) {
       return false;
     }
@@ -348,7 +453,7 @@ export function validateABI(abi: any): abi is ABI {
       return false;
     }
 
-    if (entry.type !== 'entry' && entry.type !== 'view') {
+    if (entry.type !== 'entry') {
       return false;
     }
 
@@ -365,16 +470,16 @@ export function validateABI(abi: any): abi is ABI {
 /**
  * Helper to create a contract from JSON ABI
  */
-export async function createContractFromJSON(
+export async function create_contract_from_json(
   address: string,
-  abiPath: string
+  abi_path: string
 ): Promise<TypedContract<ABI> & MethodsFromABI<ABI>> {
-  const response = await fetch(abiPath);
+  const response = await fetch(abi_path);
   const abi = await response.json();
   
-  if (!validateABI(abi.data)) {
+  if (!validate_abi(abi)) {
     throw new Error('Invalid ABI structure');
   }
   
-  return createTypedContract(address, abi);
+  return create_typed_contract(address, abi);
 }
