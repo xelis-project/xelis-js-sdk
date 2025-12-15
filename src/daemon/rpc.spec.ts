@@ -247,7 +247,7 @@ describe('DaemonRPC', () => {
   })
 
   test('getTransaction', async () => {
-    const [err, res] = await to(daemonRPC.getTransaction(`de76d2447b91d93565e679de9bfb6f8361d0f3fd21b7e7fbaee9b36c98723b2c`))
+    const [err, res] = await to(daemonRPC.getTransaction(`e72e61af025f7776d413bf557302bfd6c1fc46ec55603ba4edc3cdcb3725dbed`))
     expect(err).toBeNull()
     console.log(res)
     expect(res)
@@ -437,6 +437,12 @@ describe('DaemonRPC', () => {
 
     const [err, res] = await to(daemonRPC.batchRequest(requests))
     console.log(err, res)
+    expect(err).toBeNull()
+  })
+
+  test('getBlockSummaryAtTopoheight', async () => {
+    const [err, res] = await to(daemonRPC.getBlockSummaryAtTopoheight({ topoheight: 0 }));
+    console.log(res)
     expect(err).toBeNull()
   })
 })
