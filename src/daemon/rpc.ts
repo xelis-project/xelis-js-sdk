@@ -84,18 +84,6 @@ export class RPC extends HttpRPC {
     return this.request<types.GetBlockSummaryResult>(RPCMethod.GetBlockSummaryByHash, params)
   }
 
-  getTransactionsSummary(params: types.GetTransactionsParams) {
-    return this.request<types.TransactionSummary[]>(RPCMethod.GetTransactionsSummary, params)
-  }
-
-  keyToAddress(params: types.KeyToAddressParams) {
-    return this.request<types.Address>(RPCMethod.KeyToAddress, params)
-  }
-
-  getContractsOutputs(params: types.GetContractOutputsParams) {
-    return this.request<types.GetContractsOutputsResult>(RPCMethod.GetContractsOutputs)
-  }
-
   getBalance(params: types.GetBalanceParams) {
     return this.request<types.GetBalanceResult>(RPCMethod.GetBalance, params)
   }
@@ -166,6 +154,10 @@ export class RPC extends HttpRPC {
 
   getTransactions(txHashes: string[]) {
     return this.request<types.TransactionResponse[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
+  }
+
+  getTransactionsSummary(params: types.GetTransactionsParams) {
+    return this.request<types.TransactionSummary[]>(RPCMethod.GetTransactionsSummary, params)
   }
 
   isTxExecutedInBlock(params: types.IsTxExecutedInBlockParams) {
@@ -244,6 +236,10 @@ export class RPC extends HttpRPC {
     return this.request<string | number[]>(RPCMethod.ExtractKeyFromAddress, params)
   }
 
+  keyToAddress(params: types.KeyToAddressParams) {
+    return this.request<types.Address>(RPCMethod.KeyToAddress, params)
+  }
+
   makeIntegratedAddress(params: types.MakeIntegratedAddressParams) {
     return this.request<string>(RPCMethod.MakeIntegratedAddress, params)
   }
@@ -278,6 +274,10 @@ export class RPC extends HttpRPC {
 
   getContractRegisteredExecutionsAtTopoheight(params: types.GetContractScheduledExecutionsAtTopoheightParams) {
     return this.request<Array<[number, string]>>(RPCMethod.GetContractRegisteredExecutionsAtTopoheight, params);
+  }
+
+  getContractsOutputs(params: types.GetContractOutputsParams) {
+    return this.request<types.GetContractsOutputsResult>(RPCMethod.GetContractsOutputs)
   }
 
   getContractModule(params: types.GetContractModuleParams) {
