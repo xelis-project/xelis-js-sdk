@@ -52,8 +52,6 @@ export class WSRPC {
         this.events.set(event, eventData)
       } else {
         let idRefObject = {} as IdRefObj
-        await this.dataCall<boolean>(`subscribe`, { notify: event }, idRefObject)
-          .catch(err => listener(null, err))
 
         const onMessage = (msgEvent: MessageEvent) => {
           const eventData = this.events.get(event) as EventData
@@ -77,8 +75,15 @@ export class WSRPC {
           }
         }
 
-        this.socket.addEventListener(`message`, onMessage)
-        this.events.set(event, { onMessage, listeners: [listener] })
+        try {
+          this.socket.addEventListener(`message`, onMessage)
+          this.events.set(event, { onMessage, listeners: [listener] })
+          await this.dataCall<boolean>(`subscribe`, { notify: event }, idRefObject)
+        } catch (err) {
+          this.socket.removeEventListener(`message`, onMessage);
+          this.events.delete(event);
+          throw err
+        }
       }
     }
 
