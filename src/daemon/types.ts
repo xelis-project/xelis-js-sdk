@@ -42,6 +42,90 @@ export interface Block {
   transactions?: Transaction[] // if include_txs is true in params
 }
 
+export interface GetBlockDifficultyByHashParams {
+  block_hash: string
+}
+
+export interface GetBlockBaseFeeByHashParams {
+  block_hash: string
+}
+
+export interface GetBlockBaseFeeByHashResult {
+  fee_per_kb: number
+  block_size_ema: number
+}
+
+export interface RPCTopoHeightMetadata {
+  topoheight: number
+  reward: number
+  miner_reward: number
+  dev_reward: number
+  supply: number
+  total_fees: number
+  total_fees_burned: number
+}
+
+export interface TransactionSummary {
+  hash: string
+  source: string
+  fee: number
+  size: number
+}
+
+export interface GetBlockSummaryResult {
+  block_hash: string
+  height: number
+  miner: string
+  timestamp: number
+  block_type: BlockType
+  cumulative_difficulty: string
+  difficulty: string
+  metadata: RPCTopoHeightMetadata | null
+  transactions: TransactionSummary[]
+}
+
+export interface GetBlockSummaryByHashParams {
+  hash: string
+}
+
+export interface GetTransactionsParams {
+  tx_hashes: string[]
+}
+
+export type KeyToAddressParams = string | number[]
+
+export enum AddressType {
+  Normal = "normal",
+  Data = "data"
+}
+
+export interface Address {
+  mainnet: boolean
+  addr_type: AddressType
+  key: any
+}
+
+export interface ContractTransfersEntryKey {
+  contract: string
+  caller: string
+}
+
+export interface ContractTransfersEntry {
+  transfers: { [hash: string]: number }
+}
+
+export interface GetContractsOutputsResult {
+  executions: Array<{
+    key: ContractTransfersEntryKey
+    value: ContractTransfersEntry
+  }>
+}
+
+export interface GetContractOutputsParams {
+  address: string
+  topoheight: number
+}
+
 export interface GetBalanceParams {
   address: string
   asset: string
@@ -285,7 +369,7 @@ export interface GetAccountAssetsParams {
   maximum?: number
 }
 
-export interface GetBlockAtTopoheightParams {
+export interface GetBlockAtTopoHeightParams {
   topoheight: number
   include_txs?: boolean
 }
@@ -866,6 +950,10 @@ export enum RPCMethod {
   GetBlocksAtHeight = "get_blocks_at_height",
   GetBlockByHash = "get_block_by_hash",
   GetTopBlock = "get_top_block",
+  GetBlockDifficultyByHash = "get_block_difficulty_by_hash",
+  GetBlockBaseFeeByHash = "get_block_base_fee_by_hash",
+  GetBlockSummaryAtTopoheight = "get_block_summary_at_topoheight",
+  GetBlockSummaryByHash = "get_block_summary_by_hash",
 
   GetBalance = "get_balance",
   GetStableBalance = "get_stable_balance",
@@ -889,10 +977,13 @@ export enum RPCMethod {
   GetTransactionExecutor = "get_transaction_executor",
   GetTransaction = "get_transaction",
   GetTransactions = "get_transactions",
+  GetTransactionsSummary = "get_transactions_summary",
   IsTxExecutedInBlock = "is_tx_executed_in_block",
 
   P2PStatus = "p2p_status",
   GetPeers = "get_peers",
+
+  GetP2PBlockPropagation = "get_p2p_block_propagation",
 
   GetMempool = "get_mempool",
   GetMempoolSummary = "get_mempool_summary",
@@ -913,6 +1004,7 @@ export enum RPCMethod {
   ValidateAddress = "validate_address",
   SplitAddress = "split_address",
   ExtractKeyFromAddress = "extract_key_from_address",
+  KeyToAddress = "key_to_address",
   MakeIntegratedAddress = "make_integrated_address",
   DecryptExtraData = "decrypt_extra_data",
 
@@ -924,6 +1016,8 @@ export enum RPCMethod {
   GetContractLogs = "get_contract_logs",
   GetContractScheduledExecutionsAtTopoheight = "get_contract_scheduled_executions_at_topoheight",
   GetContractRegisteredExecutionsAtTopoheight = "get_contract_registered_executions_at_topoheight",
+
+  GetContractsOutputs = "get_contracts_outputs",
   GetContractModule = "get_contract_module",
   GetContractData = "get_contract_data",
   GetContractDataAtTopoheight = "get_contract_data_at_topoheight",
@@ -932,8 +1026,6 @@ export enum RPCMethod {
   GetContractAssets = "get_contract_assets",
   GetContracts = "get_contracts",
   GetContractDataEntries = "get_contract_data_entries",
-
-  GetP2PBlockPropagation = "get_p2p_block_propagation",
 
   GetBlockTemplate = "get_block_template",
   GetMinerWork = "get_miner_work",

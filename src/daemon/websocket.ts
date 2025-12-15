@@ -99,7 +99,7 @@ export class DaemonMethods {
     return this.dataCall<types.HardFork[]>(RPCMethod.GetHardForks)
   }
 
-  getBlockAtTopoheight(params: types.GetBlockAtTopoheightParams) {
+  getBlockAtTopoheight(params: types.GetBlockAtTopoHeightParams) {
     return this.dataCall<types.Block>(RPCMethod.GetBlockAtTopoheight, params)
   }
 
