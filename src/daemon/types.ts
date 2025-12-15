@@ -55,16 +55,6 @@ export interface GetBlockBaseFeeByHashResult {
   block_size_ema: number
 }
 
-export interface RPCTopoHeightMetadata {
-  topoheight: number
-  reward: number
-  miner_reward: number
-  dev_reward: number
-  supply: number
-  total_fees: number
-  total_fees_burned: number
-}
-
 export interface TransactionSummary {
   hash: string
   source: string
@@ -80,7 +70,13 @@ export interface GetBlockSummaryResult {
   block_type: BlockType
   cumulative_difficulty: string
   difficulty: string
-  metadata: RPCTopoHeightMetadata | null
+  topoheight: number
+  reward: number
+  miner_reward: number
+  dev_reward: number
+  supply: number
+  total_fees: number
+  total_fees_burned: number
   transactions: TransactionSummary[]
 }
 
