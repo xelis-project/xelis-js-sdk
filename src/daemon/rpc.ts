@@ -52,7 +52,7 @@ export class RPC extends HttpRPC {
     return this.request<types.HardFork[]>(RPCMethod.GetHardForks)
   }
 
-  getBlockAtTopoheight(params: types.GetBlockAtTopoheightParams) {
+  getBlockAtTopoheight(params: types.GetBlockAtTopoHeightParams) {
     return this.request<types.Block>(RPCMethod.GetBlockAtTopoheight, params)
   }
 
@@ -66,6 +66,34 @@ export class RPC extends HttpRPC {
 
   getTopBlock(params?: types.GetTopBlockParams) {
     return this.request<types.Block>(RPCMethod.GetTopBlock, params)
+  }
+
+  getBlockDifficultyByHash(params: types.GetBlockDifficultyByHashParams) {
+    return this.request<types.GetDifficultyResult>(RPCMethod.GetBlockDifficultyByHash, params)
+  }
+
+  getBlockBaseFeeByHash(params: types.GetBlockBaseFeeByHashParams) {
+    return this.request<types.GetBlockBaseFeeByHashResult>(RPCMethod.GetBlockBaseFeeByHash, params)
+  }
+
+  getBlockSummaryAtTopoheight(params: types.GetBlockAtTopoHeightParams) {
+    return this.request<types.GetBlockSummaryResult>(RPCMethod.GetBlockSummaryAtTopoheight, params)
+  }
+
+  getBlockSummaryByHash(params: types.GetBlockSummaryByHashParams) {
+    return this.request<types.GetBlockSummaryResult>(RPCMethod.GetBlockSummaryByHash, params)
+  }
+
+  getTransactionsSummary(params: types.GetTransactionsParams) {
+    return this.request<types.TransactionSummary[]>(RPCMethod.GetTransactionsSummary, params)
+  }
+
+  keyToAddress(params: types.KeyToAddressParams) {
+    return this.request<types.Address>(RPCMethod.KeyToAddress, params)
+  }
+
+  getContractsOutputs(params: types.GetContractOutputsParams) {
+    return this.request<types.GetContractsOutputsResult>(RPCMethod.GetContractsOutputs)
   }
 
   getBalance(params: types.GetBalanceParams) {
