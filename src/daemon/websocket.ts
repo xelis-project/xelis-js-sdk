@@ -115,6 +115,22 @@ export class DaemonMethods {
     return this.dataCall<types.Block>(RPCMethod.GetTopBlock, params)
   }
 
+  getBlockDifficultyByHash(params: types.GetBlockDifficultyByHashParams) {
+    return this.dataCall<types.GetDifficultyResult>(RPCMethod.GetBlockDifficultyByHash, params)
+  }
+
+  getBlockBaseFeeByHash(params: types.GetBlockBaseFeeByHashParams) {
+    return this.dataCall<types.GetBlockBaseFeeByHashResult>(RPCMethod.GetBlockBaseFeeByHash, params)
+  }
+
+  getBlockSummaryAtTopoheight(params: types.GetBlockAtTopoHeightParams) {
+    return this.dataCall<types.GetBlockSummaryResult>(RPCMethod.GetBlockSummaryAtTopoheight, params)
+  }
+
+  getBlockSummaryByHash(params: types.GetBlockSummaryByHashParams) {
+    return this.dataCall<types.GetBlockSummaryResult>(RPCMethod.GetBlockSummaryByHash, params)
+  }
+
   getBalance(params: types.GetBalanceParams) {
     return this.dataCall<types.GetBalanceResult>(RPCMethod.GetBalance, params)
   }
@@ -185,6 +201,10 @@ export class DaemonMethods {
 
   getTransactions(txHashes: string[]) {
     return this.dataCall<types.TransactionResponse[]>(RPCMethod.GetTransactions, { tx_hashes: txHashes })
+  }
+
+  getTransactionsSummary(params: types.GetTransactionsParams) {
+    return this.dataCall<types.TransactionSummary[]>(RPCMethod.GetTransactionsSummary, params)
   }
 
   isTxExecutedInBlock(params: types.IsTxExecutedInBlockParams) {
@@ -263,6 +283,10 @@ export class DaemonMethods {
     return this.dataCall<string | number[]>(RPCMethod.ExtractKeyFromAddress, params)
   }
 
+  keyToAddress(params: types.KeyToAddressParams) {
+    return this.dataCall<types.Address>(RPCMethod.KeyToAddress, params)
+  }
+
   makeIntegratedAddress(params: types.MakeIntegratedAddressParams) {
     return this.dataCall<string>(RPCMethod.MakeIntegratedAddress, params)
   }
@@ -297,6 +321,10 @@ export class DaemonMethods {
 
   getContractRegisteredExecutionsAtTopoheight(params: types.GetContractScheduledExecutionsAtTopoheightParams) {
     return this.dataCall<Array<[number, string]>>(RPCMethod.GetContractRegisteredExecutionsAtTopoheight, params);
+  }
+
+  getContractsOutputs(params: types.GetContractOutputsParams) {
+    return this.dataCall<types.GetContractsOutputsResult>(RPCMethod.GetContractsOutputs)
   }
 
   getContractModule(params: types.GetContractModuleParams) {
