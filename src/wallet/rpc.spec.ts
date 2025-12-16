@@ -103,6 +103,23 @@ describe('WalletRPC', () => {
     expect(res)
   })
 
+  test('buildTransactionFeeBuilder', async () => {
+    const [err, res] = await to(walletRPC.buildTransaction({
+      broadcast: false,
+      tx_as_hex: true,
+      transfers: [{
+        amount: 0,
+        asset: XELIS_ASSET,
+        destination: `xet:6eadzwf5xdacts6fs4y3csmnsmy4mcxewqt3xyygwfx0hm0tm32sqxdy9zk`
+      }],
+      fee: { extra: { multiplier: 2 } },
+      base_fee: { fixed: 1000 }
+    }))
+    expect(err).toBeNull()
+    console.log(res)
+    expect(res)
+  })
+
   test('transferTransaction', async () => {
     const [err, res] = await to(walletRPC.buildTransaction({
       broadcast: true,
@@ -176,7 +193,7 @@ describe('WalletRPC', () => {
       tx_as_hex: true,
       deploy_contract: {
         module: "0602020001010004000009184e72a0000004000000000000000000080948617368506f77657200080248500001080004000009184e72a00000013c000000020000000100000200000300000400010000186c010201000101000005001876010718d20118260000050001010018720118c90107000100140300",
-        /*invoke: {
+        invoke: {
           max_gas: 100000000,
           deposits: {
             "0000000000000000000000000000000000000000000000000000000000000000": {
@@ -184,7 +201,7 @@ describe('WalletRPC', () => {
               private: false
             }
           }
-        }*/
+        }
       }
     }))
     expect(err).toBeNull()

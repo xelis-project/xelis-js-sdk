@@ -327,16 +327,27 @@ export interface Reference {
   topoheight: number
 }
 
+export interface SignatureId {
+  id: number
+  signature: string
+}
+
+export interface MultiSig {
+  signatures: { [id: number]: SignatureId }
+}
+
 export interface Transaction {
   hash: string
   version: number
   source: string
   data: TransactionData
   fee: number
+  fee_limit: number
   nonce: number
   source_commitments: SourceCommitment[]
   range_proof: number[]
   reference: Reference
+  multisig?: MultiSig
   signature: string
   size: number
 }
@@ -458,23 +469,27 @@ export interface MaxSupplyMintable {
   mintable: number
 }
 
-export interface AssetCreator {
+export type MaxSupplyMode = "none" | MaxSupplyFixed | MaxSupplyMintable
+
+export interface AssetOwnerCreator {
   contract: string
   id: number
 }
 
-export interface AssetOwner {
+export interface AssetOwnerOwner {
   origin: string
   origin_id: number
   owner: string
 }
 
+export type AssetOwner = "none" | AssetOwnerCreator | AssetOwnerOwner
+
 export interface AssetData {
   decimals: number
   name: string
   ticker: string
-  max_supply: "none" | MaxSupplyFixed | MaxSupplyMintable
-  owner: "none" | { creator: AssetCreator } | { owner: AssetOwner }
+  max_supply: MaxSupplyMode
+  owner: AssetOwner
   topoheight: number
 }
 

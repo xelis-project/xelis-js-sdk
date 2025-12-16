@@ -92,7 +92,7 @@ export class RPC extends HttpRPC {
   }
 
   signUnsignedTransaction(params: types.SignUnsignedTransactionParams) {
-    return this.request<types.SignatureId>(RPCMethod.SignUnsignedTransaction, params)
+    return this.request<daemonTypes.SignatureId>(RPCMethod.SignUnsignedTransaction, params)
   }
 
   finalizeUnsignedTransaction(params: types.FinalizeUnsignedTransactionParams) {

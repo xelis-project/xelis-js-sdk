@@ -4,10 +4,25 @@ export interface GetAddressParams {
   integrated_data?: string
 }
 
-export interface FeeBuilder {
-  multiplier?: number
-  value?: number
+export interface ExtraFeeModeTip {
+  tip: number
 }
+
+export interface ExtraFeeModeMultiplier {
+  multiplier: number
+}
+
+export type ExtraFeeMode = "none" | ExtraFeeModeTip | ExtraFeeModeMultiplier
+
+export interface FeeBuilderFixed {
+  fixed: number
+}
+
+export interface FeeBuilderExtra {
+  extra: ExtraFeeMode
+}
+
+export type FeeBuilder = FeeBuilderFixed | FeeBuilderExtra
 
 export interface MultiSigBuilder {
   participants: string[]
@@ -50,36 +65,43 @@ export interface SignerId {
   private_key: number[]
 }
 
-export interface BuildTransactionParams {
+export interface BaseFeeModeFixed {
+  fixed: number
+}
+
+export interface BaseFeeModeCap {
+  cap: number
+}
+
+type BaseFeeMode = "none" | BaseFeeModeFixed | BaseFeeModeCap
+
+export interface BuildUnsignedTransaction {
   transfers?: TransferBuilder[]
   burn?: daemonTypes.Burn
   multi_sig?: MultiSigBuilder
   invoke_contract?: InvokeContractBuilder
   deploy_contract?: DeployContractBuilder
   fee?: FeeBuilder
+  base_fee?: BaseFeeMode
+  fee_limit?: number
   nonce?: number
   tx_version?: number
-  broadcast: boolean
   tx_as_hex: boolean
+}
+
+export interface BuildTransactionParams extends BuildUnsignedTransaction {
+  broadcast: boolean
   signers?: SignerId[]
 }
 
 export interface BuildTransactionOfflineParams extends BuildTransactionParams {
-  nonce: number
+  balances: { [hash: string]: any } // TODO
   reference: daemonTypes.Reference
+  nonce: number
 }
 
 export interface TransactionResponse extends daemonTypes.Transaction {
   txt_as_hex?: string
-}
-
-export interface SignatureId {
-  id: number
-  signature: string
-}
-
-export interface MultiSig {
-  signatures: { [id: number]: SignatureId }
 }
 
 export interface UnsignedTransaction {
@@ -87,11 +109,12 @@ export interface UnsignedTransaction {
   source: string
   data: daemonTypes.TransactionData
   fee: number
+  fee_limit: number
   nonce: number
   source_commitments: daemonTypes.SourceCommitment[]
   reference: daemonTypes.Reference
   range_proof: number[]
-  multisig?: MultiSig
+  multisig?: daemonTypes.MultiSig
 }
 
 export interface UnsignedTransactionResponse extends UnsignedTransaction {
@@ -237,7 +260,7 @@ export interface SignUnsignedTransactionParams {
 
 export interface FinalizeUnsignedTransactionParams {
   unsigned: string
-  signatures: SignatureId[]
+  signatures: daemonTypes.SignatureId[]
   broadcast: boolean
   tx_as_hex: boolean
 }
