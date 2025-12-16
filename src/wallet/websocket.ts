@@ -121,7 +121,7 @@ export class WalletMethods {
   }
 
   signUnsignedTransaction(params: types.SignUnsignedTransactionParams) {
-    return this.dataCall<types.SignatureId>(RPCMethod.SignUnsignedTransaction, params)
+    return this.dataCall<daemonTypes.SignatureId>(RPCMethod.SignUnsignedTransaction, params)
   }
 
   finalizeUnsignedTransaction(params: types.FinalizeUnsignedTransactionParams) {
