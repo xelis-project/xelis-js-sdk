@@ -472,14 +472,18 @@ export interface MaxSupplyMintable {
 export type MaxSupplyMode = "none" | MaxSupplyFixed | MaxSupplyMintable
 
 export interface AssetOwnerCreator {
-  contract: string
-  id: number
+  creator: {
+    contract: string
+    id: number
+  }
 }
 
 export interface AssetOwnerOwner {
-  origin: string
-  origin_id: number
-  owner: string
+  owner: {
+    origin: string
+    origin_id: number
+    owner: string
+  }
 }
 
 export type AssetOwner = "none" | AssetOwnerCreator | AssetOwnerOwner
