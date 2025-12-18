@@ -343,8 +343,8 @@ export interface Transaction {
   data: TransactionData
   fee: number
   fee_limit: number
-  fee_paid: number
-  fee_refund: number
+  fee_paid?: number
+  fee_refund?: number
   nonce: number
   source_commitments: SourceCommitment[]
   range_proof: number[]
