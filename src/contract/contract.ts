@@ -15,7 +15,7 @@ export interface ABIParam {
 }
 
 export interface ABIEntry {
-  chunk_id: number;
+  entry_id: number;
   name: string;
   outputs?: string;
   params: ABIParam[];
@@ -238,7 +238,7 @@ export class Contract<T extends ABI = ABI> implements IContract {
 
     const invocation_params: ContractInvocationParams = {
       contract: this.address,
-      chunk_id: entry.chunk_id,
+      entry_id: entry.entry_id,
       parameters,
       permission,
       maxGas: maxGas || 50000000

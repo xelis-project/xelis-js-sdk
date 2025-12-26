@@ -17,7 +17,7 @@ export interface ABIParam {
 }
 
 export interface ABIEntry {
-  chunk_id: number;
+  entry_id: number;
   name: string;
   outputs?: string | string[];
   params: ABIParam[];
@@ -279,7 +279,7 @@ export class TypedContract<T extends ABI> {
 
     const invocation_params: ContractInvocationParams = {
       contract: this.address,
-      chunk_id: entry.chunk_id,
+      entry_id: entry.entry_id,
       parameters,
       permission,
       maxGas: maxGas || 50000000
@@ -441,7 +441,7 @@ export function validate_abi(abi: any): abi is ABI {
       return false;
     }
 
-    if (typeof entry.chunk_id !== 'number') {
+    if (typeof entry.entry_id !== 'number') {
       return false;
     }
 

@@ -717,7 +717,7 @@ export type Access = "all" | "internal" | { "hook": { id: number } } | "entry"
 export interface Module {
   chunks: (Chunk | Access)[]
   constants: any[]
-  hook_chunk_ids: number[]
+  hook_entry_ids: number[]
 }
 
 export interface GetContractModuleResult {
@@ -855,7 +855,7 @@ export interface GetContractScheduledExecutionsAtTopoheightParams {
 export interface ScheduledExecution {
   hash: string
   contract: string
-  chunk_id: number
+  entry_id: number
   params: any[]
   max_gas: number
 }

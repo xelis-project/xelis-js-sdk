@@ -4,7 +4,7 @@ import { createTypedContract } from "./typed_contract";
 // Sample ABIs for testing
 const routerABI = [
   {
-    chunk_id: 12,
+    entry_id: 12,
     name: "addLiquidity",
     outputs: "u64",
     params: [
@@ -14,7 +14,7 @@ const routerABI = [
     type: "entry" as const
   },
   {
-    chunk_id: 13,
+    entry_id: 13,
     name: "removeLiquidity",
     outputs: "u64",
     params: [
@@ -23,7 +23,7 @@ const routerABI = [
     type: "entry" as const
   },
   {
-    chunk_id: 14,
+    entry_id: 14,
     name: "swap",
     outputs: "u64",
     params: [
@@ -37,7 +37,7 @@ const routerABI = [
 
 const factoryABI = [
   {
-    chunk_id: 1,
+    entry_id: 1,
     name: "createToken",
     outputs: "Hash",
     params: [
@@ -52,7 +52,7 @@ const factoryABI = [
     type: "entry" as const
   },
   {
-    chunk_id: 2,
+    entry_id: 2,
     name: "mintTokens",
     outputs: "u64",
     params: [
@@ -88,7 +88,7 @@ describe('Contract Class Tests', () => {
 
       // Check method metadata
       expect((contract as any).methods.get("addLiquidity")).toBeDefined();
-      expect((contract as any).methods.get("addLiquidity").chunk_id).toBe(12);
+      expect((contract as any).methods.get("addLiquidity").entry_id).toBe(12);
     });
   });
 
@@ -110,7 +110,7 @@ describe('Contract Class Tests', () => {
 
       expect(result).toHaveProperty('invoke_contract');
       expect(result.invoke_contract.contract).toBe(ROUTER_ADDRESS);
-      expect(result.invoke_contract.chunk_id).toBe(12);
+      expect(result.invoke_contract.entry_id).toBe(12);
       expect(result.invoke_contract.max_gas).toBe(300000000);
       expect(result.invoke_contract.parameters).toHaveLength(2);
       expect(result.invoke_contract.deposits).toBeDefined();
@@ -132,7 +132,7 @@ describe('Contract Class Tests', () => {
         }
       });
 
-      expect(result.invoke_contract.chunk_id).toBe(14);
+      expect(result.invoke_contract.entry_id).toBe(14);
       expect(result.invoke_contract.parameters).toHaveLength(3);
       expect(result.invoke_contract.parameters[2].value.value).toBe(950000);
       expect(result.invoke_contract.deposits[tokenIn]).toEqual({ amount: 1000000 });
@@ -154,7 +154,7 @@ describe('Contract Class Tests', () => {
         }
       });
 
-      expect(result.invoke_contract.chunk_id).toBe(12);
+      expect(result.invoke_contract.entry_id).toBe(12);
       expect(result.invoke_contract.parameters).toHaveLength(2);
     });
 
@@ -197,7 +197,7 @@ describe('Contract Class Tests', () => {
         icon: 'https://example.com/icon.png'
       });
 
-      expect(result.invoke_contract.chunk_id).toBe(1);
+      expect(result.invoke_contract.entry_id).toBe(1);
       expect(result.invoke_contract.parameters).toHaveLength(7);
     });
   });
@@ -260,7 +260,7 @@ describe('Contract Class Tests', () => {
 
       const swapABI = contract.getMethodSignature('swap');
       expect(swapABI).toBeDefined();
-      expect(swapABI?.chunk_id).toBe(14);
+      expect(swapABI?.entry_id).toBe(14);
       expect(swapABI?.params).toHaveLength(3);
 
       const nonExistent = contract.getMethodSignature('nonExistent');
@@ -356,7 +356,7 @@ describe('Integration Example', () => {
       }
     });
 
-    expect(addLiqTx.invoke_contract.chunk_id).toBe(12);
+    expect(addLiqTx.invoke_contract.entry_id).toBe(12);
     console.log('Add Liquidity TX:', JSON.stringify(addLiqTx, null, 2));
 
     // 2. Swap tokens
@@ -369,7 +369,7 @@ describe('Integration Example', () => {
       }
     });
 
-    expect(swapTx.invoke_contract.chunk_id).toBe(14);
+    expect(swapTx.invoke_contract.entry_id).toBe(14);
     console.log('Swap TX:', JSON.stringify(swapTx, null, 2));
 
     // 3. Remove liquidity
@@ -380,7 +380,7 @@ describe('Integration Example', () => {
       }
     });
 
-    expect(removeLiqTx.invoke_contract.chunk_id).toBe(13);
+    expect(removeLiqTx.invoke_contract.entry_id).toBe(13);
     console.log('Remove Liquidity TX:', JSON.stringify(removeLiqTx, null, 2));
   });
 });

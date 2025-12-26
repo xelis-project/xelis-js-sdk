@@ -459,7 +459,7 @@ export function createDeposits(deposits: Record<string, number | bigint>): Recor
  */
 export interface ContractInvocationParams {
   contract: string;
-  chunk_id: number;
+  entry_id: number;
   parameters?: VMParameter[];
   permission: string,
   deposits?: Record<string, number | bigint>;
@@ -469,7 +469,7 @@ export interface ContractInvocationParams {
 export function createContractInvocation(params: ContractInvocationParams): Record<string, any> {
   const {
     contract,
-    chunk_id,
+    entry_id,
     parameters = [],
     deposits,
     permission,
@@ -480,7 +480,7 @@ export function createContractInvocation(params: ContractInvocationParams): Reco
     invoke_contract: {
       contract,
       max_gas: maxGas,
-      entry_id: chunk_id,
+      entry_id: entry_id,
       permission,
       parameters
     }
