@@ -508,7 +508,7 @@ export function createContractDeployment(params: ContractDeploymentParams): Reco
   const result: any = {
     deploy_contract: {
       module: bytecode,
-      ...(hasConstructor && { invoke: { maxGas } })
+      ...(hasConstructor && { invoke: { max_gas: maxGas } })
     }
   };
   
