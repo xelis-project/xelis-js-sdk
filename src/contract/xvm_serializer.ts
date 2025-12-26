@@ -3,48 +3,70 @@ export interface VMParameter {
   value: any;
 }
 
+function toBigIntStrict(v: any, label: string): bigint {
+  if (typeof v === "bigint") return v;
+
+  if (typeof v === "number") {
+    if (!Number.isFinite(v) || !Number.isInteger(v)) {
+      throw new Error(`${label} must be a finite integer number`);
+    }
+    return BigInt(v);
+  }
+
+  if (typeof v === "string") {
+    if (!/^-?\d+$/.test(v.trim())) {
+      throw new Error(`${label} must be a base-10 integer string`);
+    }
+    return BigInt(v.trim());
+  }
+
+  try {
+    return BigInt(v);
+  } catch {
+    throw new Error(`${label} is not convertible to bigint`);
+  }
+}
+
 // Known opaque types that need special wrapping
 const OPAQUE_TYPES = new Set(['Hash', 'Address', 'PublicKey', 'Blob']);
 
+const MAX_U32 = 0xFFFFFFFFn;
+const MAX_U16 = 0xFFFFn;
+const MAX_U8  = 255n;
+const MAX_U64 = 0xFFFFFFFFFFFFFFFFn;
+
 // Type validation and conversion helpers
 const TYPE_VALIDATORS = {
-  'u256': (v: any) => {
-    const num = typeof v === 'bigint' ? v : BigInt(v);
-    if (num < 0n) throw new Error(`Value ${v} cannot be negative for u256`);
-    return Number(num)
+  u256: (v: any) => {
+    const n = toBigIntStrict(v, "u256");
+    if (n < 0n) throw new Error(`Value ${v} cannot be negative for u256`);
+    return n.toString(10);
   },
-  'u128': (v: any) => {
-    const num = typeof v === 'bigint' ? v : BigInt(v);
-    if (num < 0n) throw new Error(`Value ${v} cannot be negative for u128`);
-    return Number(num)
+  u128: (v: any) => {
+    const n = toBigIntStrict(v, "u128");
+    if (n < 0n) throw new Error(`Value ${v} cannot be negative for u128`);
+    return n.toString(10);
   },
-  'u64': (v: any) => {
-    const num = typeof v === 'bigint' ? v : BigInt(v);
-    if (num < 0n || num > 0xFFFFFFFFFFFFFFFFn) {
-      throw new Error(`Value ${v} is out of range for u64`);
-    }
-    return Number(num)
+  u64: (v: any) => {
+    const n = toBigIntStrict(v, "u64");
+    if (n < 0n || n > MAX_U64) throw new Error(`Value ${v} is out of range for u64`);
+    return n.toString(10);
   },
-  'u32': (v: any) => {
-    const num = Number(v);
-    if (num < 0 || num > 0xFFFFFFFF || !Number.isInteger(num)) {
-      throw new Error(`Value ${v} is not a valid u32`);
-    }
-    return num;
+
+  u32: (v: any) => {
+    const n = toBigIntStrict(v, "u32");
+    if (n < 0n || n > MAX_U32) throw new Error(`Value ${v} is out of range for u32`);
+    return Number(n);
   },
-  'u16': (v: any) => {
-    const num = Number(v);
-    if (num < 0 || num > 0xFFFF || !Number.isInteger(num)) {
-      throw new Error(`Value ${v} is not a valid u16`);
-    }
-    return num;
+  u16: (v: any) => {
+    const n = toBigIntStrict(v, "u16");
+    if (n < 0n || n > MAX_U16) throw new Error(`Value ${v} is out of range for u16`);
+    return Number(n);
   },
-  'u8': (v: any) => {
-    const num = Number(v);
-    if (num < 0 || num > 255 || !Number.isInteger(num)) {
-      throw new Error(`Value ${v} is not a valid u8`);
-    }
-    return num;
+  u8: (v: any) => {
+    const n = toBigIntStrict(v, "u8");
+    if (n < 0n || n > MAX_U8) throw new Error(`Value ${v} is out of range for u8`);
+    return Number(n);
   },
   'boolean': (v: any) => Boolean(v),
   'string': (v: any) => String(v),
@@ -81,13 +103,12 @@ export type ValidationType = keyof typeof TYPE_VALIDATORS;
  * @param validate - Whether to validate and convert the value (default: true)
  */
 export function createVMPrimitive(
-  value: any, 
-  type: ValidationType, 
+  value: any,
+  type: ValidationType,
   validate: boolean = true
 ): VMParameter {
   let processed_value = value;
-  
-  // Validate and convert value if requested
+
   if (validate && TYPE_VALIDATORS[type]) {
     try {
       processed_value = TYPE_VALIDATORS[type](value);
@@ -95,28 +116,28 @@ export function createVMPrimitive(
       throw new Error(`Failed to create VM parameter for type ${type}: ${error}`);
     }
   }
-  
-  // Handle opaque types (Hash, Address, PublicKey)
+
+  // Handle opaque types (Hash, Address, PublicKey, Blob)
   if (OPAQUE_TYPES.has(type)) {
     return {
       type: "primitive",
       value: {
         type: "opaque",
         value: {
-          type: type,
-          value: processed_value
-        }
-      }
+          type,
+          value: processed_value,
+        },
+      },
     };
   }
-  
-  // Handle regular types
+
+  // Handle regular primitives
   return {
     type: "primitive",
     value: {
-      type: type,
-      value: processed_value
-    }
+      type,
+      value: processed_value,
+    },
   };
 }
 
@@ -175,17 +196,21 @@ export function serialize_optional(value: any, inner_type: string): VMParameter 
  * Convenience functions for common types
  */
 export const VMParam = {
-  hash: (value: string) => createVMPrimitive(value, 'Hash'),
-  address: (value: string) => createVMPrimitive(value, 'Address'),
-  public_key: (value: string) => createVMPrimitive(value, 'PublicKey'),
-  blob: (value: string) => createVMPrimitive(value, 'Blob'),
-  u64: (value: number | bigint) => createVMPrimitive(value, 'u64'),
-  u32: (value: number) => createVMPrimitive(value, 'u32'),
-  u16: (value: number) => createVMPrimitive(value, 'u16'),
-  u8: (value: number) => createVMPrimitive(value, 'u8'),
-  string: (value: string) => createVMPrimitive(value, 'string'),
-  boolean: (value: boolean) => createVMPrimitive(value, 'boolean'),
-};
+  hash: (value: string) => createVMPrimitive(value, "Hash"),
+  address: (value: string) => createVMPrimitive(value, "Address"),
+  public_key: (value: string) => createVMPrimitive(value, "PublicKey"),
+  blob: (value: string) => createVMPrimitive(value, "Blob"),
+
+  u256: (value: number | bigint | string) => createVMPrimitive(value, "u256"),
+  u128: (value: number | bigint | string) => createVMPrimitive(value, "u128"),
+  u64: (value: number | bigint | string) => createVMPrimitive(value, "u64"),
+  u32: (value: number | bigint | string) => createVMPrimitive(value, "u32"),
+  u16: (value: number | bigint | string) => createVMPrimitive(value, "u16"),
+  u8: (value: number | bigint | string) => createVMPrimitive(value, "u8"),
+
+  string: (value: string) => createVMPrimitive(value, "string"),
+  boolean: (value: boolean) => createVMPrimitive(value, "boolean"),
+} as const;
 
 // ============================================================================
 // Custom Type System (Structs & Enums)
@@ -439,7 +464,7 @@ export function createVMParameter(
  * Creates a deposits object for contract calls
  * @param deposits - Object mapping token hashes to amounts
  */
-export function createDeposits(deposits: Record<string, number | bigint>): Record<string, { amount: number | bigint }> {
+export function create_deposits(deposits: Record<string, number | bigint>): Record<string, { amount: number | bigint }> {
   const result: Record<string, { amount: number | bigint }> = {};
   
   for (const [token_hash, amount] of Object.entries(deposits)) {
@@ -487,7 +512,7 @@ export function createContractInvocation(params: ContractInvocationParams): Reco
   };
   
   if (deposits && Object.keys(deposits).length > 0) {
-    result.invoke_contract.deposits = createDeposits(deposits);
+    result.invoke_contract.deposits = create_deposits(deposits);
   }
   
   return result;
