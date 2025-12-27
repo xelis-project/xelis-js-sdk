@@ -15,7 +15,8 @@ export interface GetInfoResult {
   miner_reward: number
   mempool_size: number
   version: string
-  network: string
+  network: string,
+  block_version: number
 }
 
 export interface Block {
