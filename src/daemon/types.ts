@@ -938,8 +938,52 @@ export interface ContractLogScheduledExecution {
   }
 }
 
+export interface ContractLogExitPayload {
+  type: "exit_payload"
+  value: {
+    payload: any
+  }
+}
+
+export interface ContractLogTransferPayload {
+  type: "transfer_payload"
+  value: {
+    contract: string
+    amount: number
+    asset: string
+    destination: string
+    payload: any
+  }
+}
+
+export type ExitErrorCode = 
+  | "INVALID_ENTRY_PAYLOAD_RETURN"
+  | "UNKNOWN_HOOK"
+  | "INVALID_ENTRY"
+  | "MISSING_ENTRY_EXIT_CODE"
+  | "ILLEGAL_STATE"
+  | "DIVISION_BY_ZERO"
+  | "ASSERTION_FAILED"
+  | "OUT_OF_BOUNDS"
+  | "OUT_OF_MEMORY"
+  | "NOT_ENOUGH_GAS"
+  | "GAS_OVERFLOW"
+  | "RUNTIME_ERROR"
+
+export interface ExitError {
+  code: ExitErrorCode
+  message: string
+}
+
+export interface ContractLogExitError {
+  type: "exit_error"
+  value: {
+    err: ExitError
+  }
+}
+
 export type ContractLog = ContractLogRefundGas | ContractLogTransfer | ContractLogTransferContract | ContractLogMint | ContractLogBurn
-  | ContractLogNewAsset | ContractLogExitCode | ContractLogRefundDeposits | ContractLogGasInjection | ContractLogScheduledExecution
+  | ContractLogNewAsset | ContractLogExitCode | ContractLogRefundDeposits | ContractLogGasInjection | ContractLogScheduledExecution | ContractLogExitPayload | ContractLogTransferPayload | ContractLogExitError
 
 export interface PredicatedBaseFeeResult {
   fee_per_kb: number
