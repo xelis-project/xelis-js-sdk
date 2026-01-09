@@ -167,8 +167,12 @@ export class DaemonMethods {
     return this.dataCall<types.AssetData>(RPCMethod.GetAsset, params)
   }
 
-  getAssetSupply(params: types.GetAssetParams) {
+  getAssetSupply(params: types.GetAssetSupplyParams) {
     return this.dataCall<types.GetAssetSupplyResult>(RPCMethod.GetAssetSupply, params)
+  }
+
+  getAssetSupplyAtTopoheight(params: types.GetAssetSupplyAtTopoheightParams) {
+    return this.dataCall<types.GetAssetSupplyAtTopoheightResult>(RPCMethod.GetAssetSupplyAtTopoheight, params);
   }
 
   getAssets(params?: types.GetAssetsParams) {

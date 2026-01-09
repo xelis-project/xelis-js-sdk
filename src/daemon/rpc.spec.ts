@@ -455,4 +455,21 @@ describe('DaemonRPC', () => {
     console.log(res)
     expect(err).toBeNull()
   })
+
+  test('getAssetSupply', async () => {
+    const [err, res] = await to(mainnetDaemonRPC.getAssetSupply({
+      asset: "d16f350551c09f5c4108524dc24104af5364eb04391ebf7a1daff0ea93d0ee8c",
+    }));
+    console.log(res)
+    expect(err).toBeNull()
+  })
+
+  test('getAssetSupplyAtTopoheight', async () => {
+    const [err, res] = await to(mainnetDaemonRPC.getAssetSupplyAtTopoheight({
+      topoheight: 3480072,
+      asset: "d16f350551c09f5c4108524dc24104af5364eb04391ebf7a1daff0ea93d0ee8c",
+    }));
+    console.log(res)
+    expect(err).toBeNull()
+  })
 })

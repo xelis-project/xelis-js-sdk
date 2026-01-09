@@ -533,6 +533,15 @@ export interface GetAssetParams {
   asset: string
 }
 
+export interface GetAssetSupplyParams {
+  asset: string
+}
+
+export interface GetAssetSupplyAtTopoheightParams {
+  asset: string
+  topoheight: number
+}
+
 export interface GetPeersResult {
   peers: Peer[]
   total_peers: number
@@ -748,6 +757,12 @@ export interface GetContractBalanceResult {
 
 export interface GetAssetSupplyResult {
   topoheight: number
+  previous_topoheight?: number
+  data: number
+}
+
+export interface GetAssetSupplyAtTopoheightResult {
+  previous_topoheight?: number
   data: number
 }
 
@@ -956,7 +971,7 @@ export interface ContractLogTransferPayload {
   }
 }
 
-export type ExitErrorCode = 
+export type ExitErrorCode =
   | "INVALID_ENTRY_PAYLOAD_RETURN"
   | "UNKNOWN_HOOK"
   | "INVALID_ENTRY"
@@ -1040,6 +1055,7 @@ export enum RPCMethod {
 
   GetAsset = "get_asset",
   GetAssetSupply = "get_asset_supply",
+  GetAssetSupplyAtTopoheight = "get_asset_supply_at_topoheight",
   GetAssets = "get_assets",
 
   CountAssets = "count_assets",

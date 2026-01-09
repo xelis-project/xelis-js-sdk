@@ -120,8 +120,12 @@ export class RPC extends HttpRPC {
     return this.request<types.AssetData>(RPCMethod.GetAsset, params)
   }
 
-  getAssetSupply(params: types.GetAssetParams) {
+  getAssetSupply(params: types.GetAssetSupplyParams) {
     return this.request<types.GetAssetSupplyResult>(RPCMethod.GetAssetSupply, params)
+  }
+
+  getAssetSupplyAtTopoheight(params: types.GetAssetSupplyAtTopoheightParams) {
+    return this.request<types.GetAssetSupplyAtTopoheightResult>(RPCMethod.GetAssetSupplyAtTopoheight, params);
   }
 
   getAssets(params: types.GetAssetsParams) {
