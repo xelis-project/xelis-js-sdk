@@ -445,4 +445,14 @@ describe('DaemonRPC', () => {
     console.log(res)
     expect(err).toBeNull()
   })
+
+  test('getBalancesAtMaximumTopoheight', async () => {
+    const [err, res] = await to(mainnetDaemonRPC.getBalancesAtMaximumTopoheight({
+      address: "xel:zjymtskwm2tyaz77qmcj6h2k3n46s23cxffykgz52p8tnfqy4e9sqeur4dl",
+      assets: ["d16f350551c09f5c4108524dc24104af5364eb04391ebf7a1daff0ea93d0ee8c"],
+      maximum_topoheight: 3480072
+    }));
+    console.log(res)
+    expect(err).toBeNull()
+  })
 })

@@ -998,6 +998,12 @@ export interface GetContractDataEntriesParams {
   maximum?: number
 }
 
+export interface GetBalancesAtMaximumTopoheightParams {
+  address: string
+  assets: string[]
+  maximum_topoheight: number
+}
+
 export enum RPCMethod {
   GetVersion = "get_version",
   GetHeight = "get_height",
@@ -1026,6 +1032,7 @@ export enum RPCMethod {
   GetStableBalance = "get_stable_balance",
   HasBalance = "has_balance",
   GetBalanceAtTopoheight = "get_balance_at_topoheight",
+  GetBalancesAtMaximumTopoheight = "get_balances_at_maximum_topoheight",
 
   GetNonce = "get_nonce",
   HasNonce = "has_nonce",
@@ -1049,7 +1056,6 @@ export enum RPCMethod {
 
   P2PStatus = "p2p_status",
   GetPeers = "get_peers",
-
   GetP2PBlockPropagation = "get_p2p_block_propagation",
 
   GetMempool = "get_mempool",

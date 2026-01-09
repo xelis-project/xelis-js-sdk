@@ -100,6 +100,10 @@ export class RPC extends HttpRPC {
     return this.request<types.VersionedBalance>(RPCMethod.GetBalanceAtTopoheight, params)
   }
 
+  getBalancesAtMaximumTopoheight(params: types.GetBalancesAtMaximumTopoheightParams) {
+    return this.request<types.VersionedBalance[]>(RPCMethod.GetBalancesAtMaximumTopoheight, params);
+  }
+
   getNonce(params: types.GetNonceParams) {
     return this.request<types.GetNonceResult>(RPCMethod.GetNonce, params)
   }

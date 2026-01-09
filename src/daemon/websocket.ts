@@ -147,6 +147,10 @@ export class DaemonMethods {
     return this.dataCall<types.VersionedBalance>(RPCMethod.GetBalanceAtTopoheight, params)
   }
 
+  getBalancesAtMaximumTopoheight(params: types.GetBalancesAtMaximumTopoheightParams) {
+    return this.dataCall<types.VersionedBalance[]>(RPCMethod.GetBalancesAtMaximumTopoheight, params);
+  }
+
   getNonce(params: types.GetNonceParams) {
     return this.dataCall<types.GetNonceResult>(RPCMethod.GetNonce, params)
   }
