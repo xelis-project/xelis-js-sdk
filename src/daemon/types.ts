@@ -741,6 +741,12 @@ export interface GetContractModuleResult {
 
 export interface GetContractDataResult {
   previous_topoheight: number | null
+  topoheight: number
+  data: any | null
+}
+
+export interface GetContractDataAtTopoHeightResult {
+  previous_topoheight: number | null
   data: any | null
 }
 
