@@ -955,7 +955,15 @@ export interface ContractLogScheduledExecution {
   value: {
     contract: string
     hash: string
-    kind: "topo_height" | "block_end"
+    kind: {
+      topo_height: { topoheight: number }
+    } | {
+      block_end: {
+        chunk_id: number,
+        max_gas: number,
+        params: [],
+      }
+    }
   }
 }
 
