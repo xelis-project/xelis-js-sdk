@@ -131,9 +131,14 @@ export class WSRPC {
             return evaluate_data()
           }
 
-          // special XSWD case - sending first call will return null id
-          if (data.id === null && id === 0) {
-            return evaluate_data()
+          // special XSWD case 
+          // previously sending first call will return null id
+          // now it returns the id as app id
+          if (id === 0) {
+            const body_data = JSON.parse(body);
+            if (body_data.id === data.id || data.id === null) {
+              return evaluate_data()
+            }
           }
         }
       }
