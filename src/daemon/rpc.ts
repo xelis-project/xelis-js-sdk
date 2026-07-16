@@ -337,7 +337,7 @@ export class RPC extends HttpRPC {
   }
 
   getContractTransactions(params: types.GetContractTransactionsParams) {
-    return this.request<types.GetContractTransactionsResult>(RPCMethod.GetContractTransactions, params)
+    return this.request<string[]>(RPCMethod.GetContractTransactions, params)
   }
 
   simulateContractInvoke(params: types.SimulateContractInvokeParams) {

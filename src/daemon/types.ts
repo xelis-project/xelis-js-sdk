@@ -1027,10 +1027,6 @@ export interface GetContractTransactionsParams {
   maximum_topoheight?: number
 }
 
-export interface GetContractTransactionsResult {
-  tx_hashes: string[]
-}
-
 export interface SimulateContractInvokeParams {
   source: string
   contract: string

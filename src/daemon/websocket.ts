@@ -383,7 +383,7 @@ export class DaemonMethods {
   }
 
   getContractTransactions(params: types.GetContractTransactionsParams) {
-    return this.dataCall<types.GetContractTransactionsResult>(RPCMethod.GetContractTransactions, params)
+    return this.dataCall<string[]>(RPCMethod.GetContractTransactions, params)
   }
 
   simulateContractInvoke(params: types.SimulateContractInvokeParams) {
