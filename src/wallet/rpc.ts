@@ -55,6 +55,18 @@ export class RPC extends HttpRPC {
     return this.request<string[]>(RPCMethod.GetTrackedAssets)
   }
 
+  isAssetTracked(asset: string) {
+    return this.request<boolean>(RPCMethod.IsAssetTracked, { asset })
+  }
+
+  trackAsset(params: types.TrackAsset) {
+    return this.request<boolean>(RPCMethod.TrackAsset, params)
+  }
+
+  untrackAsset(params: types.UntrackAsset) {
+    return this.request<boolean>(RPCMethod.UntrackAsset, params)
+  }
+
   getAssetPrecision(params: daemonTypes.GetAssetParams) {
     return this.request<number>(RPCMethod.GetAssetPrecision, params)
   }
@@ -99,6 +111,10 @@ export class RPC extends HttpRPC {
     return this.request<types.TransactionResponse>(RPCMethod.FinalizeUnsignedTransaction, params)
   }
 
+  getPendingTransactions() {
+    return this.request<types.NewPendingTransactionResult[]>(RPCMethod.GetPendingTransactions)
+  }
+
   clearTxCache() {
     return this.request<boolean>(RPCMethod.ClearTxCache)
   }
@@ -123,6 +139,10 @@ export class RPC extends HttpRPC {
     return this.request<string>(RPCMethod.SignData, data.toObject())
   }
 
+  verifySignedData(params: types.VerifySignedDataParams) {
+    return this.request<boolean>(RPCMethod.VerifySignedData, params)
+  }
+
   estimateFees(params: types.EstimateFeesParams) {
     return this.request<number>(RPCMethod.EstimateFees, params)
   }
@@ -141,6 +161,18 @@ export class RPC extends HttpRPC {
 
   decryptCiphertext(params: types.DecryptCiphertextParams) {
     return this.request<number>(RPCMethod.DecryptCiphertext, params)
+  }
+
+  createOwnershipProof(params: types.CreateOwnershipProofParams) {
+    return this.request<string>(RPCMethod.CreateOwnershipProof, params)
+  }
+
+  createBalanceProof(params: types.CreateBalanceProofParams) {
+    return this.request<string>(RPCMethod.CreateBalanceProof, params)
+  }
+
+  verifyHumanReadableProof(params: types.VerifyHumanReadableProofParams) {
+    return this.request<boolean>(RPCMethod.VerifyHumanReadableProof, params)
   }
 
   getMatchingKeys(params: types.GetMatchingKeysParams) {

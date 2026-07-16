@@ -125,13 +125,20 @@ export interface UnsignedTransactionResponse extends UnsignedTransaction {
 }
 
 export interface ListTransactionParams {
+  asset?: string
   min_topoheight?: number
   max_topoheight?: number
+  min_timestamp?: number
+  max_timestamp?: number
   address?: string
   accept_incoming?: boolean
   accept_outgoing?: boolean
   accept_coinbase?: boolean
   accept_burn?: boolean
+  accept_blob?: boolean
+  query?: Query
+  limit?: number
+  skip?: number
 }
 
 export interface Signature {
@@ -252,6 +259,7 @@ export interface PlaintextCiphertext {
 
 export interface DecryptCiphertextParams {
   ciphertext: CompressedCiphertext
+  max_supply?: number
 }
 
 export interface SignUnsignedTransactionParams {
@@ -270,9 +278,33 @@ export interface HistorySyncedResult {
   topoheight: number
 }
 
+export interface VerifySignedDataParams {
+  data: any
+  signature: string
+  address: string
+}
+
+export interface CreateOwnershipProofParams {
+  asset: string
+  topoheight?: number
+  amount: number
+}
+
+export interface CreateBalanceProofParams {
+  asset: string
+  topoheight?: number
+}
+
+export interface VerifyHumanReadableProofParams {
+  proof: string
+  address: string
+}
+
 export interface GetMatchingKeysParams {
   tree: string
   query?: Query
+  limit?: number
+  skip?: number
 }
 
 export interface CountMatchingKeysParams {
@@ -307,6 +339,8 @@ export interface QueryDBParams {
   key?: Query
   value?: Query
   return_on_first: boolean
+  limit?: number
+  skip?: number
 }
 
 export interface QueryResult {
@@ -391,6 +425,12 @@ export interface UntrackAsset {
   asset: string
 }
 
+export interface NewPendingTransactionResult {
+  hash: string
+  timestamp: number
+  outgoing: Outgoing
+}
+
 export enum RPCMethod {
   GetVersion = 'get_version',
   GetNetwork = 'get_network',
@@ -402,28 +442,36 @@ export enum RPCMethod {
   GetBalance = 'get_balance',
   HasBalance = 'has_balance',
   GetTrackedAssets = 'get_tracked_assets',
+  IsAssetTracked = 'is_asset_tracked',
+  TrackAsset = 'track_asset',
+  UntrackAsset = 'untrack_asset',
   GetAssetPrecision = 'get_asset_precision',
   GetAssets = 'get_assets',
   GetAsset = 'get_asset',
   GetTransaction = 'get_transaction',
-  SearchTransaction = 'search_transaction', // TODO
-  DumpTransaction = 'dump_transaction', // TODO
+  SearchTransaction = 'search_transaction',
+  DumpTransaction = 'dump_transaction',
   BuildTransaction = 'build_transaction',
   BuildTransactionOffline = 'build_transaction_offline',
   BuildUnsignedTransaction = 'build_unsigned_transaction',
   FinalizeUnsignedTransaction = 'finalize_unsigned_transaction',
   SignUnsignedTransaction = 'sign_unsigned_transaction',
+  GetPendingTransactions = 'get_pending_transactions',
   ClearTxCache = 'clear_tx_cache',
   ListTransactions = 'list_transactions',
   IsOnline = 'is_online',
   SetOnlineMode = 'set_online_mode',
   SetOfflineMode = 'set_offline_mode',
   SignData = 'sign_data',
+  VerifySignedData = 'verify_signed_data',
   EstimateFees = 'estimate_fees',
   EstimateExtraDataSize = 'estimate_extra_data_size',
   NetworkInfo = 'network_info',
   DecryptExtraData = 'decrypt_extra_data',
   DecryptCiphertext = 'decrypt_ciphertext',
+  CreateOwnershipProof = 'create_ownership_proof',
+  CreateBalanceProof = 'create_balance_proof',
+  VerifyHumanReadableProof = 'verify_human_readable_proof',
   GetMatchingKeys = 'get_matching_keys',
   CountMatchingEntries = 'count_matching_entries',
   GetValueFromKey = 'get_value_from_key',
@@ -435,9 +483,10 @@ export enum RPCMethod {
 }
 
 export enum RPCEvent {
-  NewTopoheight = 'new_topoheight',
+  NewTopoheight = 'new_topo_height',
   NewAsset = 'new_asset',
   NewTransaction = 'new_transaction',
+  NewPendingTransaction = 'new_pending_transaction',
   BalanceChanged = 'balance_changed',
   Rescan = 'rescan',
   HistorySynced = 'history_synced',

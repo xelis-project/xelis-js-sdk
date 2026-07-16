@@ -9,6 +9,7 @@ export interface WalletEventsData {
   [RPCEvent.NewTopoheight]: { params: null, returnType: types.NewTopoheightResult }
   [RPCEvent.NewAsset]: { params: null, returnType: daemonTypes.AssetWithData }
   [RPCEvent.NewTransaction]: { params: null, returnType: types.TransactionEntry }
+  [RPCEvent.NewPendingTransaction]: { params: null, returnType: types.NewPendingTransactionResult }
   [RPCEvent.BalanceChanged]: { params: null, returnType: types.BalanceChangedResult }
   [RPCEvent.Rescan]: { params: null, returnType: types.RescanResult }
   [RPCEvent.HistorySynced]: { params: null, returnType: types.HistorySyncedResult }
@@ -84,6 +85,18 @@ export class WalletMethods {
     return this.dataCall<string[]>(RPCMethod.GetTrackedAssets)
   }
 
+  isAssetTracked(asset: string) {
+    return this.dataCall<boolean>(RPCMethod.IsAssetTracked, { asset })
+  }
+
+  trackAsset(params: types.TrackAsset) {
+    return this.dataCall<boolean>(RPCMethod.TrackAsset, params)
+  }
+
+  untrackAsset(params: types.UntrackAsset) {
+    return this.dataCall<boolean>(RPCMethod.UntrackAsset, params)
+  }
+
   getAssetPrecision(params: daemonTypes.GetAssetParams) {
     return this.dataCall<number>(RPCMethod.GetAssetPrecision, params)
   }
@@ -128,12 +141,16 @@ export class WalletMethods {
     return this.dataCall<types.TransactionResponse>(RPCMethod.FinalizeUnsignedTransaction, params)
   }
 
+  getPendingTransactions() {
+    return this.dataCall<types.NewPendingTransactionResult[]>(RPCMethod.GetPendingTransactions)
+  }
+
   clearTxCache() {
     return this.dataCall<boolean>(RPCMethod.ClearTxCache)
   }
 
   listTransactions(params?: types.ListTransactionParams) {
-    return this.dataCall<types.TransactionEntry[]>(RPCMethod.GetTransaction, params)
+    return this.dataCall<types.TransactionEntry[]>(RPCMethod.ListTransactions, params)
   }
 
   isOnline() {
@@ -141,7 +158,7 @@ export class WalletMethods {
   }
 
   setOnlineMode(params: types.SetOnlineModeParams) {
-    return this.dataCall<boolean>(RPCMethod.SetOfflineMode, params)
+    return this.dataCall<boolean>(RPCMethod.SetOnlineMode, params)
   }
 
   setOfflineMode() {
@@ -150,6 +167,10 @@ export class WalletMethods {
 
   signData(data: Element) {
     return this.dataCall<string>(RPCMethod.SignData, data.toObject())
+  }
+
+  verifySignedData(params: types.VerifySignedDataParams) {
+    return this.dataCall<boolean>(RPCMethod.VerifySignedData, params)
   }
 
   estimateFees(params: types.EstimateFeesParams) {
@@ -170,6 +191,18 @@ export class WalletMethods {
 
   decryptCiphertext(params: types.DecryptCiphertextParams) {
     return this.dataCall<number>(RPCMethod.DecryptCiphertext, params)
+  }
+
+  createOwnershipProof(params: types.CreateOwnershipProofParams) {
+    return this.dataCall<string>(RPCMethod.CreateOwnershipProof, params)
+  }
+
+  createBalanceProof(params: types.CreateBalanceProofParams) {
+    return this.dataCall<string>(RPCMethod.CreateBalanceProof, params)
+  }
+
+  verifyHumanReadableProof(params: types.VerifyHumanReadableProofParams) {
+    return this.dataCall<boolean>(RPCMethod.VerifyHumanReadableProof, params)
   }
 
   getMatchingKeys(params: types.GetMatchingKeysParams) {
