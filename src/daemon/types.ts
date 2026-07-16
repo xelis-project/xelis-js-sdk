@@ -1023,6 +1023,8 @@ export interface GetContractTransactionsParams {
   contract: string
   skip?: number
   maximum?: number
+  minimum_topoheight?: number
+  maximum_topoheight?: number
 }
 
 export interface GetContractTransactionsResult {
