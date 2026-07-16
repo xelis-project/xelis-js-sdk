@@ -39,7 +39,7 @@ describe('DaemonWS', () => {
     })
   }, timeout)
 
-  test('listen_InvokeContract', () => {
+  test('listen_ContractInvoke', () => {
     return new Promise(async (resolve, reject) => {
       const daemonWS = new DaemonWS(MAINNET_NODE_WS)
       daemonWS.socket.addEventListener(`open`, async () => {
@@ -49,13 +49,13 @@ describe('DaemonWS', () => {
           resolve(null)
         }
 
-        daemonWS.methods.addListener(RPCEvent.InvokeContract, { contract: "32c5ccae542846696b0cd7f40949023219e123adca44d123d14d467ae8761f83" }, async (data, err) => {
+        daemonWS.methods.addListener(RPCEvent.ContractInvoke, { contract: "32c5ccae542846696b0cd7f40949023219e123adca44d123d14d467ae8761f83" }, async (data, err) => {
           console.log(data)
           doneTest(err)
         })
       })
     })
-  })
+  }, timeout)
 
   test('multi_listen', () => {
     return new Promise(async (resolve, reject) => {
