@@ -3,18 +3,20 @@
     "target": "ES2020",
     "jsx": "react",
     "lib": ["DOM"],
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
+    "module": "nodenext",
+    "rootDir": "./src",
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "types": ["jest", "node"]
   },
   "include": [
     "./src/**/*"
   ],
   "exclude": [
     "node_modules",
-    "**/*.spec.ts",
     "./src/xswd/relayer/test"
   ]
 }
