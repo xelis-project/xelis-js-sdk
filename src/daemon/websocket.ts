@@ -12,11 +12,10 @@ export interface DaemonEventsData {
   [RPCEvent.TransactionOrphaned]: { params: null, returnType: types.TransactionResponse }
   [RPCEvent.TransactionAddedInMempool]: { params: null, returnType: types.MempoolTransactionSummary }
   [RPCEvent.TransactionExecuted]: { params: null, returnType: types.TransactionExecuted }
-  [RPCEvent.InvokeContract]: { params: { contract: string }, returnType: types.InvokeContract }
+  [RPCEvent.ContractInvoke]: { params: { contract: string }, returnType: types.InvokeContract }
   [RPCEvent.ContractTransfers]: { params: { address: string }, returnType: types.ContractTransfers }
-  [RPCEvent.InvokeContractError]: { params: { address: string }, returnType: null }
   [RPCEvent.ContractEvent]: { params: { contract: string, id: number }, returnType: types.ContractEvent }
-  [RPCEvent.DeployContract]: { params: null, returnType: types.NewContract }
+  [RPCEvent.ContractDeploy]: { params: null, returnType: types.NewContract }
   [RPCEvent.NewAsset]: { params: null, returnType: types.NewAsset }
   [RPCEvent.PeerConnected]: { params: null, returnType: types.Peer }
   [RPCEvent.PeerDisconnected]: { params: null, returnType: types.Peer }
@@ -275,7 +274,7 @@ export class DaemonMethods {
     return this.dataCall<boolean>(RPCMethod.IsAccountRegistered, params)
   }
 
-  getAccountRegistrationTopoheight(address: String) {
+  getAccountRegistrationTopoheight(address: string) {
     return this.dataCall<number>(RPCMethod.GetAccountRegistrationTopoheight, { address })
   }
 
@@ -332,7 +331,7 @@ export class DaemonMethods {
   }
 
   getContractsOutputs(params: types.GetContractOutputsParams) {
-    return this.dataCall<types.GetContractsOutputsResult>(RPCMethod.GetContractsOutputs)
+    return this.dataCall<types.GetContractsOutputsResult>(RPCMethod.GetContractsOutputs, params)
   }
 
   getContractModule(params: types.GetContractModuleParams) {
@@ -381,6 +380,26 @@ export class DaemonMethods {
 
   submitBlock(params: types.SubmitBlockParams) {
     return this.dataCall<boolean>(RPCMethod.SubmitBlock, params)
+  }
+
+  getContractTransactions(params: types.GetContractTransactionsParams) {
+    return this.dataCall<types.GetContractTransactionsResult>(RPCMethod.GetContractTransactions, params)
+  }
+
+  simulateContractInvoke(params: types.SimulateContractInvokeParams) {
+    return this.dataCall<types.SimulateContractInvokeResult>(RPCMethod.SimulateContractInvoke, params)
+  }
+
+  rewindChain(params: types.RewindChainParams) {
+    return this.dataCall<types.RewindChainResult>(RPCMethod.RewindChain, params)
+  }
+
+  clearCaches() {
+    return this.dataCall<types.ClearCachesResult>(RPCMethod.ClearCaches)
+  }
+
+  pruneChain(params: types.PruneChainParams) {
+    return this.dataCall<types.PruneChainResult>(RPCMethod.PruneChain, params)
   }
 }
 

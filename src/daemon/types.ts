@@ -1019,6 +1019,58 @@ export interface PredicatedBaseFeeResult {
   predicated_fee_per_kb: number
 }
 
+export interface GetContractTransactionsParams {
+  contract: string
+  skip?: number
+  maximum?: number
+}
+
+export interface GetContractTransactionsResult {
+  tx_hashes: string[]
+}
+
+export interface SimulateContractInvokeParams {
+  source: string
+  contract: string
+  deposits: { [asset: string]: { public: number } }
+  entry_id: number
+  parameters: any[]
+  permission?: InterContractPermission
+}
+
+export interface SimulateContractInvokeResult {
+  base_fee: number
+  result: {
+    used_gas: number
+    burned_gas: number
+    fee_gas: number
+    vm_max_gas: number
+    exit_value?: any
+    logs?: any[]
+  }
+}
+
+export interface RewindChainParams {
+  count: number
+  until_stable_height?: boolean
+}
+
+export interface RewindChainResult {
+  topoheight: number
+  txs: string[]
+}
+
+export interface ClearCachesResult {
+}
+
+export interface PruneChainParams {
+  topoheight: number
+}
+
+export interface PruneChainResult {
+  pruned_topoheight: number
+}
+
 export interface GetContractDataEntriesParams {
   contract: string
   minimum_topoheight?: number
@@ -1132,10 +1184,18 @@ export enum RPCMethod {
 
   GetBlockTemplate = "get_block_template",
   GetMinerWork = "get_miner_work",
-  SubmitBlock = "submit_block"
+  SubmitBlock = "submit_block",
+
+  GetContractTransactions = "get_contract_transactions",
+  SimulateContractInvoke = "simulate_contract_invoke",
+
+  RewindChain = "rewind_chain",
+  ClearCaches = "clear_caches",
+  PruneChain = "prune_chain"
 }
 
 export enum RPCEvent {
+  NewTopoHeight = 'new_topo_height',
   NewBlock = 'new_block',
   BlockOrdered = 'block_ordered',
   BlockOrphaned = 'block_orphaned',
@@ -1144,11 +1204,10 @@ export enum RPCEvent {
   TransactionOrphaned = 'transaction_orphaned',
   TransactionAddedInMempool = 'transaction_added_in_mempool',
   TransactionExecuted = 'transaction_executed',
-  InvokeContract = 'invoke_contract',
+  ContractInvoke = 'contract_invoke',
   ContractTransfers = 'contract_transfers',
-  InvokeContractError = 'invoke_contract_error',
   ContractEvent = 'contract_event',
-  DeployContract = 'deploy_contract',
+  ContractDeploy = 'contract_deploy',
   NewAsset = 'new_asset',
   PeerConnected = 'peer_connected',
   PeerDisconnected = 'peer_disconnected',

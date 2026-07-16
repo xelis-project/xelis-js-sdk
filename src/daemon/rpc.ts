@@ -152,7 +152,7 @@ export class RPC extends HttpRPC {
     return this.request<boolean>(RPCMethod.SubmitTransaction, { data: hexData })
   }
 
-  getTransationExecutor(hash: string) {
+  getTransactionExecutor(hash: string) {
     return this.request<types.GetTransactionExecutorResult>(RPCMethod.GetTransactionExecutor, { hash })
   }
 
@@ -188,7 +188,7 @@ export class RPC extends HttpRPC {
     return this.request<types.GetMempoolSummaryResult>(RPCMethod.GetMempoolSummary, params)
   }
 
-  getMempoolCache(address: String) {
+  getMempoolCache(address: string) {
     return this.request<types.GetMempoolCacheResult>(RPCMethod.GetMempoolCache, { address })
   }
 
@@ -285,7 +285,7 @@ export class RPC extends HttpRPC {
   }
 
   getContractsOutputs(params: types.GetContractOutputsParams) {
-    return this.request<types.GetContractsOutputsResult>(RPCMethod.GetContractsOutputs)
+    return this.request<types.GetContractsOutputsResult>(RPCMethod.GetContractsOutputs, params)
   }
 
   getContractModule(params: types.GetContractModuleParams) {
@@ -334,6 +334,26 @@ export class RPC extends HttpRPC {
 
   submitBlock(params: types.SubmitBlockParams) {
     return this.request<boolean>(RPCMethod.SubmitBlock, params)
+  }
+
+  getContractTransactions(params: types.GetContractTransactionsParams) {
+    return this.request<types.GetContractTransactionsResult>(RPCMethod.GetContractTransactions, params)
+  }
+
+  simulateContractInvoke(params: types.SimulateContractInvokeParams) {
+    return this.request<types.SimulateContractInvokeResult>(RPCMethod.SimulateContractInvoke, params)
+  }
+
+  rewindChain(params: types.RewindChainParams) {
+    return this.request<types.RewindChainResult>(RPCMethod.RewindChain, params)
+  }
+
+  clearCaches() {
+    return this.request<types.ClearCachesResult>(RPCMethod.ClearCaches)
+  }
+
+  pruneChain(params: types.PruneChainParams) {
+    return this.request<types.PruneChainResult>(RPCMethod.PruneChain, params)
   }
 }
 
