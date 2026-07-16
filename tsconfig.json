@@ -17,6 +17,7 @@
   ],
   "exclude": [
     "node_modules",
+    "./src/contract/contract.spec.ts",
     "./src/xswd/relayer/test"
   ]
 }
