@@ -40,8 +40,7 @@ export interface DeployContractInvokeBuilder {
 }
 
 export interface DeployContractBuilder {
-  contract_version: "v0" | "v1"
-  module: string
+  contract: string
   invoke?: DeployContractInvokeBuilder
 }
 

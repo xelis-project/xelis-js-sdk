@@ -91,12 +91,12 @@ export class WSRPC {
     if (this.socket.readyState === WebSocket.OPEN) {
       listenEvent()
     } else {
-      const wait_for_open = () => {
+      const waitForOpen = () => {
         listenEvent()
-        this.socket.removeEventListener(`open`, wait_for_open)
+        this.socket.removeEventListener(`open`, waitForOpen)
       }
 
-      this.socket.addEventListener(`open`, wait_for_open)
+      this.socket.addEventListener(`open`, waitForOpen)
     }
   }
 
@@ -180,12 +180,18 @@ export class WSRPC {
       if (this.socket.readyState === WebSocket.OPEN) {
         sendDataCall()
       } else {
-        const wait_for_open = () => {
+        let timeoutId
+        const waitForOpen = () => {
+          clearTimeout(this.callTimeout)
           sendDataCall()
-          this.socket.removeEventListener(`open`, wait_for_open)
+          this.socket.removeEventListener(`open`, waitForOpen)
         }
-
-        this.socket.addEventListener(`open`, wait_for_open)
+        const onWaitTimeout = () => {
+          this.socket.removeEventListener(`open`, waitForOpen)
+          reject(new Error('timeout'))
+        }
+        timeoutId = setTimeout(onWaitTimeout, this.callTimeout)
+        this.socket.addEventListener(`open`, waitForOpen)
       }
     })
   }
