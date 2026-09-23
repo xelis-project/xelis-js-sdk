@@ -1011,8 +1011,16 @@ export interface ContractLogExitError {
   }
 }
 
+export interface ContractLogEvent {
+  type: "event"
+  value: {
+    contract: string
+    event_id: number
+  }
+}
+
 export type ContractLog = ContractLogRefundGas | ContractLogTransfer | ContractLogTransferContract | ContractLogMint | ContractLogBurn
-  | ContractLogNewAsset | ContractLogExitCode | ContractLogRefundDeposits | ContractLogGasInjection | ContractLogScheduledExecution | ContractLogExitPayload | ContractLogTransferPayload | ContractLogExitError
+  | ContractLogNewAsset | ContractLogExitCode | ContractLogRefundDeposits | ContractLogGasInjection | ContractLogScheduledExecution | ContractLogExitPayload | ContractLogTransferPayload | ContractLogExitError | ContractLogEvent
 
 export interface PredicatedBaseFeeResult {
   fee_per_kb: number
