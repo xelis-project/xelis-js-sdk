@@ -1,4 +1,4 @@
-import to from "await-to-js"
+import { to } from "await-to-js"
 import { RPCRequest, RPCResponse } from "./types"
 import { parseJSON } from "./parse_json/parse_json"
 import { ClientOptions, MessageEvent } from 'ws'
